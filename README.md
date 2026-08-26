@@ -1,30 +1,70 @@
-# Free eCommerce Template for Next.js - NextMerce
+# Vintage Audio
 
-The free Next.js eCommerce template is a lite version of the NextMerce Next.js eCommerce boilerplate, designed to streamline the launch and management of your online store.
+A vintage audio storefront for collectors and listeners looking for carefully selected classic hi-fi equipment, turntables, speakers, receivers, and physical media.
 
-![NextMerce](https://github.com/user-attachments/assets/57155689-a756-4222-8af7-134e556acae2)
+The storefront is built with Next.js, React, TypeScript, Tailwind CSS, and Redux Toolkit. Its visual identity uses a warm cream, rust, gold, teal, and ink palette inspired by the Vintage Audio logo.
 
+## Live Review
 
-While NextMerce Pro features advanced functionalities, seamless integration, and customizable options, providing all the essential tools needed to build and expand your business, the lite version offers a basic Next.js template specifically crafted for eCommerce websites. Both versions ensure superior performance and flexibility, all powered by Next.js.
+[Open the GitHub Pages site](https://geogreymbugua.github.io/e-commerce/)
 
-### NextMerce Free VS NextMerce Pro
+Source repository: [github.com/GeogreyMbugua/e-commerce](https://github.com/GeogreyMbugua/e-commerce)
 
-| ✨ Features                         | 🎁 NextMerce Free                 | 🔥 NextMerce Pro                        |
-|----------------------------------|--------------------------------|--------------------------------------|
-| Next.js Pages                    | Static                         | Dynamic Boilerplate Template         |
-| Components                       | Limited                        | All According to Demo                |
-| eCommerce Functionality          | Included                       | Included                             |
-| Integrations (DB, Auth, etc.)    | Not Included                   | Included                             |
-| Community Support                | Included                       | Included                             |
-| Premium Email Support            | Not Included                   | Included                             |
-| Lifetime Free Updates            | Included                       | Included                             |
+## Features
 
+- Responsive homepage designed for desktop, tablet, and mobile screens
+- Vintage audio product catalogue with product detail views
+- New arrivals, best sellers, promotional banners, countdown offer, and testimonials
+- Quick view, cart, wishlist, and checkout interfaces
+- Branded newsletter, navigation, loading screen, and footer
+- Static export configured for GitHub Pages
 
-#### [🚀 Live Demo](https://demo.nextmerce.com/)
+## Requirements
 
-#### [🌐 Visit Website](https://nextmerce.com/)
+- Node.js 22 or newer
+- pnpm 10 or newer
 
-## Update Logs
+## Local Development
 
-Version 0.1.2 - [Mar 16, 2026]
-- Update Next.js, React, and React DOM dependencies, add baseline-browser-mapping
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Start the development server:
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in a browser.
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Create the static production export |
+| `pnpm start` | Serve a production build locally |
+| `pnpm lint` | Run the configured lint command |
+
+## GitHub Pages Deployment
+
+Deployment is automated by [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). A push to `main` builds the static site and publishes the `out` directory through GitHub Pages.
+
+The repository deployment uses `/e-commerce` as its base path. GitHub repository settings must have Pages configured to use **GitHub Actions** as the source.
+
+To test the Pages build locally:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/e-commerce pnpm build
+```
+
+## Project Structure
+
+- `src/app` contains the Next.js routes, layout, styles, and providers
+- `src/components/Home` contains the modular homepage sections
+- `src/components/Shop` contains catalogue data and shop views
+- `src/components/Common` contains shared UI such as the newsletter, loader, and product cards
+- `public/images` contains the storefront, product, logo, and promotional assets
