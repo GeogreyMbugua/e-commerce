@@ -68,3 +68,5 @@ NEXT_PUBLIC_BASE_PATH=/e-commerce pnpm build
 - `src/components/Shop` contains catalogue data and shop views
 - `src/components/Common` contains shared UI such as the newsletter, loader, and product cards
 - `public/images` contains the storefront, product, logo, and promotional assets
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the route map, shared layout, navigation model, state boundaries, current integration gaps, and guidance for search, filtering, AI, and payments.
