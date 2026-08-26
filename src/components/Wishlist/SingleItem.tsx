@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { removeItemFromWishlist } from "@/redux/features/wishlist-slice";
 import { addItemToCart } from "@/redux/features/cart-slice";
 
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const SingleItem = ({ item }) => {
   const dispatch = useDispatch<AppDispatch>();

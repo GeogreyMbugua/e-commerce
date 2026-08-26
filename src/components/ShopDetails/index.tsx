@@ -1,7 +1,7 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Newsletter from "../Common/Newsletter";
 import RecentlyViewdItems from "./RecentlyViewd";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";

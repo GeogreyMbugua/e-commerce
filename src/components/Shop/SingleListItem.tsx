@@ -9,7 +9,7 @@ import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();

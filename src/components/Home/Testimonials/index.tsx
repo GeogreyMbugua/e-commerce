@@ -2,7 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef } from "react";
 import testimonialsData from "./testimonialsData";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 // Import Swiper styles
 import "swiper/css/navigation";

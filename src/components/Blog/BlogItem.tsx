@@ -1,6 +1,6 @@
 import React from "react";
 import { BlogItem } from "@/types/blogItem";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 
 const BlogItem = ({ blog }: { blog: BlogItem }) => {

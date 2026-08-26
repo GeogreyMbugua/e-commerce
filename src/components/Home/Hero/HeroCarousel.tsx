@@ -7,7 +7,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 import "swiper/css";
 
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const slides = [
   {

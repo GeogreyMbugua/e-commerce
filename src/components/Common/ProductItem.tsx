@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";

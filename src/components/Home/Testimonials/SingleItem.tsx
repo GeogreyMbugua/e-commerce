@@ -1,6 +1,6 @@
 import React from "react";
 import { Testimonial } from "@/types/testimonial";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const SingleItem = ({ testimonial }: { testimonial: Testimonial }) => {
   return (

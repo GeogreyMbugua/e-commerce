@@ -1,6 +1,6 @@
 import React from "react";
 import SingleItem from "./SingleItem";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 import shopData from "@/components/Shop/shopData";
 

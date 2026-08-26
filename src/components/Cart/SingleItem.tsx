@@ -6,7 +6,7 @@ import {
   updateCartItemQuantity,
 } from "@/redux/features/cart-slice";
 
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);

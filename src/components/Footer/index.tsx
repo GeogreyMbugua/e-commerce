@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const Footer = () => {
   const year = new Date().getFullYear();

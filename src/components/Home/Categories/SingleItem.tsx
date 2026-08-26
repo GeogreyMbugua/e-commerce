@@ -1,6 +1,6 @@
 import { Category } from "@/types/category";
 import React from "react";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 
 const SingleItem = ({ item }: { item: Category }) => {

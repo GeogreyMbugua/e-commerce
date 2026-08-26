@@ -2,7 +2,7 @@
 import React from "react";
 import shopData from "@/components/Shop/shopData";
 import ProductItem from "@/components/Common/ProductItem";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 
 import { Swiper, SwiperSlide } from "swiper/react";

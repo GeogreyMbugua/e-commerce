@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import AddressModal from "./AddressModal";
 import Orders from "../Orders";
 

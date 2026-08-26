@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import HeroCarousel from "./HeroCarousel";
 import HeroFeature from "./HeroFeature";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const Hero = () => {
   return (

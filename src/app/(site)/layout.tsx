@@ -16,6 +16,8 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function RootLayout({
   children,
 }: {
@@ -29,6 +31,13 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
+      <head>
+        <link
+          rel="icon"
+          href={`${basePath}/images/logo/vintage.png`}
+          type="image/png"
+        />
+      </head>
       <body>
         {loading ? (
           <PreLoader />

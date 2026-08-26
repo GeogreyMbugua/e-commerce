@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const ShippingMethod = () => {
   const [shippingMethod, setShippingMethod] = useState("free");

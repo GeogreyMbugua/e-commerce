@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 
 const CounDown = () => {
   const [days, setDays] = useState(0);

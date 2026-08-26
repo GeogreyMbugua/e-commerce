@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import Image from "next/image";
+import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 
 const BlogDetails = () => {
