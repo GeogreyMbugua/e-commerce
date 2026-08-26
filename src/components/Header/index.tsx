@@ -45,16 +45,14 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 left-0 z-50 w-full bg-brand-cream transition-all ease-in-out duration-300 ${
+      className={`sticky top-0 left-0 z-50 w-full bg-brand-cream transition-shadow ease-in-out duration-300 ${
         stickyMenu && "shadow"
       }`}
     >
       <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
         {/* <!-- header top start --> */}
         <div
-          className={`flex flex-col lg:flex-row gap-5 items-end lg:items-center xl:justify-between ease-out duration-200 ${
-            stickyMenu ? "py-4" : "py-6"
-          }`}
+          className="flex flex-col lg:flex-row gap-5 items-end lg:items-center xl:justify-between py-6"
         >
           {/* <!-- header top left --> */}
           <div className="xl:w-auto flex-col sm:flex-row w-full flex sm:justify-between sm:items-center gap-5 sm:gap-10">
@@ -312,9 +310,7 @@ const Header = () => {
                       >
                         <Link
                           href={menuItem.path}
-                          className={`hover:text-brand-rust text-custom-sm font-medium text-brand-ink flex ${
-                            stickyMenu ? "xl:py-4" : "xl:py-6"
-                          }`}
+                          className="hover:text-brand-rust text-custom-sm font-medium text-brand-ink flex xl:py-6"
                         >
                           {menuItem.title}
                         </Link>
