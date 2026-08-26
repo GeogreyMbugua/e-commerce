@@ -7,14 +7,14 @@ const CategoryItem = ({ category }) => {
   return (
     <button
       className={`${
-        selected && "text-blue"
-      } group flex items-center justify-between ease-out duration-200 hover:text-blue `}
+        selected && "text-brand-rust"
+      } group flex items-center justify-between ease-out duration-200 hover:text-brand-rust `}
       onClick={() => setSelected(!selected)}
     >
       <div className="flex items-center gap-2">
         <div
           className={`cursor-pointer flex items-center justify-center rounded w-4 h-4 border ${
-            selected ? "border-blue bg-blue" : "bg-white border-gray-3"
+            selected ? "border-brand-rust bg-brand-rust" : "bg-white border-gray-3"
           }`}
         >
           <svg
@@ -40,8 +40,8 @@ const CategoryItem = ({ category }) => {
 
       <span
         className={`${
-          selected ? "text-white bg-blue" : "bg-gray-2"
-        } inline-flex rounded-[30px] text-custom-xs px-2 ease-out duration-200 group-hover:text-white group-hover:bg-blue`}
+          selected ? "text-white bg-brand-rust" : "bg-gray-2"
+        } inline-flex rounded-[30px] text-custom-xs px-2 ease-out duration-200 group-hover:text-white group-hover:bg-brand-rust`}
       >
         {category.products}
       </span>

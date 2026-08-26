@@ -9,12 +9,18 @@ const Categories = ({ categories }) => {
 
       <div className="p-4 sm:p-6">
         <div className="flex flex-col gap-3">
-          <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-            Desktop
-            <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-              12
-            </span>
-          </button>
+          {categories.map((category) => (
+            <a
+              key={category.slug}
+              href={`/shop-with-sidebar?category=${category.slug}`}
+              className="group flex items-center justify-between text-dark ease-out duration-200 hover:text-brand-rust"
+            >
+              {category.title}
+              <span className="inline-flex rounded-[30px] bg-gray-2 px-1.5 text-custom-xs ease-out duration-200 group-hover:bg-brand-rust group-hover:text-white">
+                {category.products ?? 0}
+              </span>
+            </a>
+          ))}
         </div>
       </div>
     </div>

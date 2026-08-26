@@ -6,6 +6,7 @@ import LatestProducts from "../Blog/LatestProducts";
 import blogData from "../BlogGrid/blogData";
 import Image from "@/components/Common/BrandedImage";
 import shopData from "../Shop/shopData"; 
+import categoriesData from "../Home/Categories/categoryData";
 
 const BlogDetailsWithSidebar = () => {
   return (
@@ -284,61 +285,18 @@ const BlogDetailsWithSidebar = () => {
 
                 <div className="p-4 sm:p-6">
                   <div className="flex flex-col gap-3">
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Desktop
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        12
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Laptop
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        25
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Monitor
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        23
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      UPS
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        09
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Phone
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        54
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Tablet
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        21
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Watch
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        17
-                      </span>
-                    </button>
-
-                    <button className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue">
-                      Mouse
-                      <span className="inline-flex rounded-[30px] bg-gray-2 text-custom-xs px-1.5 ease-out duration-200 group-hover:text-white group-hover:bg-blue">
-                        08
-                      </span>
-                    </button>
+                    {categoriesData.map((category) => (
+                      <a
+                        key={category.slug}
+                        href={`/shop-with-sidebar?category=${category.slug}`}
+                        className="group flex items-center justify-between text-dark ease-out duration-200 hover:text-brand-rust"
+                      >
+                        {category.title}
+                        <span className="inline-flex rounded-[30px] bg-gray-2 px-1.5 text-custom-xs ease-out duration-200 group-hover:bg-brand-rust group-hover:text-white">
+                          {category.products ?? 0}
+                        </span>
+                      </a>
+                    ))}
                   </div>
                 </div>
               </div>

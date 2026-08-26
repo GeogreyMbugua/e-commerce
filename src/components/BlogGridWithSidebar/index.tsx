@@ -7,34 +7,10 @@ import LatestPosts from "../Blog/LatestPosts";
 import LatestProducts from "../Blog/LatestProducts";
 import Categories from "../Blog/Categories";
 import shopData from "../Shop/shopData"; 
+import categoriesData from "../Home/Categories/categoryData";
  
 const BlogGridWithSidebar = () => {
-  const categories = [
-    {
-      name: "Desktop",
-      products: 10,
-    },
-    {
-      name: "Laptop",
-      products: 12,
-    },
-    {
-      name: "Monitor",
-      products: 30,
-    },
-    {
-      name: "UPS",
-      products: 23,
-    },
-    {
-      name: "Phone",
-      products: 10,
-    },
-    {
-      name: "Watch",
-      products: 13,
-    },
-  ];
+  const categories = categoriesData;
 
   return (
     <>

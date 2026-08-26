@@ -3,4 +3,5 @@ export type Category = {
   id: number;
   img: string;
   slug: string;
+  products?: number;
 };
