@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="overflow-hidden bg-brand-cream">
       <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- footer menu start --> */}
-        <div className="flex flex-wrap xl:flex-nowrap gap-10 xl:gap-19 xl:justify-between border-b border-brand-ink/10 pt-17.5 xl:pt-22.5 pb-10 xl:pb-15">
+        <div className="grid grid-cols-1 gap-10 border-b border-brand-ink/10 pt-12 pb-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-19 xl:pt-22.5 xl:pb-15">
           <div className="max-w-[330px] w-full">
             <Image
               src="/images/logo/vintage.png"
@@ -42,7 +42,7 @@ const Footer = () => {
                     />
                   </svg>
                 </span>
-                685 Market Street, Las Vegas, NV 95820, United States.
+                <span className="text-custom-sm">685 Market Street, Las Vegas, NV 95820, United States.</span>
               </li>
 
               <li>
@@ -206,7 +206,7 @@ const Footer = () => {
             {/* <!-- Social Links end --> */}
           </div>
 
-          <div className="w-full sm:w-auto">
+          <div className="w-full">
             <h2 className="mb-5 text-custom-1 font-medium text-brand-ink">
               Your Account
             </h2>
@@ -219,7 +219,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto">
+          <div className="w-full">
             <h2 className="mb-5 text-custom-1 font-medium text-brand-ink">
               Explore
             </h2>
@@ -232,7 +232,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto sm:max-w-[250px] lg:text-right">
+          <div className="w-full sm:max-w-[250px] lg:justify-self-end lg:text-right">
             <h2 className="mb-5 text-custom-1 font-medium text-brand-ink">
               Our Promise
             </h2>
@@ -309,12 +309,12 @@ const Footer = () => {
       {/* <!-- footer bottom start --> */}
       <div className="border-t border-brand-ink/10 bg-brand-ink py-5 text-brand-cream xl:py-7.5">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
-          <div className="flex gap-5 flex-wrap items-center justify-between">
+          <div className="flex flex-col items-start gap-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="font-medium text-brand-cream/80">
               &copy; {year}. Vintage Audio. All rights reserved.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:gap-4">
               <p className="font-medium text-brand-cream/80">Secure payments:</p>
 
               <div className="flex flex-wrap items-center gap-6">

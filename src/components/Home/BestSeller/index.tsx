@@ -9,7 +9,7 @@ const BestSeller = () => {
     <section className="overflow-hidden">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- section title --> */}
-        <div className="mb-10 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between sm:mb-10">
           <div>
             <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
               <Image
@@ -27,14 +27,14 @@ const BestSeller = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7.5 lg:grid-cols-3">
           {/* <!-- Best Sellers item --> */}
           {shopData.slice(1, 7).map((item, key) => (
             <SingleItem item={item} key={key} />
           ))}
         </div>
 
-        <div className="mt-12.5 text-center">
+        <div className="mt-9 text-center sm:mt-12.5">
           <Link
             href="/shop-without-sidebar"
             className="inline-flex rounded-md border border-brand-ink/15 bg-brand-cream px-7 py-3 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white sm:px-12.5"

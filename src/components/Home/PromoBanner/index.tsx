@@ -3,11 +3,11 @@ import Image from "next/image";
 
 const PromoBanner = () => {
   return (
-    <section className="overflow-hidden py-20">
+    <section className="overflow-hidden py-10 sm:py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- promo banner big --> */}
         <div className="relative z-1 mb-7.5 overflow-hidden rounded-lg bg-brand-cream px-4 py-12.5 sm:px-7.5 lg:px-14 lg:py-17.5 xl:px-19 xl:py-22.5">
-          <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             <div className="relative z-10 max-w-[500px] w-full">
               <span className="mb-3 block text-xl font-medium text-brand-rust">
                 Restored Sound, Timeless Style
@@ -30,11 +30,11 @@ const PromoBanner = () => {
               </a>
             </div>
 
-            <div className="relative hidden flex-1 items-end justify-end lg:flex">
+            <div className="relative flex w-full items-end justify-center lg:flex-1 lg:justify-end">
               <Image
                 src="/images/promo/3way.png"
                 alt="Vintage audio promo"
-                className="h-[360px] w-auto object-contain lg:h-[420px] xl:h-[470px]"
+                className="h-56 w-auto object-contain sm:h-72 lg:h-[420px] xl:h-[470px]"
                 width={620}
                 height={720}
               />
@@ -44,9 +44,9 @@ const PromoBanner = () => {
 
         <div className="grid gap-7.5 grid-cols-1 lg:grid-cols-2">
           {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F4E6D4] px-4 py-10 sm:px-7.5 xl:px-10 xl:py-16">
-            <div className="flex items-center justify-between gap-4">
-              <div className="relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-md">
+          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F4E6D4] px-4 py-8 sm:px-7.5 sm:py-10 xl:px-10 xl:py-16">
+            <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+              <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-md sm:h-[180px] sm:w-[180px]">
                 <Image
                   src="/images/promo/hero1.png"
                   alt="JVC vintage audio promo"
@@ -56,7 +56,7 @@ const PromoBanner = () => {
                 />
               </div>
 
-              <div className="flex-1 text-right">
+              <div className="flex-1 text-center sm:text-right">
                 <span className="mb-1.5 block text-lg font-medium text-brand-ink">
                   Turntable Classics
                 </span>
@@ -80,8 +80,8 @@ const PromoBanner = () => {
           </div>
 
           {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F8EFE7] px-4 py-10 sm:px-7.5 xl:px-10 xl:py-16">
-            <div className="flex items-center justify-between gap-4">
+          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F8EFE7] px-4 py-8 sm:px-7.5 sm:py-10 xl:px-10 xl:py-16">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex-1">
                 <span className="mb-1.5 block text-lg font-medium text-brand-ink">
                   Collector’s Set
@@ -104,7 +104,7 @@ const PromoBanner = () => {
                 </a>
               </div>
 
-              <div className="relative h-[170px] w-[180px] shrink-0 overflow-hidden rounded-md">
+              <div className="relative order-first h-40 w-full shrink-0 overflow-hidden rounded-md sm:order-none sm:h-[170px] sm:w-[180px]">
                 <Image
                   src="/images/promo/sansui.webp"
                   alt="Sansui vintage audio promo"

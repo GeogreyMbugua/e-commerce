@@ -41,7 +41,7 @@ const SingleItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group">
-      <div className="relative min-h-[403px] overflow-hidden rounded-lg bg-brand-cream">
+      <div className="relative min-h-[403px] overflow-hidden rounded-lg bg-brand-cream sm:min-h-[430px]">
         <div className="px-4 py-7.5 text-center">
           <div className="mb-2 flex items-center justify-center gap-2.5">
             <div className="flex items-center gap-1">
@@ -83,7 +83,7 @@ const SingleItem = ({ item }: { item: Product }) => {
           />
         </div>
 
-        <div className="absolute bottom-0 right-0 flex translate-x-full flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">
+        <div className="absolute bottom-0 right-0 flex translate-x-0 flex-col gap-2 p-4 opacity-100 transition-all duration-300 lg:translate-x-full lg:p-5.5 lg:opacity-0 lg:group-hover:translate-x-0 lg:group-hover:opacity-100">
           <button
             onClick={() => {
               handleQuickViewUpdate();
