@@ -30,17 +30,18 @@ const Testimonials = () => {
             {/* <!-- section title --> */}
             <div className="mb-10 flex items-center justify-between">
               <div>
-                <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
+                <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
                   <Image
                     src="/images/icons/icon-08.svg"
                     alt="icon"
                     width={17}
                     height={17}
+                    className="opacity-90"
                   />
                   Testimonials
                 </span>
-                <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                  User Feedbacks
+                <h2 className="text-xl font-semibold text-brand-ink xl:text-heading-5">
+                  Listener Feedback
                 </h2>
               </div>
 

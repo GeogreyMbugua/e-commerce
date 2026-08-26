@@ -6,101 +6,113 @@ const PromoBanner = () => {
     <section className="overflow-hidden py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- promo banner big --> */}
-        <div className="relative z-1 overflow-hidden rounded-lg bg-[#F5F5F7] py-12.5 lg:py-17.5 xl:py-22.5 px-4 sm:px-7.5 lg:px-14 xl:px-19 mb-7.5">
-          <div className="max-w-[550px] w-full">
-            <span className="block font-medium text-xl text-dark mb-3">
-              Apple iPhone 14 Plus
-            </span>
+        <div className="relative z-1 mb-7.5 overflow-hidden rounded-lg bg-brand-cream px-4 py-12.5 sm:px-7.5 lg:px-14 lg:py-17.5 xl:px-19 xl:py-22.5">
+          <div className="flex items-center justify-between gap-6">
+            <div className="relative z-10 max-w-[500px] w-full">
+              <span className="mb-3 block text-xl font-medium text-brand-rust">
+                Restored Sound, Timeless Style
+              </span>
 
-            <h2 className="font-bold text-xl lg:text-heading-4 xl:text-heading-3 text-dark mb-5">
-              UP TO 30% OFF
-            </h2>
+              <h2 className="mb-5 text-xl font-bold text-brand-ink lg:text-heading-4 xl:text-heading-3">
+                Save Up To 30% On Vintage Audio
+              </h2>
 
-            <p>
-              iPhone 14 has the same superspeedy chip that’s in iPhone 13 Pro,
-              A15 Bionic, with a 5‑core GPU, powers all the latest features.
-            </p>
+              <p className="max-w-[430px] text-brand-ink/75">
+                Discover warm analog performance, handcrafted finishes, and the rich
+                character of classic hi-fi pieces rebuilt for modern listening.
+              </p>
 
-            <a
-              href="#"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
-            >
-              Buy Now
-            </a>
+              <a
+                href="#"
+                className="mt-7.5 inline-flex rounded-md bg-brand-rust px-9.5 py-[11px] text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-ink"
+              >
+                Shop The Drop
+              </a>
+            </div>
+
+            <div className="relative hidden flex-1 items-end justify-end lg:flex">
+              <Image
+                src="/images/promo/3way.png"
+                alt="Vintage audio promo"
+                className="h-[360px] w-auto object-contain lg:h-[420px] xl:h-[470px]"
+                width={620}
+                height={720}
+              />
+            </div>
           </div>
-
-          <Image
-            src="/images/promo/promo-01.png"
-            alt="promo img"
-            className="absolute bottom-0 right-4 lg:right-26 -z-1"
-            width={274}
-            height={350}
-          />
         </div>
 
         <div className="grid gap-7.5 grid-cols-1 lg:grid-cols-2">
           {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#DBF4F3] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
-              src="/images/promo/promo-02.png"
-              alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 left-3 sm:left-10 -z-1"
-              width={241}
-              height={241}
-            />
+          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F4E6D4] px-4 py-10 sm:px-7.5 xl:px-10 xl:py-16">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative h-[180px] w-[180px] shrink-0 overflow-hidden rounded-md">
+                <Image
+                  src="/images/promo/hero1.png"
+                  alt="JVC vintage audio promo"
+                  className="h-full w-full object-contain"
+                  width={180}
+                  height={180}
+                />
+              </div>
 
-            <div className="text-right">
-              <span className="block text-lg text-dark mb-1.5">
-                Foldable Motorised Treadmill
-              </span>
+              <div className="flex-1 text-right">
+                <span className="mb-1.5 block text-lg font-medium text-brand-ink">
+                  Turntable Classics
+                </span>
 
-              <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Workout At Home
-              </h2>
+                <h2 className="mb-2.5 text-xl font-bold text-brand-ink lg:text-heading-4">
+                  Analog Listening, Reimagined
+                </h2>
 
-              <p className="font-semibold text-custom-1 text-teal">
-                Flat 20% off
-              </p>
+                <p className="text-custom-1 font-semibold text-brand-rust">
+                  Save 20% On Signature Pieces
+                </p>
 
-              <a
-                href="#"
-                className="inline-flex font-medium text-custom-sm text-white bg-teal py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-dark mt-9"
-              >
-                Grab Now
-              </a>
+                <a
+                  href="#"
+                  className="mt-9 inline-flex rounded-md bg-brand-ink px-8.5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-rust"
+                >
+                  Explore Audio
+                </a>
+              </div>
             </div>
           </div>
 
           {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#FFECE1] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
-              src="/images/promo/promo-03.png"
-              alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-8.5 -z-1"
-              width={200}
-              height={200}
-            />
+          <div className="relative z-1 overflow-hidden rounded-lg bg-[#F8EFE7] px-4 py-10 sm:px-7.5 xl:px-10 xl:py-16">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex-1">
+                <span className="mb-1.5 block text-lg font-medium text-brand-ink">
+                  Collector’s Set
+                </span>
 
-            <div>
-              <span className="block text-lg text-dark mb-1.5">
-                Apple Watch Ultra
-              </span>
+                <h2 className="mb-2.5 text-xl font-bold text-brand-ink lg:text-heading-4">
+                  Vintage Audio, <span className="text-brand-rust">Up To 40%</span> Off
+                </h2>
 
-              <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Up to <span className="text-orange">40%</span> off
-              </h2>
+                <p className="max-w-[285px] text-sm text-brand-ink/75">
+                  Discover premium receivers and speakers from the golden age of
+                  music listening.
+                </p>
 
-              <p className="max-w-[285px] text-custom-sm">
-                The aerospace-grade titanium case strikes the perfect balance of
-                everything.
-              </p>
+                <a
+                  href="#"
+                  className="mt-7.5 inline-flex rounded-md bg-brand-rust px-8.5 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-ink"
+                >
+                  Shop Now
+                </a>
+              </div>
 
-              <a
-                href="#"
-                className="inline-flex font-medium text-custom-sm text-white bg-orange py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-dark mt-7.5"
-              >
-                Buy Now
-              </a>
+              <div className="relative h-[170px] w-[180px] shrink-0 overflow-hidden rounded-md">
+                <Image
+                  src="/images/promo/sansui.webp"
+                  alt="Sansui vintage audio promo"
+                  className="h-full w-full object-contain"
+                  width={180}
+                  height={170}
+                />
+              </div>
             </div>
           </div>
         </div>

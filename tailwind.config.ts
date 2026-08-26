@@ -25,6 +25,14 @@ const config: Config = {
       current: "currentColor",
       transparent: "transparent",
       white: "#FFFFFF",
+        brand: {
+          ink: "#25242A",
+          rust: "#B85F2D",
+          gold: "#D2A33A",
+          teal: "#2F8B82",
+          red: "#C94545",
+          cream: "#FBF8F2",
+        },
       body: "#6C6F93",
       meta: {
         DEFAULT: "#F7F9FC",

@@ -29,17 +29,20 @@ const CounDown = () => {
   return (
     <section className="overflow-hidden py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="relative overflow-hidden z-1 rounded-lg bg-[#D0E9F3] p-4 sm:p-7.5 lg:p-10 xl:p-15">
+        <div className="relative z-1 overflow-hidden rounded-lg bg-[#F3E7D9] p-4 sm:p-7.5 lg:p-10 xl:p-15">
           <div className="max-w-[422px] w-full">
-            <span className="block font-medium text-custom-1 text-blue mb-2.5">
-              Don’t Miss!!
+            <span className="mb-2.5 block text-custom-1 font-medium text-brand-rust">
+              Limited Drop
             </span>
 
-            <h2 className="font-bold text-dark text-xl lg:text-heading-4 xl:text-heading-3 mb-3">
-              Enhance Your Music Experience
+            <h2 className="mb-3 text-xl font-bold text-brand-ink lg:text-heading-4 xl:text-heading-3">
+              Panasonic SA-AK66 Stereo System
             </h2>
 
-            <p>The Havit H206d is a wired PC headphone.</p>
+            <p className="text-brand-ink/75">
+              A vintage 5-disc CD changer and dual cassette shelf stereo with a
+              silver main unit, multi-way speakers, and surround-ready woofers.
+            </p>
 
             {/* <!-- Countdown timer --> */}
             <div
@@ -50,13 +53,13 @@ const CounDown = () => {
               {/* <!-- timer day --> */}
               <div>
                 <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
+                  className="mb-2 flex h-14.5 min-w-[64px] items-center justify-center rounded-lg bg-white px-4 text-xl font-semibold text-brand-ink shadow-2 lg:text-3xl"
                   x-text="days"
                 >
                   {" "}
                   {days < 10 ? "0" + days : days}{" "}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">
+                <span className="block text-center text-custom-sm text-brand-ink/75">
                   Days
                 </span>
               </div>
@@ -64,13 +67,13 @@ const CounDown = () => {
               {/* <!-- timer hours --> */}
               <div>
                 <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
+                  className="mb-2 flex h-14.5 min-w-[64px] items-center justify-center rounded-lg bg-white px-4 text-xl font-semibold text-brand-ink shadow-2 lg:text-3xl"
                   x-text="hours"
                 >
                   {" "}
                   {hours < 10 ? "0" + hours : hours}{" "}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">
+                <span className="block text-center text-custom-sm text-brand-ink/75">
                   Hours
                 </span>
               </div>
@@ -78,12 +81,12 @@ const CounDown = () => {
               {/* <!-- timer minutes --> */}
               <div>
                 <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
+                  className="mb-2 flex h-14.5 min-w-[64px] items-center justify-center rounded-lg bg-white px-4 text-xl font-semibold text-brand-ink shadow-2 lg:text-3xl"
                   x-text="minutes"
                 >
                   {minutes < 10 ? "0" + minutes : minutes}{" "}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">
+                <span className="block text-center text-custom-sm text-brand-ink/75">
                   Minutes
                 </span>
               </div>
@@ -91,12 +94,12 @@ const CounDown = () => {
               {/* <!-- timer seconds --> */}
               <div>
                 <span
-                  className="min-w-[64px] h-14.5 font-semibold text-xl lg:text-3xl text-dark rounded-lg flex items-center justify-center bg-white shadow-2 px-4 mb-2"
+                  className="mb-2 flex h-14.5 min-w-[64px] items-center justify-center rounded-lg bg-white px-4 text-xl font-semibold text-brand-ink shadow-2 lg:text-3xl"
                   x-text="seconds"
                 >
                   {seconds < 10 ? "0" + seconds : seconds}{" "}
                 </span>
-                <span className="block text-custom-sm text-dark text-center">
+                <span className="block text-center text-custom-sm text-brand-ink/75">
                   Seconds
                 </span>
               </div>
@@ -105,9 +108,9 @@ const CounDown = () => {
 
             <a
               href="#"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-3 px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
+              className="mt-7.5 inline-flex rounded-md bg-brand-rust px-9.5 py-3 text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-ink"
             >
-              Check it Out!
+              Grab This Set
             </a>
           </div>
 
@@ -120,7 +123,7 @@ const CounDown = () => {
             height={482}
           />
           <Image
-            src="/images/countdown/countdown-01.png"
+            src="/images/countdown/count-down-01.webp"
             alt="product"
             className="hidden lg:block absolute right-4 xl:right-33 bottom-4 xl:bottom-10 -z-1"
             width={411}

@@ -41,60 +41,49 @@ const SingleItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden rounded-lg bg-[#F6F7FB] min-h-[403px]">
-        <div className="text-center px-4 py-7.5">
-          <div className="flex items-center justify-center gap-2.5 mb-2">
+      <div className="relative min-h-[403px] overflow-hidden rounded-lg bg-brand-cream">
+        <div className="px-4 py-7.5 text-center">
+          <div className="mb-2 flex items-center justify-center gap-2.5">
             <div className="flex items-center gap-1">
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
-              <Image
-                src="/images/icons/icon-star.svg"
-                alt="star icon"
-                width={14}
-                height={14}
-              />
+              {[...Array(5)].map((_, index) => (
+                <Image
+                  key={index}
+                  src="/images/icons/icon-star.svg"
+                  alt="star icon"
+                  width={14}
+                  height={14}
+                  style={{
+                    filter:
+                      "sepia(1) saturate(2.5) hue-rotate(18deg) brightness(1.05)",
+                  }}
+                />
+              ))}
             </div>
 
-            <p className="text-custom-sm">({item.reviews})</p>
+            <p className="text-custom-sm text-brand-ink/70">({item.reviews})</p>
           </div>
 
-          <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
+          <h3 className="mb-1.5 text-base font-medium text-brand-ink transition-colors duration-200 hover:text-brand-rust">
             <Link href="/shop-details"> {item.title} </Link>
           </h3>
 
-          <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">${item.discountedPrice}</span>
-            <span className="text-dark-4 line-through">${item.price}</span>
+          <span className="flex items-center justify-center gap-2 text-lg font-medium">
+            <span className="text-brand-rust">${item.discountedPrice}</span>
+            <span className="text-brand-ink/60 line-through">${item.price}</span>
           </span>
         </div>
 
-        <div className="flex justify-center items-center">
-          <Image src={item.imgs.previews[0]} alt="" width={280} height={280} />
+        <div className="flex items-center justify-center">
+          <Image
+            src={item.imgs.previews[0]}
+            alt={item.title}
+            width={280}
+            height={280}
+            className="object-contain"
+          />
         </div>
 
-        <div className="absolute right-0 bottom-0 translate-x-full u-w-full flex flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">
+        <div className="absolute bottom-0 right-0 flex translate-x-full flex-col gap-2 p-5.5 ease-linear duration-300 group-hover:translate-x-0">
           <button
             onClick={() => {
               handleQuickViewUpdate();
@@ -102,7 +91,7 @@ const SingleItem = ({ item }: { item: Product }) => {
             }}
             aria-label="button for quick view"
             id="bestOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-white hover:bg-blue"
+            className="flex h-9 w-9 items-center justify-center rounded-[5px] bg-white text-brand-ink shadow-1 transition-colors duration-200 hover:bg-brand-rust hover:text-white"
           >
             <svg
               className="fill-current"
@@ -131,7 +120,7 @@ const SingleItem = ({ item }: { item: Product }) => {
             onClick={() => handleAddToCart()}
             aria-label="button for add to cart"
             id="addCartOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-white hover:bg-blue"
+            className="flex h-9 w-9 items-center justify-center rounded-[5px] bg-white text-brand-ink shadow-1 transition-colors duration-200 hover:bg-brand-rust hover:text-white"
           >
             <svg
               className="fill-current"
@@ -168,7 +157,7 @@ const SingleItem = ({ item }: { item: Product }) => {
             }}
             aria-label="button for add to fav"
             id="addFavOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-white hover:bg-blue"
+            className="flex h-9 w-9 items-center justify-center rounded-[5px] bg-white text-brand-ink shadow-1 transition-colors duration-200 hover:bg-brand-rust hover:text-white"
           >
             <svg
               className="fill-current"

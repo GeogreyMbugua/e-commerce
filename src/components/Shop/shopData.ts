@@ -1,138 +1,138 @@
 import { Product } from "@/types/product";
 const shopData: Product[] = [
   {
-    title: "Havit HV-G69 USB Gamepad",
+    title: "Sony TA Stereo Amplifier",
     reviews: 15,
     price: 59.0,
     discountedPrice: 29.0,
     id: 1,
     imgs: {
       thumbnails: [
-        "/images/products/product-1-sm-1.png",
-        "/images/products/product-1-sm-2.png",
+        "/images/products/sony.png",
+        "/images/products/sony.png",
       ],
       previews: [
-        "/images/products/product-1-bg-1.png",
-        "/images/products/product-1-bg-2.png",
+        "/images/products/sony.png",
+        "/images/products/sony.png",
       ],
     },
   },
   {
-    title: "iPhone 14 Plus , 6/128GB",
+    title: "Technics SL-1200MK2 Turntable",
     reviews: 5,
     price: 899.0,
     discountedPrice: 99.0,
     id: 2,
     imgs: {
       thumbnails: [
-        "/images/products/product-2-sm-1.png",
-        "/images/products/product-2-sm-2.png",
+        "/images/products/technics.png",
+        "/images/products/technics.png",
       ],
       previews: [
-        "/images/products/product-2-bg-1.png",
-        "/images/products/product-2-bg-2.png",
+        "/images/products/technics.png",
+        "/images/products/technics.png",
       ],
     },
   },
   {
-    title: "Apple iMac M1 24-inch 2021",
+    title: "Vintage Integrated Stereo Amplifier",
     reviews: 5,
     price: 59.0,
     discountedPrice: 29.0,
     id: 3,
     imgs: {
       thumbnails: [
-        "/images/products/product-3-sm-1.png",
-        "/images/products/product-3-sm-2.png",
+        "/images/products/integratedamp.png",
+        "/images/products/integratedamp.png",
       ],
       previews: [
-        "/images/products/product-3-bg-1.png",
-        "/images/products/product-3-bg-2.png",
+        "/images/products/integratedamp.png",
+        "/images/products/integratedamp.png",
       ],
     },
   },
   {
-    title: "MacBook Air M1 chip, 8/256GB",
+    title: "Classic Stereo Receiver",
     reviews: 6,
     price: 59.0,
     discountedPrice: 29.0,
     id: 4,
     imgs: {
       thumbnails: [
-        "/images/products/product-4-sm-1.png",
-        "/images/products/product-4-sm-2.png",
+        "/images/products/receiver2.png",
+        "/images/products/receiver2.png",
       ],
       previews: [
-        "/images/products/product-4-bg-1.png",
-        "/images/products/product-4-bg-2.png",
+        "/images/products/receiver2.png",
+        "/images/products/receiver2.png",
       ],
     },
   },
   {
-    title: "Apple Watch Ultra",
+    title: "Curated Vinyl Records",
     reviews: 3,
     price: 99.0,
     discountedPrice: 29.0,
     id: 5,
     imgs: {
       thumbnails: [
-        "/images/products/product-5-sm-1.png",
-        "/images/products/product-5-sm-2.png",
+        "/images/products/curated.png",
+        "/images/products/curated.png",
       ],
       previews: [
-        "/images/products/product-5-bg-1.png",
-        "/images/products/product-5-bg-2.png",
+        "/images/products/curated.png",
+        "/images/products/curated.png",
       ],
     },
   },
   {
-    title: "Logitech MX Master 3 Mouse",
+    title: "Vintage Cassette Deck",
     reviews: 15,
     price: 59.0,
     discountedPrice: 29.0,
     id: 6,
     imgs: {
       thumbnails: [
-        "/images/products/product-6-sm-1.png",
-        "/images/products/product-6-sm-2.png",
+        "/images/products/casseet.png",
+        "/images/products/casseet.png",
       ],
       previews: [
-        "/images/products/product-6-bg-1.png",
-        "/images/products/product-6-bg-2.png",
+        "/images/products/casseet.png",
+        "/images/products/casseet.png",
       ],
     },
   },
   {
-    title: "Apple iPad Air 5th Gen - 64GB",
+    title: "Pre-owned Music CDs",
     reviews: 15,
     price: 59.0,
     discountedPrice: 29.0,
     id: 7,
     imgs: {
       thumbnails: [
-        "/images/products/product-7-sm-1.png",
-        "/images/products/product-7-sm-2.png",
+        "/images/products/preowned.webp",
+        "/images/products/preowned.webp",
       ],
       previews: [
-        "/images/products/product-7-bg-1.png",
-        "/images/products/product-7-bg-2.png",
+        "/images/products/preowned.webp",
+        "/images/products/preowned.webp",
       ],
     },
   },
   {
-    title: "Asus RT Dual Band Router",
+    title: "Classic Film and Music Collection",
     reviews: 15,
     price: 59.0,
     discountedPrice: 29.0,
     id: 8,
     imgs: {
       thumbnails: [
-        "/images/products/product-8-sm-1.png",
-        "/images/products/product-8-sm-2.png",
+        "/images/products/films.png",
+        "/images/products/films.png",
       ],
       previews: [
-        "/images/products/product-8-bg-1.png",
-        "/images/products/product-8-bg-2.png",
+        "/images/products/films.png",
+        "/images/products/films.png",
       ],
     },
   },

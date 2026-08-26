@@ -58,6 +58,11 @@ input[type='search']::-webkit-search-results-decoration {
   -webkit-border-bottom-right-radius: 5px;
 }
 
+.hero-pattern {
+  opacity: 0.16;
+  filter: sepia(1) saturate(2.2) hue-rotate(325deg);
+}
+
 /* The container must be positioned relative: */
 .custom-select select {
   display: none; /*hide original SELECT element: */
@@ -123,11 +128,11 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .hero-carousel .swiper-pagination-bullet-active {
-  @apply w-5.5 bg-blue;
+  @apply w-5.5 bg-brand-rust;
 }
 
 .hero-carousel .swiper-pagination {
-  @apply xl:!bottom-5;
+  @apply !bottom-3 xl:!bottom-5;
 }
 
 .common-carousel .swiper-button-next:after,

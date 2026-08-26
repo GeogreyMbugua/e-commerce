@@ -11,16 +11,17 @@ const BestSeller = () => {
         {/* <!-- section title --> */}
         <div className="mb-10 flex items-center justify-between">
           <div>
-            <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
+            <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
               <Image
                 src="/images/icons/icon-07.svg"
                 alt="icon"
                 width={17}
                 height={17}
+                className="opacity-90"
               />
               This Month
             </span>
-            <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
+            <h2 className="text-xl font-semibold text-brand-ink xl:text-heading-5">
               Best Sellers
             </h2>
           </div>
@@ -33,10 +34,10 @@ const BestSeller = () => {
           ))}
         </div>
 
-        <div className="text-center mt-12.5">
+        <div className="mt-12.5 text-center">
           <Link
             href="/shop-without-sidebar"
-            className="inline-flex font-medium text-custom-sm py-3 px-7 sm:px-12.5 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
+            className="inline-flex rounded-md border border-brand-ink/15 bg-brand-cream px-7 py-3 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white sm:px-12.5"
           >
             View All
           </Link>
