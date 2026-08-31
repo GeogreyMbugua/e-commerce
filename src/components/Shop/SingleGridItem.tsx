@@ -5,6 +5,7 @@ import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";
 import { addItemToCart } from "@/redux/features/cart-slice";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import { updateproductDetails } from "@/redux/features/product-details";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
@@ -14,6 +15,10 @@ const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleProductDetails = () => {
+    dispatch(updateproductDetails({ ...item }));
+  };
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -42,10 +47,16 @@ const SingleGridItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
-        <Image src={item.imgs.previews[0]} alt="" width={250} height={250} />
+      <div className="relative mb-4 flex min-h-[230px] items-center justify-center overflow-hidden rounded-lg bg-brand-cream shadow-1 sm:min-h-[270px]">
+        <Image
+          src={item.imgs.previews[0]}
+          alt={item.title}
+          width={250}
+          height={250}
+          className="max-h-[250px] w-full object-contain px-4"
+        />
 
-        <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
+        <div className="absolute bottom-0 left-0 flex w-full translate-y-0 items-center justify-center gap-2.5 bg-gradient-to-t from-brand-ink/15 to-transparent pb-5 pt-8 ease-linear duration-200 sm:translate-y-full sm:group-hover:translate-y-0">
           <button
             onClick={() => {
               openModal();
@@ -53,7 +64,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
             }}
             id="newOne"
             aria-label="button for quick view"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className="flex h-9 w-9 items-center justify-center rounded-[5px] bg-white text-brand-ink shadow-1 ease-out duration-200 hover:text-brand-rust"
           >
             <svg
               className="fill-current"
@@ -80,7 +91,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
 
           <button
             onClick={() => handleAddToCart()}
-            className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
+            className="inline-flex rounded-[5px] bg-brand-rust px-5 py-[7px] text-custom-sm font-medium text-white ease-out duration-200 hover:bg-brand-ink"
           >
             Add to cart
           </button>
@@ -89,7 +100,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
             onClick={() => handleItemToWishList()}
             aria-label="button for favorite select"
             id="favOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className="flex h-9 w-9 items-center justify-center rounded-[5px] bg-white text-brand-ink shadow-1 ease-out duration-200 hover:text-brand-rust"
           >
             <svg
               className="fill-current"
@@ -147,13 +158,15 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         <p className="text-custom-sm">({item.reviews})</p>
       </div>
 
-      <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
-        <Link href="/shop-details"> {item.title} </Link>
+      <h3 className="mb-1.5 font-medium text-brand-ink ease-out duration-200 hover:text-brand-rust">
+        <Link href="/shop-details" onClick={handleProductDetails}>
+          {item.title}
+        </Link>
       </h3>
 
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${item.discountedPrice}</span>
-        <span className="text-dark-4 line-through">${item.price}</span>
+        <span className="text-brand-rust">${item.discountedPrice}</span>
+        <span className="text-brand-ink/60 line-through">${item.price}</span>
       </span>
     </div>
   );

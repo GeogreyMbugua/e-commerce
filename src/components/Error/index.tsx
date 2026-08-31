@@ -7,7 +7,7 @@ const Error = () => {
   return (
     <>
       <Breadcrumb title={"Error"} pages={["error"]} />
-      <section className="overflow-hidden py-20 bg-gray-2">
+      <section className="overflow-hidden bg-brand-cream/40 py-20">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="bg-white rounded-xl shadow-1 px-4 py-10 sm:py-15 lg:py-20 xl:py-25">
             <div className="text-center">
@@ -30,7 +30,7 @@ const Error = () => {
 
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
+                className="inline-flex items-center gap-2 rounded-md bg-brand-ink px-6 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
               >
                 <svg
                   className="fill-current"

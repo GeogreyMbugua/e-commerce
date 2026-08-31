@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import CustomSelect from "./CustomSelect";
 import { menuData } from "./menuData";
-import Dropdown from "./Dropdown";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { selectTotalPrice } from "@/redux/features/cart-slice";
@@ -49,23 +48,24 @@ const Header = () => {
         stickyMenu && "shadow"
       }`}
     >
-      <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+      <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-7.5 xl:px-0">
         {/* <!-- header top start --> */}
         <div
-          className="flex flex-col lg:flex-row gap-5 items-end lg:items-center xl:justify-between py-6"
+          className="flex flex-col lg:flex-row gap-5 xl:gap-8 items-end lg:items-center xl:justify-between py-5 xl:min-h-[120px] xl:py-4"
         >
           {/* <!-- header top left --> */}
-          <div className="xl:w-auto flex-col sm:flex-row w-full flex sm:justify-between sm:items-center gap-5 sm:gap-10">
+          <div className="xl:flex-1 xl:min-w-0 flex-col sm:flex-row w-full flex sm:justify-between sm:items-center gap-5 sm:gap-8">
             <Link className="flex-shrink-0" href="/">
               <Image
                 src="/images/logo/vintage.png"
                 alt="Logo"
                 width={219}
                 height={36}
+                className="h-16 w-16 object-cover lg:h-20 lg:w-20 xl:h-[120px] xl:w-[219px]"
               />
             </Link>
 
-            <div className="max-w-[475px] w-full">
+            <div className="w-full max-w-[600px] xl:flex-1">
               <form>
                 <div className="flex items-center">
                   <CustomSelect options={options} />
@@ -110,7 +110,7 @@ const Header = () => {
           </div>
 
           {/* <!-- header top right --> */}
-          <div className="flex w-full lg:w-auto items-center gap-7.5">
+          <div className="flex w-full lg:w-auto items-center gap-6">
             <div className="hidden xl:flex items-center gap-3.5">
               <svg
                 width="24"
@@ -240,6 +240,8 @@ const Header = () => {
               <button
                 id="Toggle"
                 aria-label="Toggler"
+                aria-expanded={navigationOpen}
+                aria-controls="site-navigation"
                 className="xl:hidden block"
                 onClick={() => setNavigationOpen(!navigationOpen)}
               >
@@ -284,10 +286,11 @@ const Header = () => {
       </div>
 
       <div className="border-t border-brand-ink/10">
-        <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+        <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-7.5 xl:px-0">
           <div className="flex items-center justify-between">
             {/* <!--=== Main Nav Start ===--> */}
             <div
+              id="site-navigation"
               className={`w-[288px] absolute right-4 top-full xl:static xl:w-auto h-0 xl:h-auto invisible xl:visible xl:flex items-center justify-between ${
                 navigationOpen &&
                 `!visible bg-brand-cream shadow-lg border border-brand-ink/10 !h-auto max-h-[400px] overflow-y-scroll rounded-md p-5`
@@ -295,28 +298,21 @@ const Header = () => {
             >
               {/* <!-- Main Nav Start --> */}
               <nav>
-                <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
-                  {menuData.map((menuItem, i) =>
-                    menuItem.submenu ? (
-                      <Dropdown
-                        key={i}
-                        menuItem={menuItem}
-                        stickyMenu={stickyMenu}
-                      />
-                    ) : (
-                      <li
-                        key={i}
-                        className="group relative before:w-0 before:h-[3px] before:bg-brand-rust before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full "
+                <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-8">
+                  {menuData.map((menuItem) => (
+                    <li
+                      key={menuItem.id}
+                      className="group relative before:w-0 before:h-[3px] before:bg-brand-rust before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full"
+                    >
+                      <Link
+                        href={menuItem.path}
+                        onClick={() => setNavigationOpen(false)}
+                        className="hover:text-brand-rust text-custom-sm font-medium text-brand-ink flex xl:py-4"
                       >
-                        <Link
-                          href={menuItem.path}
-                          className="hover:text-brand-rust text-custom-sm font-medium text-brand-ink flex xl:py-6"
-                        >
-                          {menuItem.title}
-                        </Link>
-                      </li>
-                    )
-                  )}
+                        {menuItem.title}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </nav>
               {/* //   <!-- Main Nav End --> */}
@@ -326,7 +322,7 @@ const Header = () => {
             {/* // <!--=== Nav Right Start ===--> */}
             <div className="hidden xl:block">
               <ul className="flex items-center gap-5.5">
-                <li className="py-4">
+                <li className="hidden py-4">
                   <a
                     href="#"
                     className="flex items-center gap-1.5 font-medium text-custom-sm text-brand-ink hover:text-brand-rust"

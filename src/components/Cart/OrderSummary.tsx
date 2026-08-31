@@ -55,7 +55,7 @@ const OrderSummary = () => {
           {/* <!-- checkout button --> */}
           <button
             type="submit"
-            className="w-full flex justify-center font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
+            className="mt-7.5 flex w-full justify-center rounded-md bg-brand-ink px-6 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
           >
             Process to Checkout
           </button>

@@ -20,22 +20,22 @@ const ShopWithoutSidebar = () => {
   return (
     <>
       <Breadcrumb
-        title={"Explore All Products"}
-        pages={["shop", "/", "shop without sidebar"]}
+        title={"Shop Audio & Physical Media"}
+        pages={["shop"]}
       />
-      <section className="overflow-hidden relative pb-20 pt-5 lg:pt-20 xl:pt-28 bg-[#f3f4f6]">
+      <section className="relative overflow-hidden bg-brand-cream/40 pb-20 pt-5 lg:pt-20 xl:pt-28">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex gap-7.5">
             {/* // <!-- Content Start --> */}
             <div className="w-full">
-              <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
-                <div className="flex items-center justify-between">
+              <div className="mb-6 rounded-lg bg-white py-2.5 pl-3 pr-2.5 shadow-1">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   {/* <!-- top bar left --> */}
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                     <CustomSelect options={options} />
 
                     <p>
-                      Showing <span className="text-dark">9 of 50</span>{" "}
+                      Showing <span className="text-brand-ink">{shopData.length}</span>{" "}
                       Products
                     </p>
                   </div>
@@ -47,9 +47,9 @@ const ShopWithoutSidebar = () => {
                       aria-label="button for product grid tab"
                       className={`${
                         productStyle === "grid"
-                          ? "bg-blue border-blue text-white"
+                          ? "border-brand-rust bg-brand-rust text-white"
                           : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
+                      } flex h-9 w-10.5 items-center justify-center rounded-[5px] border ease-out duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white`}
                     >
                       <svg
                         className="fill-current"
@@ -91,9 +91,9 @@ const ShopWithoutSidebar = () => {
                       aria-label="button for product list tab"
                       className={`${
                         productStyle === "list"
-                          ? "bg-blue border-blue text-white"
+                          ? "border-brand-rust bg-brand-rust text-white"
                           : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
+                      } flex h-9 w-10.5 items-center justify-center rounded-[5px] border ease-out duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white`}
                     >
                       <svg
                         className="fill-current"
@@ -125,7 +125,7 @@ const ShopWithoutSidebar = () => {
               <div
                 className={`${
                   productStyle === "grid"
-                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-7.5 gap-y-9"
+                    ? "grid grid-cols-1 gap-x-4 gap-y-9 sm:grid-cols-2 sm:gap-x-7.5 lg:grid-cols-4"
                     : "flex flex-col gap-7.5"
                 }`}
               >
@@ -140,7 +140,7 @@ const ShopWithoutSidebar = () => {
               {/* <!-- Products Grid Tab Content End --> */}
 
               {/* <!-- Products Pagination Start --> */}
-              <div className="flex justify-center mt-15">
+              <div className="hidden justify-center mt-15">
                 <div className="bg-white shadow-1 rounded-md p-2">
                   <ul className="flex items-center">
                     <li>
@@ -149,7 +149,7 @@ const ShopWithoutSidebar = () => {
                         aria-label="button for pagination left"
                         type="button"
                         disabled
-                        className="flex items-center justify-center w-8 h-9 ease-out duration-200 rounded-[3px disabled:text-gray-4"
+                        className="flex h-9 w-8 items-center justify-center rounded-[3px] text-brand-ink/50 ease-out duration-200 disabled:text-brand-ink/30"
                       >
                         <svg
                           className="fill-current"

@@ -1,9 +1,11 @@
 import React from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import blogData from "./blogData";
 import BlogItem from "../Blog/BlogItem";
+import { getArticles, urlFor } from "@/lib/sanity";
 
-const BlogGrid = () => {
+const BlogGrid = async () => {
+  const articles = await getArticles();
+
   return (
     <>
       <Breadcrumb title={"Blog Grid"} pages={["blog grid"]} />{" "}
@@ -11,13 +13,26 @@ const BlogGrid = () => {
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-7.5">
             {/* <!-- blog item --> */}
-            {blogData.map((blog, key) => (
-              <BlogItem blog={blog} key={key} />
+            {articles.map((article) => (
+              <BlogItem
+                blog={{
+                  date: new Intl.DateTimeFormat("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  }).format(new Date(article.publishedAt)),
+                  title: article.title,
+                  img: urlFor(article.heroImage).width(900).height(600).url(),
+                  slug: article.slug,
+                  excerpt: article.excerpt,
+                }}
+                key={article._id}
+              />
             ))}
           </div>
 
           {/* <!-- Blog Pagination Start --> */}
-          <div className="flex justify-center mt-15">
+          <div className="hidden flex justify-center mt-15">
             <div className="bg-white shadow-1 rounded-md p-2">
               <ul className="flex items-center">
                 <li>

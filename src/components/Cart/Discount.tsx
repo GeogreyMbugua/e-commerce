@@ -18,13 +18,13 @@ const Discount = () => {
                   name="coupon"
                   id="coupon"
                   placeholder="Enter coupon code"
-                  className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                  className="w-full rounded-md border border-gray-3 bg-gray-1 px-5 py-2.5 placeholder:text-dark-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-brand-rust/20"
                 />
               </div>
 
               <button
                 type="submit"
-                className="inline-flex font-medium text-white bg-blue py-3 px-8 rounded-md ease-out duration-200 hover:bg-blue-dark"
+                className="inline-flex rounded-md bg-brand-ink px-8 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
               >
                 Apply Code
               </button>

@@ -28,13 +28,13 @@ const Categories = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden bg-brand-cream/40 pt-14 sm:pt-17.5">
-      <div className="max-w-[1170px] w-full mx-auto border-b border-brand-ink/10 px-4 pb-12 sm:px-8 sm:pb-15 xl:px-0">
+    <section className="overflow-hidden bg-brand-cream/40 pt-10 sm:pt-17.5">
+      <div className="max-w-[1170px] w-full mx-auto border-b border-brand-ink/10 px-4 pb-10 sm:px-8 sm:pb-15 xl:px-0">
         <div className="swiper categories-carousel common-carousel">
           {/* <!-- section title --> */}
-          <div className="mb-8 flex items-end justify-between sm:mb-10">
+          <div className="mb-6 flex items-end justify-between sm:mb-10">
             <div>
-              <span className="mb-1.5 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-brand-rust">
+              <span className="mb-1.5 flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-rust sm:text-sm">
                 <svg
                   width="20"
                   height="20"
@@ -71,13 +71,13 @@ const Categories = () => {
                 </svg>
                 Categories
               </span>
-              <h2 className="font-semibold text-xl text-brand-ink xl:text-heading-5">
+              <h2 className="font-semibold text-xl text-brand-ink sm:text-2xl xl:text-heading-5">
                 Find Your Format
               </h2>
             </div>
 
             <div className="flex items-center gap-3">
-              <button type="button" aria-label="Previous categories" onClick={handlePrev} className="swiper-button-prev !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white">
+              <button type="button" aria-label="Previous categories" onClick={handlePrev} className="swiper-button-prev !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9">
                 <svg
                   className="fill-current"
                   width="24"
@@ -95,7 +95,7 @@ const Categories = () => {
                 </svg>
               </button>
 
-              <button type="button" aria-label="Next categories" onClick={handleNext} className="swiper-button-next !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white">
+              <button type="button" aria-label="Next categories" onClick={handleNext} className="swiper-button-next !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9">
                 <svg
                   className="fill-current"
                   width="24"
@@ -117,20 +117,25 @@ const Categories = () => {
 
           <Swiper
             ref={sliderRef}
-            slidesPerView={6}
-            spaceBetween={16}
+            slidesPerView={2.15}
+            spaceBetween={12}
             breakpoints={{
-              // when window width is >= 640px
+              // Keep a partial next card visible on small screens.
               0: {
-                slidesPerView: 2,
+                slidesPerView: 2.15,
+                spaceBetween: 12,
+              },
+              640: {
+                slidesPerView: 3,
+                spaceBetween: 16,
               },
               1000: {
                 slidesPerView: 4,
-                // spaceBetween: 4,
+                spaceBetween: 16,
               },
-              // when window width is >= 768px
               1200: {
                 slidesPerView: 6,
+                spaceBetween: 16,
               },
             }}
           >

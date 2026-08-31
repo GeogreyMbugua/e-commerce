@@ -41,7 +41,7 @@ const Login = () => {
         } pt-7.5 pb-8.5 px-4 sm:px-8.5`}
       >
         <p className="text-custom-sm mb-6">
-          If you didn&apos;t Logged in, Please Log in first.
+          If you are not signed in, please sign in first.
         </p>
 
         <div className="mb-5">
@@ -53,7 +53,7 @@ const Login = () => {
             type="text"
             name="name"
             id="name"
-            className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+            className="w-full rounded-md border border-gray-3 bg-gray-1 px-5 py-2.5 placeholder:text-dark-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-brand-rust/20"
           />
         </div>
 
@@ -67,13 +67,13 @@ const Login = () => {
             name="password"
             id="password"
             autoComplete="on"
-            className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+            className="w-full rounded-md border border-gray-3 bg-gray-1 px-5 py-2.5 placeholder:text-dark-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-brand-rust/20"
           />
         </div>
 
         <button
           type="submit"
-          className="inline-flex font-medium text-white bg-blue py-3 px-10.5 rounded-md ease-out duration-200 hover:bg-blue-dark"
+          className="inline-flex rounded-md bg-brand-ink px-10.5 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
         >
           Login
         </button>

@@ -7,9 +7,9 @@ const SingleItem = ({ item }: { item: Category }) => {
   return (
     <Link
       href={`/shop-with-sidebar?category=${item.slug}`}
-      className="group flex flex-col items-center rounded-md px-2 py-3 transition-colors duration-200 hover:bg-brand-cream"
+      className="group flex flex-col items-center rounded-md px-1 py-2 transition-colors duration-200 hover:bg-brand-cream sm:px-2 sm:py-3"
     >
-      <div className="relative mb-4 aspect-square w-full max-w-[150px] overflow-hidden rounded-md border border-brand-ink/10 bg-brand-cream">
+      <div className="relative mb-3 aspect-square w-full max-w-[150px] overflow-hidden rounded-lg border border-brand-ink/10 bg-white sm:mb-4 sm:rounded-md">
         <Image
           src={item.img}
           alt={`${item.title} collection`}

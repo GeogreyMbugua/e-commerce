@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_PATH: /e-commerce
+      NEXT_PUBLIC_SANITY_PROJECT_ID: lfv6li8u
+      NEXT_PUBLIC_SANITY_DATASET: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4

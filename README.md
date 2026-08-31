@@ -61,6 +61,17 @@ To test the Pages build locally:
 NEXT_PUBLIC_BASE_PATH=/e-commerce pnpm build
 ```
 
+### Sanity content
+
+The storefront reads published AudioVintage articles from Sanity during the
+static build. The public project ID and dataset are configured in the GitHub
+Pages workflow; no Sanity write token is exposed to the storefront.
+
+After publishing an article in Sanity, push a change to `main` or manually run
+the **Deploy to GitHub Pages** workflow to rebuild the site and publish the
+updated Listening Room content. The Sanity Studio lives in `studio/` and can be
+run locally with `cd studio && pnpm dev`.
+
 ## Project Structure
 
 - `src/app` contains the Next.js routes, layout, styles, and providers

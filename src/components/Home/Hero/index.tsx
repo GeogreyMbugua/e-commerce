@@ -6,25 +6,49 @@ import Image from "@/components/Common/BrandedImage";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-[#a85e32] pb-10 pt-6 sm:pt-8 lg:pt-10">
+    <section className="relative overflow-hidden bg-[#a85e32] pb-0 pt-0 sm:pb-10 sm:pt-6 lg:pt-7">
       <Image
         src="/images/hero/hero4.webp"
         alt="Shelves of vintage audio equipment in a curated shop"
         fill
         priority
         sizes="100vw"
-        className="object-cover object-center"
+        className="hidden object-cover object-center xl:block"
       />
-      <div className="absolute inset-0 bg-[#6f351d]/75" aria-hidden="true" />
+      <Image
+        src="/images/hero/canvabg.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        aria-hidden="true"
+        className="hidden object-cover object-center sm:block xl:hidden"
+      />
+      <Image
+        src="/images/hero/canva2.webp"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        aria-hidden="true"
+        className="block object-cover object-[62%_center] sm:hidden"
+      />
+      <div
+        className="absolute inset-0 bg-[#6f351d]/20 xl:bg-[#6f351d]/75"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-y-0 left-0 w-[88%] bg-gradient-to-r from-brand-ink/65 via-brand-ink/30 to-transparent xl:hidden"
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="flex flex-wrap gap-5">
-          <div className="xl:max-w-[757px] w-full">
-            <div className="relative z-1 rounded-[10px] bg-white/95 overflow-hidden shadow-xl">
+      <div className="relative z-10 w-full max-w-[1360px] mx-auto px-0 sm:px-8 xl:px-0">
+        <div className="flex flex-wrap gap-5 xl:flex-nowrap xl:gap-6">
+          <div className="w-full xl:min-w-0 xl:flex-1">
+            <div className="relative z-1 overflow-hidden xl:rounded-[10px] xl:bg-white/95 xl:shadow-xl">
               <Image
                 src="/images/hero/hero-bg.png"
                 alt="Vintage audio background pattern"
-                className="hero-pattern absolute right-0 bottom-0 -z-1"
+                className="hero-pattern absolute right-0 bottom-0 -z-1 hidden xl:block"
                 width={534}
                 height={520}
               />
@@ -33,7 +57,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="xl:max-w-[393px] w-full">
+          <div className="hidden w-full xl:block xl:w-[420px] xl:shrink-0">
             <div className="flex flex-col sm:flex-row xl:flex-col gap-5">
               <div className="w-full relative rounded-[10px] bg-white/95 p-4 sm:p-7.5 shadow-xl">
                 <div className="flex items-center gap-4 sm:gap-6">
@@ -97,7 +121,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="relative z-10 mt-8 border-t border-white/20 bg-brand-ink/85 py-7 sm:mt-12 sm:py-8">
+      <div className="relative z-10 mt-0 border-t border-white/20 bg-brand-ink/85 py-7 sm:mt-12 sm:py-8">
         <HeroFeature />
       </div>
     </section>

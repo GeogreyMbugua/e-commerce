@@ -26,7 +26,7 @@ const featureData = [
 
 const HeroFeature = () => {
   return (
-    <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 xl:px-0">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4 xl:gap-8">
         {featureData.map((item, key) => (
           <div className="flex items-start gap-4" key={key}>

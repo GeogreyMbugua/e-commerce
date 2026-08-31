@@ -27,7 +27,7 @@ const ShippingMethod = () => {
               <div
                 className={`flex h-4 w-4 items-center justify-center rounded-full ${
                   shippingMethod === "free"
-                    ? "border-4 border-blue"
+                    ? "border-4 border-brand-rust"
                     : "border border-gray-4"
                 }`}
               ></div>
@@ -50,7 +50,7 @@ const ShippingMethod = () => {
               <div
                 className={`flex h-4 w-4 items-center justify-center rounded-full ${
                   shippingMethod === "fedex"
-                    ? "border-4 border-blue"
+                    ? "border-4 border-brand-rust"
                     : "border border-gray-4"
                 }`}
               ></div>
@@ -90,7 +90,7 @@ const ShippingMethod = () => {
               <div
                 className={`flex h-4 w-4 items-center justify-center rounded-full ${
                   shippingMethod === "dhl"
-                    ? "border-4 border-blue"
+                    ? "border-4 border-brand-rust"
                     : "border border-gray-4"
                 }`}
               ></div>
