@@ -81,3 +81,7 @@ run locally with `cd studio && pnpm dev`.
 - `public/images` contains the storefront, product, logo, and promotional assets
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the route map, shared layout, navigation model, state boundaries, current integration gaps, and guidance for search, filtering, AI, and payments.
+
+See [CHANGELOG.md](CHANGELOG.md) for the Version 2 release record, Sanity
+content workflow, deployment behavior, verification results, and rollback
+guidance.
