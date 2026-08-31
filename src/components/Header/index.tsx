@@ -61,7 +61,7 @@ const Header = () => {
                 alt="Logo"
                 width={219}
                 height={36}
-                className="h-16 w-16 object-cover lg:h-20 lg:w-20 xl:h-[120px] xl:w-[219px]"
+                className="h-auto w-[150px] object-contain sm:w-[180px] lg:h-20 lg:w-20 xl:h-[120px] xl:w-[219px]"
               />
             </Link>
 
