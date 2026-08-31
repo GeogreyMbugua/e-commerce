@@ -69,8 +69,14 @@ Pages workflow; no Sanity write token is exposed to the storefront.
 
 After publishing an article in Sanity, push a change to `main` or manually run
 the **Deploy to GitHub Pages** workflow to rebuild the site and publish the
-updated Listening Room content. The Sanity Studio lives in `studio/` and can be
-run locally with `cd studio && pnpm dev`.
+updated Listening Room content. The Sanity Studio lives in `studio/` and can
+be installed and run independently:
+
+```bash
+cd studio
+pnpm install --frozen-lockfile
+pnpm dev
+```
 
 ## Project Structure
 

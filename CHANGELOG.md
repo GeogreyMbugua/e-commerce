@@ -6,6 +6,15 @@ and releases follow semantic-versioning conventions where practical.
 
 ## [Unreleased]
 
+### Fixed
+
+- Isolated the Sanity Studio from the storefront TypeScript project so the
+  GitHub Pages build no longer resolves Studio dependencies against the
+  storefront’s Sanity version.
+- Added a dedicated `studio/pnpm-lock.yaml` and approved only the required
+  `esbuild` install script for reproducible Studio CI builds.
+- Added a Studio validation job to the GitHub Pages workflow.
+
 ### Planned
 
 - Add Sanity preview mode so editors can review unpublished articles.
