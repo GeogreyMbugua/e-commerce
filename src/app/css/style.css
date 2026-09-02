@@ -144,6 +144,17 @@ input[type='search']::-webkit-search-results-decoration {
   }
 }
 
+@media (min-width: 1280px) {
+  .hero-desktop .hero-slide-copy h1,
+  .hero-desktop .hero-slide-copy h2 {
+    color: #f8f2e8;
+  }
+
+  .hero-desktop .hero-slide-copy .hero-slide-description {
+    color: #f1eadf;
+  }
+}
+
 .hero-carousel .swiper-pagination-bullet {
   @apply h-1 w-4 rounded-[11px];
   background-color: rgba(255, 255, 255, 0.35);

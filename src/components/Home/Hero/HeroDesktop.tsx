@@ -73,7 +73,7 @@ const HeroDesktopCarousel = () => {
                   </p>
 
                   {index === 0 ? (
-                    <h1 className="relative mb-5 font-semibold text-[2.75rem] leading-[1.06] tracking-tight text-brand-cream drop-shadow-[0_4px_24px_rgba(15,11,9,0.55)] 2xl:text-[3rem]">
+                    <h1 className="relative mb-5 font-semibold text-[2.75rem] leading-[1.06] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_24px_rgba(15,11,9,0.55)] 2xl:text-[3rem]">
                       {slide.title.map((line) => (
                         <span className="block" key={line}>
                           {line}
@@ -81,7 +81,7 @@ const HeroDesktopCarousel = () => {
                       ))}
                     </h1>
                   ) : (
-                    <h2 className="relative mb-5 font-semibold text-[2.75rem] leading-[1.06] tracking-tight text-brand-cream drop-shadow-[0_4px_24px_rgba(15,11,9,0.55)] 2xl:text-[3rem]">
+                    <h2 className="relative mb-5 font-semibold text-[2.75rem] leading-[1.06] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_24px_rgba(15,11,9,0.55)] 2xl:text-[3rem]">
                       {slide.title.map((line) => (
                         <span className="block" key={line}>
                           {line}
@@ -90,7 +90,7 @@ const HeroDesktopCarousel = () => {
                     </h2>
                   )}
 
-                  <p className="relative max-w-[380px] text-base leading-7 text-brand-cream/85 drop-shadow-[0_2px_16px_rgba(15,11,9,0.45)]">
+                  <p className="hero-slide-description relative max-w-[380px] text-base leading-7 text-[#f1eadf] drop-shadow-[0_2px_16px_rgba(15,11,9,0.45)]">
                     {slide.description}
                   </p>
 
@@ -121,7 +121,7 @@ const HeroDesktopCarousel = () => {
               </div>
 
               <span
-                className="absolute bottom-6 right-10 z-20 text-xs font-medium tracking-[0.22em] text-brand-cream/75 2xl:right-14"
+                className="absolute bottom-6 right-10 z-20 text-xs font-medium tracking-[0.22em] text-[#f8f2e8]/80 2xl:right-14"
                 aria-hidden="true"
               >
                 {String(index + 1).padStart(2, "0")} / 03
@@ -144,7 +144,7 @@ const HeroDesktopCarousel = () => {
 
 const HeroDesktop = () => {
   return (
-    <section className="relative overflow-hidden bg-[#7a4528]">
+    <section className="hero-desktop relative overflow-hidden bg-[#7a4528]">
       <Image
         src="/images/hero/hero-ackground-2.jpg"
         alt="Shelves of vintage audio equipment in a curated shop"
