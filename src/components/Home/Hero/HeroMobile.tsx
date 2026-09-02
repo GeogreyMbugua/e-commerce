@@ -68,23 +68,32 @@ const HeroMobile = () => {
               />
 
               <div
-                className="absolute inset-0 bg-gradient-to-b from-brand-ink/88 via-brand-ink/45 to-brand-ink/82"
+                className="absolute inset-0 bg-brand-ink/20"
                 aria-hidden="true"
               />
               <div
-                className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-brand-ink/90 via-brand-ink/35 to-transparent"
+                className="absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-brand-ink/95 via-brand-ink/72 to-transparent"
+                aria-hidden="true"
+              />
+              <div
+                className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-brand-ink/88 via-brand-ink/30 to-transparent"
                 aria-hidden="true"
               />
 
               <div className="relative z-10 flex flex-1 flex-col px-5 pb-24 pt-7">
-                <div className="hero-mobile-copy flex flex-col">
-                  <p className="mb-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold">
+                <div className="hero-mobile-copy relative flex flex-col">
+                  <div
+                    className="pointer-events-none absolute -inset-x-5 -top-7 bottom-0 bg-gradient-to-b from-brand-ink/55 via-brand-ink/25 to-transparent"
+                    aria-hidden="true"
+                  />
+
+                  <p className="relative mb-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold">
                     <span className="h-px w-7 bg-brand-gold" aria-hidden="true" />
                     {slide.eyebrow}
                   </p>
 
                   {index === 0 ? (
-                    <h1 className="mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-brand-cream drop-shadow-[0_6px_25px_rgba(15,11,9,0.45)]">
+                    <h1 className="relative mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
                       {slide.title.map((line) => (
                         <span className="block" key={line}>
                           {line}
@@ -92,7 +101,7 @@ const HeroMobile = () => {
                       ))}
                     </h1>
                   ) : (
-                    <h2 className="mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-brand-cream drop-shadow-[0_6px_25px_rgba(15,11,9,0.45)]">
+                    <h2 className="relative mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
                       {slide.title.map((line) => (
                         <span className="block" key={line}>
                           {line}
@@ -101,13 +110,13 @@ const HeroMobile = () => {
                     </h2>
                   )}
 
-                  <p className="max-w-[20rem] text-sm leading-6 text-brand-cream/88">
+                  <p className="relative max-w-[20rem] text-sm leading-6 text-[#f1eadf] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
                     {slide.description}
                   </p>
 
                   <Link
                     href={slide.ctaHref}
-                    className="mt-6 inline-flex w-fit items-center gap-2.5 rounded-md bg-brand-cream px-6 py-3.5 text-sm font-medium text-brand-ink shadow-[0_8px_22px_rgba(15,11,9,0.28)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
+                    className="relative mt-6 inline-flex w-fit items-center gap-2.5 rounded-md bg-[#f5efe7] px-6 py-3.5 text-sm font-medium text-brand-ink shadow-[0_8px_22px_rgba(0,0,0,0.35)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
                   >
                     {slide.cta}
                     <span aria-hidden="true">→</span>
@@ -132,7 +141,7 @@ const HeroMobile = () => {
               </div>
 
               <span
-                className="absolute bottom-20 right-5 z-20 text-[11px] font-medium tracking-[0.22em] text-brand-cream/75"
+                className="absolute bottom-20 right-5 z-20 text-[11px] font-medium tracking-[0.22em] text-[#f8f2e8]/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                 aria-hidden="true"
               >
                 {String(index + 1).padStart(2, "0")} / 03
