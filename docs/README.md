@@ -22,7 +22,9 @@ implementation and maintained as the system evolves.
    quality gates.
 8. [DEPLOYMENT-OPERATIONS.md](DEPLOYMENT-OPERATIONS.md) — GitHub Pages,
    Render, PostgreSQL, Redis, Sanity, CI/CD, observability, and recovery.
-9. [../CHANGELOG.md](../CHANGELOG.md) — release history and operational notes.
+9. [PRODUCTION-COST-ESTIMATE.md](PRODUCTION-COST-ESTIMATE.md) — staging vs
+   production infrastructure cost approximation for a single client.
+10. [../CHANGELOG.md](../CHANGELOG.md) — release history and operational notes.
 
 ## Documentation rules
 
