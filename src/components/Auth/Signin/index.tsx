@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
-import { withBasePath } from "@/lib/routes";
+import { myAccountPath, shopPath } from "@/lib/routes";
 
 const Signin = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const Signin = () => {
         firstName: firstName.trim() || undefined,
         lastName: lastName.trim() || undefined,
       });
-      router.push(withBasePath("/my-account"));
+      router.push(myAccountPath);
     } catch (signInError) {
       setError(
         signInError instanceof Error
@@ -123,7 +123,7 @@ const Signin = () => {
               <p className="text-center mt-4">
                 Prefer guest checkout?{" "}
                 <Link
-                  href={withBasePath("/shop-with-sidebar")}
+                  href={shopPath}
                   className="text-brand-rust hover:underline"
                 >
                   Continue shopping

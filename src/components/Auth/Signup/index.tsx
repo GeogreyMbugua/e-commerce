@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
 import React from "react";
-import { withBasePath } from "@/lib/routes";
+import { signInPath } from "@/lib/routes";
 
 const Signup = () => {
   return (
@@ -22,7 +22,7 @@ const Signup = () => {
 
             <div className="flex flex-col gap-4 text-center">
               <Link
-                href={withBasePath("/signin")}
+                href={signInPath}
                 className="inline-flex justify-center rounded-lg bg-brand-ink px-6 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
               >
                 Continue to sign in

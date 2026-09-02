@@ -10,7 +10,7 @@ import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "@/components/Common/BrandedImage";
 import categories from "../Home/Categories/categoryData";
-import { shopPath, withBasePath } from "@/lib/routes";
+import { myAccountPath, shopPath, signInPath } from "@/lib/routes";
 import { useAuth } from "@/providers/AuthProvider";
 
 const Header = () => {
@@ -185,7 +185,7 @@ const Header = () => {
                 {isAuthenticated && customer ? (
                   <div className="flex items-center gap-4">
                     <Link
-                      href={withBasePath("/my-account")}
+                      href={myAccountPath}
                       className="flex items-center gap-2.5"
                     >
                       <div>
@@ -206,7 +206,7 @@ const Header = () => {
                     </button>
                   </div>
                 ) : (
-                <Link href={withBasePath("/signin")} className="flex items-center gap-2.5">
+                <Link href={signInPath} className="flex items-center gap-2.5">
                   <svg
                     width="24"
                     height="24"

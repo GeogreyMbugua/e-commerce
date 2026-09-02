@@ -5,7 +5,7 @@ import AddressModal from "./AddressModal";
 import Orders from "../Orders";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { withBasePath } from "@/lib/routes";
+import { signInPath } from "@/lib/routes";
 
 const MyAccount = () => {
   const { customer, isAuthenticated, loading, signOut } = useAuth();
@@ -31,7 +31,7 @@ const MyAccount = () => {
               Sign in to manage your profile, addresses, and orders.
             </p>
             <Link
-              href={withBasePath("/signin")}
+              href={signInPath}
               className="inline-flex rounded-md bg-brand-rust px-6 py-3 font-medium text-white hover:bg-brand-ink"
             >
               Sign in
