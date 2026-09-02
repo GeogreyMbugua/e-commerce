@@ -27,10 +27,10 @@ const featureData = [
 const HeroFeature = () => {
   return (
     <div className="w-full max-w-[1360px] mx-auto px-5 sm:px-8 xl:px-6">
-      <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-8 xl:grid-cols-4 xl:gap-10">
+      <div className="flex gap-5 overflow-x-auto pb-1 no-scrollbar sm:gap-6 xl:grid xl:grid-cols-4 xl:gap-10 xl:overflow-visible xl:pb-0">
         {featureData.map((item, key) => (
           <div
-            className="flex items-start gap-4 border-t border-white/10 pt-6 first:border-t-0 first:pt-0 sm:border-t-0 sm:pt-0 xl:border-l xl:border-t-0 xl:border-brand-cream/15 xl:pl-8 xl:pt-0 xl:first:border-l-0 xl:first:pl-0"
+            className="flex min-w-[220px] shrink-0 items-start gap-4 border-t border-white/10 pt-6 first:border-t-0 first:pt-0 sm:min-w-[260px] xl:min-w-0 xl:shrink xl:border-l xl:border-t-0 xl:border-brand-cream/15 xl:pl-8 xl:pt-0 xl:first:border-l-0 xl:first:pl-0"
             key={key}
           >
             <Image
