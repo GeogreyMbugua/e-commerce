@@ -55,7 +55,7 @@ const HeroMobile = () => {
       >
         {heroSlides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <div className="hero-mobile-slide relative flex min-h-[calc(100svh-7.5rem)] flex-col">
+            <div className="hero-mobile-slide relative min-h-[clamp(520px,82svh,680px)] overflow-hidden">
               <Image
                 src={slide.mobileBackground}
                 alt=""
@@ -67,65 +67,62 @@ const HeroMobile = () => {
                 style={{ objectPosition: slide.mobileBackgroundPosition }}
               />
 
+              <div className="absolute inset-0 bg-brand-ink/15" aria-hidden="true" />
               <div
-                className="absolute inset-0 bg-brand-ink/20"
+                className="absolute inset-x-0 top-0 h-[52%] bg-gradient-to-b from-brand-ink/95 via-brand-ink/68 to-transparent"
                 aria-hidden="true"
               />
               <div
-                className="absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-brand-ink/95 via-brand-ink/72 to-transparent"
-                aria-hidden="true"
-              />
-              <div
-                className="absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-brand-ink/88 via-brand-ink/30 to-transparent"
+                className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-brand-ink/92 via-brand-ink/45 to-transparent"
                 aria-hidden="true"
               />
 
-              <div className="relative z-10 flex flex-1 flex-col px-5 pb-24 pt-7">
-                <div className="hero-mobile-copy relative flex flex-col">
+              <div className="hero-mobile-copy relative z-20 px-5 pb-[min(42vh,240px)] pt-6">
+                <div
+                  className="pointer-events-none absolute -inset-x-5 -top-6 bottom-8 bg-gradient-to-b from-brand-ink/50 via-brand-ink/20 to-transparent"
+                  aria-hidden="true"
+                />
+
+                <p className="relative mb-3 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold">
+                  <span className="h-px w-7 bg-brand-gold" aria-hidden="true" />
+                  {slide.eyebrow}
+                </p>
+
+                {index === 0 ? (
+                  <h1 className="relative mb-3 font-semibold text-[2rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
+                    {slide.title.map((line) => (
+                      <span className="block" key={line}>
+                        {line}
+                      </span>
+                    ))}
+                  </h1>
+                ) : (
+                  <h2 className="relative mb-3 font-semibold text-[2rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
+                    {slide.title.map((line) => (
+                      <span className="block" key={line}>
+                        {line}
+                      </span>
+                    ))}
+                  </h2>
+                )}
+
+                <p className="relative line-clamp-3 max-w-[19rem] text-sm leading-6 text-[#f1eadf] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+                  {slide.description}
+                </p>
+
+                <Link
+                  href={slide.ctaHref}
+                  className="relative mt-4 inline-flex w-fit items-center gap-2.5 rounded-md bg-[#f5efe7] px-6 py-3 text-sm font-medium text-brand-ink shadow-[0_8px_22px_rgba(0,0,0,0.35)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
+                >
+                  {slide.cta}
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+
+              <div className="hero-mobile-product pointer-events-none absolute inset-x-0 bottom-[3.25rem] z-10 flex justify-center px-3">
+                <div className="relative flex w-full max-w-[min(100%,400px)] items-end justify-center">
                   <div
-                    className="pointer-events-none absolute -inset-x-5 -top-7 bottom-0 bg-gradient-to-b from-brand-ink/55 via-brand-ink/25 to-transparent"
-                    aria-hidden="true"
-                  />
-
-                  <p className="relative mb-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold">
-                    <span className="h-px w-7 bg-brand-gold" aria-hidden="true" />
-                    {slide.eyebrow}
-                  </p>
-
-                  {index === 0 ? (
-                    <h1 className="relative mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
-                      {slide.title.map((line) => (
-                        <span className="block" key={line}>
-                          {line}
-                        </span>
-                      ))}
-                    </h1>
-                  ) : (
-                    <h2 className="relative mb-4 font-semibold text-[2.125rem] leading-[1.04] tracking-tight text-[#f8f2e8] drop-shadow-[0_4px_18px_rgba(0,0,0,0.65)]">
-                      {slide.title.map((line) => (
-                        <span className="block" key={line}>
-                          {line}
-                        </span>
-                      ))}
-                    </h2>
-                  )}
-
-                  <p className="relative max-w-[20rem] text-sm leading-6 text-[#f1eadf] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
-                    {slide.description}
-                  </p>
-
-                  <Link
-                    href={slide.ctaHref}
-                    className="relative mt-6 inline-flex w-fit items-center gap-2.5 rounded-md bg-[#f5efe7] px-6 py-3.5 text-sm font-medium text-brand-ink shadow-[0_8px_22px_rgba(0,0,0,0.35)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
-                  >
-                    {slide.cta}
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
-
-                <div className="hero-mobile-product relative mt-auto flex flex-1 items-end justify-center pb-2 pt-8">
-                  <div
-                    className="absolute bottom-[12%] left-1/2 h-[13.5rem] w-[13.5rem] -translate-x-1/2 rounded-full border border-brand-rust/25"
+                    className="absolute bottom-[8%] left-1/2 h-[min(38vw,11.5rem)] w-[min(38vw,11.5rem)] -translate-x-1/2 rounded-full border border-brand-rust/30"
                     aria-hidden="true"
                   />
                   <Image
@@ -134,14 +131,14 @@ const HeroMobile = () => {
                     width={slide.productWidth}
                     height={slide.productHeight}
                     priority={index === 0}
-                    sizes="92vw"
-                    className={`relative z-10 h-auto w-full object-contain drop-shadow-[0_20px_44px_rgba(15,11,9,0.42)] ${slide.mobileProductClassName}`}
+                    sizes="90vw"
+                    className="relative z-10 h-auto w-full max-h-[min(40vh,280px)] object-contain object-bottom drop-shadow-[0_24px_48px_rgba(0,0,0,0.5)]"
                   />
                 </div>
               </div>
 
               <span
-                className="absolute bottom-20 right-5 z-20 text-[11px] font-medium tracking-[0.22em] text-[#f8f2e8]/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                className="absolute bottom-[3.25rem] right-5 z-30 text-[11px] font-medium tracking-[0.22em] text-[#f8f2e8]/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                 aria-hidden="true"
               >
                 {String(index + 1).padStart(2, "0")} / 03
@@ -151,7 +148,7 @@ const HeroMobile = () => {
         ))}
       </Swiper>
 
-      <div className="absolute inset-x-0 bottom-6 z-30 flex items-center px-5">
+      <div className="absolute inset-x-0 bottom-5 z-30 flex items-center px-5">
         <div
           ref={paginationRef}
           className="hero-carousel-pagination pointer-events-auto"
