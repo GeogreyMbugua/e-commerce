@@ -3,22 +3,21 @@ import React from "react";
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
+import { addProductToCart } from "@/lib/cart-service";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import { updateproductDetails } from "@/redux/features/product-details";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "@/components/Common/BrandedImage";
+import { getProductPreviewAlt, getProductPreviewUrl } from "@/lib/product-images";
+import { productHref } from "@/lib/routes";
 
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleProductDetails = () => {
-    dispatch(updateproductDetails({ ...item }));
-  };
+  const previewImage = getProductPreviewUrl(item);
+  const previewAlt = getProductPreviewAlt(item);
+  const detailHref = productHref(item.slug);
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -26,13 +25,12 @@ const SingleGridItem = ({ item }: { item: Product }) => {
   };
 
   // add to cart
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+  const handleAddToCart = async () => {
+    if (!item.slug) {
+      return;
+    }
+
+    await addProductToCart(dispatch, { slug: item.slug, quantity: 1 });
   };
 
   const handleItemToWishList = () => {
@@ -49,8 +47,8 @@ const SingleGridItem = ({ item }: { item: Product }) => {
     <div className="group">
       <div className="relative mb-4 flex min-h-[230px] items-center justify-center overflow-hidden rounded-lg bg-brand-cream shadow-1 sm:min-h-[270px]">
         <Image
-          src={item.imgs.previews[0]}
-          alt={item.title}
+          src={previewImage}
+          alt={previewAlt}
           width={250}
           height={250}
           className="max-h-[250px] w-full object-contain px-4"
@@ -159,7 +157,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
       </div>
 
       <h3 className="mb-1.5 font-medium text-brand-ink ease-out duration-200 hover:text-brand-rust">
-        <Link href="/shop-details" onClick={handleProductDetails}>
+        <Link href={detailHref}>
           {item.title}
         </Link>
       </h3>

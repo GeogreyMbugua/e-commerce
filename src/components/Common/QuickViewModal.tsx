@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { AppDispatch, useAppSelector } from "@/redux/store";
-import { addItemToCart } from "@/redux/features/cart-slice";
+import { addProductToCart } from "@/lib/cart-service";
 import { useDispatch } from "react-redux";
 import Image from "@/components/Common/BrandedImage";
+import Link from "next/link";
+import { productHref } from "@/lib/routes";
 import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { resetQuickView } from "@/redux/features/quickView-slice";
 import { updateproductDetails } from "@/redux/features/product-details";
@@ -30,13 +32,15 @@ const QuickViewModal = () => {
   };
 
   // add to cart
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-      })
-    );
+  const handleAddToCart = async () => {
+    if (!product.slug) {
+      return;
+    }
+
+    await addProductToCart(dispatch, {
+      slug: product.slug,
+      quantity,
+    });
 
     closeModal();
   };
@@ -399,6 +403,16 @@ const QuickViewModal = () => {
                 >
                   Add to Cart
                 </button>
+
+                {product.slug && (
+                  <Link
+                    href={productHref(product.slug)}
+                    onClick={() => closeModal()}
+                    className="inline-flex font-medium text-brand-ink border border-gray-3 py-3 px-7 rounded-md ease-out duration-200 hover:border-brand-rust hover:text-brand-rust"
+                  >
+                    View full details
+                  </Link>
+                )}
 
                 <button
                   className={`inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md ease-out duration-200 hover:bg-opacity-95 `}

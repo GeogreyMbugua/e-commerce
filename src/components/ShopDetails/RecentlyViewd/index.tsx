@@ -1,9 +1,8 @@
 "use client";
 import React from "react";
-import shopData from "@/components/Shop/shopData";
 import ProductItem from "@/components/Common/ProductItem";
 import Image from "@/components/Common/BrandedImage";
-import Link from "next/link";
+import { useCatalogProducts } from "@/hooks/useCatalogProducts";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef } from "react";
@@ -12,6 +11,7 @@ import "swiper/css";
 
 const RecentlyViewdItems = () => {
   const sliderRef = useRef(null);
+  const { products, loading } = useCatalogProducts({ limit: 8, sort: "newest" });
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -89,11 +89,17 @@ const RecentlyViewdItems = () => {
             spaceBetween={20}
             className="justify-between"
           >
-            {shopData.map((item, key) => (
-              <SwiperSlide key={key}>
-                <ProductItem item={item} />
-              </SwiperSlide>
-            ))}
+            {loading
+              ? Array.from({ length: 4 }).map((_, key) => (
+                  <SwiperSlide key={key}>
+                    <div className="h-[320px] animate-pulse rounded-lg bg-gray-2" />
+                  </SwiperSlide>
+                ))
+              : products.map((item) => (
+                  <SwiperSlide key={item.slug ?? item.id}>
+                    <ProductItem item={item} />
+                  </SwiperSlide>
+                ))}
           </Swiper>
         </div>
       </div>

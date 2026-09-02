@@ -1,12 +1,9 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-type InitialState = {
-  items: CartItem[];
-};
-
-type CartItem = {
+export type CartItem = {
   id: number;
+  slug: string;
   title: string;
   price: number;
   discountedPrice: number;
@@ -14,7 +11,14 @@ type CartItem = {
   imgs?: {
     thumbnails: string[];
     previews: string[];
+    alts?: string[];
   };
+  imageAlt?: string;
+  primaryImageUrl?: string;
+};
+
+type InitialState = {
+  items: CartItem[];
 };
 
 const initialState: InitialState = {
@@ -25,40 +29,23 @@ export const cart = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItemToCart: (state, action: PayloadAction<CartItem>) => {
-      const { id, title, price, quantity, discountedPrice, imgs } =
-        action.payload;
-      const existingItem = state.items.find((item) => item.id === id);
-
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
-        state.items.push({
-          id,
-          title,
-          price,
-          quantity,
-          discountedPrice,
-          imgs,
-        });
-      }
+    setCartFromServer: (state, action: PayloadAction<CartItem[]>) => {
+      state.items = action.payload;
     },
-    removeItemFromCart: (state, action: PayloadAction<number>) => {
-      const itemId = action.payload;
-      state.items = state.items.filter((item) => item.id !== itemId);
+    removeItemFromCart: (state, action: PayloadAction<string>) => {
+      state.items = state.items.filter((item) => item.slug !== action.payload);
     },
     updateCartItemQuantity: (
       state,
-      action: PayloadAction<{ id: number; quantity: number }>
+      action: PayloadAction<{ slug: string; quantity: number }>,
     ) => {
-      const { id, quantity } = action.payload;
-      const existingItem = state.items.find((item) => item.id === id);
+      const { slug, quantity } = action.payload;
+      const existingItem = state.items.find((item) => item.slug === slug);
 
       if (existingItem) {
         existingItem.quantity = quantity;
       }
     },
-
     removeAllItemsFromCart: (state) => {
       state.items = [];
     },
@@ -73,8 +60,12 @@ export const selectTotalPrice = createSelector([selectCartItems], (items) => {
   }, 0);
 });
 
+export const selectCartItemCount = createSelector([selectCartItems], (items) =>
+  items.reduce((count, item) => count + item.quantity, 0),
+);
+
 export const {
-  addItemToCart,
+  setCartFromServer,
   removeItemFromCart,
   updateCartItemQuantity,
   removeAllItemsFromCart,

@@ -26,22 +26,29 @@ const featureData = [
 
 const HeroFeature = () => {
   return (
-    <div className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 xl:px-0">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4 xl:gap-8">
+    <div className="w-full max-w-[1360px] mx-auto px-5 sm:px-8 xl:px-6">
+      <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-8 xl:grid-cols-4 xl:gap-10">
         {featureData.map((item, key) => (
-          <div className="flex items-start gap-4" key={key}>
+          <div
+            className="flex items-start gap-4 border-t border-white/10 pt-6 first:border-t-0 first:pt-0 sm:border-t-0 sm:pt-0 xl:border-l xl:border-t-0 xl:border-brand-cream/15 xl:pl-8 xl:pt-0 xl:first:border-l-0 xl:first:pl-0"
+            key={key}
+          >
             <Image
               src={item.img}
               alt=""
               aria-hidden="true"
               width={40}
               height={41}
-              className="mt-1 shrink-0 brightness-0 invert"
+              className="mt-0.5 shrink-0 brightness-0 invert opacity-90 xl:opacity-95"
             />
 
             <div>
-              <h3 className="font-medium text-lg text-brand-gold">{item.title}</h3>
-              <p className="text-sm leading-6 text-white/75">{item.description}</p>
+              <h3 className="font-medium text-base text-brand-gold sm:text-lg xl:text-brand-gold/90">
+                {item.title}
+              </h3>
+              <p className="mt-1 text-sm leading-6 text-white/72 xl:text-brand-cream/85">
+                {item.description}
+              </p>
             </div>
           </div>
         ))}

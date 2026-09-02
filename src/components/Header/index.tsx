@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import CustomSelect from "./CustomSelect";
 import { menuData } from "./menuData";
 import { useAppSelector } from "@/redux/store";
@@ -9,15 +10,20 @@ import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 import Image from "@/components/Common/BrandedImage";
 import categories from "../Home/Categories/categoryData";
+import { shopPath, withBasePath } from "@/lib/routes";
+import { useAuth } from "@/providers/AuthProvider";
 
 const Header = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("0");
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [stickyMenu, setStickyMenu] = useState(false);
   const { openCartModal } = useCartModalContext();
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
+  const { customer, isAuthenticated, signOut } = useAuth();
 
   const handleOpenCartModal = () => {
     openCartModal();
@@ -41,6 +47,25 @@ const Header = () => {
       value: category.slug,
     })),
   ];
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const params = new URLSearchParams();
+    const trimmedSearch = searchQuery.trim();
+
+    if (trimmedSearch) {
+      params.set("search", trimmedSearch);
+    }
+
+    if (selectedCategory !== "0") {
+      params.set("category", selectedCategory);
+    }
+
+    const query = params.toString();
+    router.push(query ? `${shopPath}?${query}` : shopPath);
+    setNavigationOpen(false);
+  };
 
   return (
     <header
@@ -66,9 +91,13 @@ const Header = () => {
             </Link>
 
             <div className="w-full max-w-[600px] xl:flex-1">
-              <form>
+              <form onSubmit={handleSearchSubmit}>
                 <div className="flex items-center">
-                  <CustomSelect options={options} />
+                  <CustomSelect
+                    options={options}
+                    value={selectedCategory}
+                    onChange={setSelectedCategory}
+                  />
 
                   <div className="relative max-w-[333px] sm:min-w-[333px] w-full">
                     {/* <!-- divider --> */}
@@ -85,6 +114,7 @@ const Header = () => {
                     />
 
                     <button
+                      type="submit"
                       id="search-btn"
                       aria-label="Search"
                       className="flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 text-brand-rust ease-in duration-200 hover:text-brand-teal"
@@ -152,7 +182,31 @@ const Header = () => {
 
             <div className="flex w-full lg:w-auto justify-between items-center gap-5">
               <div className="flex items-center gap-5">
-                <Link href="/signin" className="flex items-center gap-2.5">
+                {isAuthenticated && customer ? (
+                  <div className="flex items-center gap-4">
+                    <Link
+                      href={withBasePath("/my-account")}
+                      className="flex items-center gap-2.5"
+                    >
+                      <div>
+                        <span className="block text-2xs text-dark-4 uppercase">
+                          account
+                        </span>
+                        <p className="font-medium text-custom-sm text-dark">
+                          {customer.firstName ?? customer.email}
+                        </p>
+                      </div>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={signOut}
+                      className="text-custom-sm text-brand-rust hover:underline"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                ) : (
+                <Link href={withBasePath("/signin")} className="flex items-center gap-2.5">
                   <svg
                     width="24"
                     height="24"
@@ -183,6 +237,7 @@ const Header = () => {
                     </p>
                   </div>
                 </Link>
+                )}
 
                 <button
                   onClick={handleOpenCartModal}

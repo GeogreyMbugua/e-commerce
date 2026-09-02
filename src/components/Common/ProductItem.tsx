@@ -4,12 +4,13 @@ import Image from "@/components/Common/BrandedImage";
 import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
+import { addProductToCart } from "@/lib/cart-service";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import { updateproductDetails } from "@/redux/features/product-details";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
+import { getProductPreviewAlt, getProductPreviewUrl } from "@/lib/product-images";
+import { productHref } from "@/lib/routes";
 
 const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -22,13 +23,12 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   // add to cart
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+  const handleAddToCart = async () => {
+    if (!item.slug) {
+      return;
+    }
+
+    await addProductToCart(dispatch, { slug: item.slug, quantity: 1 });
   };
 
   const handleItemToWishList = () => {
@@ -41,17 +41,17 @@ const ProductItem = ({ item }: { item: Product }) => {
     );
   };
 
-  const handleProductDetails = () => {
-    dispatch(updateproductDetails({ ...item }));
-  };
+  const detailHref = productHref(item.slug);
+  const previewImage = getProductPreviewUrl(item);
+  const previewAlt = getProductPreviewAlt(item);
 
   return (
     <div className="group">
       <div className="relative mb-4 overflow-hidden rounded-lg bg-brand-cream">
         <div className="flex h-[260px] items-center justify-center p-4 sm:h-[280px]">
           <Image
-            src={item.imgs.previews[0]}
-            alt={item.title}
+            src={previewImage}
+            alt={previewAlt}
             width={300}
             height={300}
             className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
@@ -145,11 +145,8 @@ const ProductItem = ({ item }: { item: Product }) => {
         <p className="text-custom-sm text-brand-ink/70">({item.reviews})</p>
       </div>
 
-      <h3
-        className="mb-1.5 text-base font-medium text-brand-ink transition-colors duration-200 hover:text-brand-rust"
-        onClick={() => handleProductDetails()}
-      >
-        <Link href="/shop-details" className="line-clamp-2">
+      <h3 className="mb-1.5 text-base font-medium text-brand-ink transition-colors duration-200 hover:text-brand-rust">
+        <Link href={detailHref} className="line-clamp-2">
           {item.title}
         </Link>
       </h3>

@@ -7,6 +7,8 @@ const nextConfig = {
 	assetPrefix: basePath ? `${basePath}/` : undefined,
 	images: {
 		unoptimized: true,
+		// When product media moves to a CDN, add remotePatterns here, e.g.:
+		// remotePatterns: [{ protocol: "https", hostname: "cdn.example.com" }],
 	},
 };
 

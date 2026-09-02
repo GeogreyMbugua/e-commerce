@@ -3,7 +3,7 @@ import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 
 import { removeItemFromWishlist } from "@/redux/features/wishlist-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
+import { addProductToCart } from "@/lib/cart-service";
 
 import Image from "@/components/Common/BrandedImage";
 
@@ -14,13 +14,12 @@ const SingleItem = ({ item }) => {
     dispatch(removeItemFromWishlist(item.id));
   };
 
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+  const handleAddToCart = async () => {
+    if (!item.slug) {
+      return;
+    }
+
+    await addProductToCart(dispatch, { slug: item.slug, quantity: 1 });
   };
 
   return (

@@ -4,7 +4,8 @@ This document describes the current structure of the AudioVintage storefront and
 
 ## 1. Runtime Shape
 
-The application is a Next.js App Router project using React, TypeScript, Tailwind CSS, Redux Toolkit, Swiper, and static assets under `public/images`.
+The application is a Next.js App Router project using React, TypeScript,
+Tailwind CSS, Redux Toolkit, Swiper, and static assets under `public/images`.
 
 The main request flow is:
 
@@ -17,7 +18,27 @@ URL
   -> shared modals / ScrollToTop / Footer
 ```
 
-The current storefront is primarily client-rendered after the site layout's one-second preloader. Most feature components use local React state and static TypeScript data rather than a server or API layer.
+The current storefront is primarily client-rendered after the site layout's
+one-second preloader. Most commerce feature components still use local React
+state and static TypeScript data rather than a server or API layer. The
+Listening Room is the first Sanity-backed surface and is statically generated
+at build time.
+
+The target production architecture keeps the web and API independently
+deployable:
+
+```text
+GitHub Pages static Next.js web
+              |
+              v
+       Render NestJS API
+          |          |
+          v          v
+    PostgreSQL   Redis/Valkey
+```
+
+Sanity remains the editorial source of truth for Listening Room content. The
+API and PostgreSQL become the source of truth for transactional commerce.
 
 ## 2. App Router and URL Map
 
@@ -108,13 +129,14 @@ type Menu = {
 
 Current top-level destinations are:
 
-- `Popular` -> `/`
+- `Home` -> `/`
 - `Shop` -> `/shop-with-sidebar`
+- `Listening Room` -> `/blogs/blog-grid`
 - `Contact` -> `/contact`
-- `pages` -> shop variants, checkout, cart, wishlist, auth, account, contact, error, and mail-success
-- `blogs` -> blog grid and detail variants
 
-`Header/index.tsx` renders this data through `Dropdown` and owns search input state, cart opening, responsive navigation state, and sticky-header state. The header search form currently captures text but does not submit or query a catalog.
+`Header/index.tsx` renders the direct links and owns search input state, cart
+opening, responsive navigation state, and sticky-header state. The header
+search form currently captures text but does not submit or query a catalog.
 
 Recommended navigation extensions:
 
@@ -125,16 +147,52 @@ Recommended navigation extensions:
 
 ## 6. Catalog and Product Data
 
-The current catalog is `src/components/Shop/shopData.ts`, typed as `Product[]` from `src/types/product.ts`. A product currently contains:
+The storefront catalog is served by the NestJS API (`GET /api/v1/products`,
+`GET /api/v1/products/:slug`) and consumed through:
 
-- `id`
-- `title`
-- `reviews`
-- `price`
-- `discountedPrice`
-- optional thumbnail and preview image arrays
+- `src/lib/catalog.ts` — fetch client
+- `src/lib/catalog-adapter.ts` — maps API DTOs to the legacy `Product` card shape
+- `src/hooks/useCatalogProducts.ts` — client-side listing for home/blog widgets
+- `src/hooks/useShopCatalog.ts` — URL-synced shop filters
 
-`ShopWithSidebar` and `ShopWithoutSidebar` import this array directly and map it to `SingleGridItem` or `SingleListItem`. The home product sections also use local/static data paths.
+Shop, product detail, home sections, and blog sidebars all read from this API.
+Do not reintroduce a parallel static product list.
+
+### Product images
+
+Product photos are **transactional catalog media**, not Sanity editorial assets.
+
+| Layer | Responsibility |
+| --- | --- |
+| `ProductMedia` (Postgres) | Stores `url`, `altText`, `sortOrder`, `isPrimary` per product |
+| `public/images/products/` | **Interim** static asset host bundled with the GitHub Pages export |
+| Object storage + CDN | **Target** production delivery (S3/R2 + public HTTPS URLs) |
+| Sanity | Editorial images only (Listening Room, hero, Portable Text) |
+
+**Interim (current):** seed data stores site-relative paths such as
+`/images/products/sony-ta.webp`. The API returns those paths unchanged. The
+storefront resolves them in one place:
+
+```text
+API ProductMedia.url
+  -> catalog-adapter (preserve altText)
+  -> BrandedImage via src/lib/product-images.ts (basePath + CDN pass-through)
+  -> next/image (unoptimized static export)
+```
+
+**Production target:** upload product photos to object storage, persist absolute
+CDN URLs in `ProductMedia`, optionally pre-generate thumb/card/detail variants,
+and add `remotePatterns` in `next.config.js` for the CDN host. Do not store
+product inventory images in Sanity unless an explicit sync contract is added.
+
+Rules:
+
+- Postgres owns product media references; Sanity owns editorial image refs.
+- All product `<Image>` rendering goes through `BrandedImage`.
+- Meaningful `altText` flows from the API through `Product.imageAlt` /
+  `Product.imgs.alts`.
+- Static export cannot run Next.js image optimization; optimize at upload time
+  or ship pre-compressed assets (prefer `.webp`).
 
 This is sufficient for a visual prototype but not for reliable commerce logic. Before adding search or AI, introduce a canonical catalog model and repository boundary, for example:
 
@@ -173,16 +231,13 @@ Product cards dispatch `productDetailsReducer` and the detail page also reads/wr
 
 ## 8. Current Gaps to Know Before Integrating Logic
 
-- Shop filter controls render UI but do not currently change the product query.
-- Sort options are displayed but do not sort `shopData`.
-- Pagination is visual and does not request pages.
-- Header search state is not connected to catalog search.
-- Product data is duplicated or imported directly by feature components.
-- Cart and wishlist state is in-memory only.
+- Wishlist state is client-only; cart and checkout quotes persist via guest tokens + API.
+- Checkout collects a server quote; inventory reservations are created when placing an order (payment arrives in Slice 4).
 - Checkout components collect/display checkout information but there is no order API or payment provider boundary.
 - Authentication pages are presentational; no session boundary is wired.
-- Blog data is local and has no content query abstraction.
-- `ShopDetails` reads `localStorage` during render; browser-only access should be guarded or moved into an effect when this route is evolved.
+- The primary Listening Room grid and slug-based article pages query Sanity at
+  build time; legacy sidebar blog routes still use local template data.
+- Legacy `ShopDetails` template remains in the tree but `/shop-details` redirects to the shop; use `/shop/[slug]` for product detail.
 
 These are architectural boundaries, not reasons to rewrite the current UI. Add one domain boundary at a time behind the existing components.
 
@@ -190,11 +245,32 @@ These are architectural boundaries, not reasons to rewrite the current UI. Add o
 
 ### Search
 
-1. Define a canonical `CatalogProduct` and a catalog repository/query function.
+1. Define a canonical `CatalogProduct` and a catalog repository/query function
+   in the API.
 2. Make the header search submit to a route such as `/search?q=...`.
 3. Parse and validate query parameters in the route/page layer.
-4. Apply search, category, price, availability, and sort criteria in one query pipeline.
+4. Apply search, category, price, availability, and sort criteria in one query
+   pipeline.
 5. Reuse the same result contract for grid/list views and AI suggestions.
+
+### Backend foundation
+
+1. Create the NestJS API as a modular monolith under the future monorepo
+   `apps/api` boundary.
+2. Establish PostgreSQL/Prisma migrations, typed configuration, health checks,
+   structured logging, and test infrastructure.
+3. Implement catalog and inventory ownership before exposing cart or checkout
+   commands.
+4. Add guest carts, server-generated quotes, reservations, orders, and payment
+   webhooks in that order.
+5. Add OIDC identity, customer ownership, admin authorization, audit logs, and
+   operational workflows.
+6. Generate the web client from the reviewed OpenAPI contract rather than
+   coupling frontend components to Prisma types.
+
+The first implementation should remain a modular monolith on Render. Split
+services only when independent scaling, deployment isolation, or ownership
+requirements are demonstrated.
 
 ### Filtering
 
@@ -236,4 +312,9 @@ Add a server-owned order/payment module with idempotency keys, provider webhooks
 - Use URL parameters for shareable search/filter/sort state.
 - Use server-side code for secrets, payment calls, order creation, webhooks, and AI provider calls.
 - Preserve `NEXT_PUBLIC_BASE_PATH` compatibility for GitHub Pages assets and links.
+- Keep GitHub Pages and Render deployments independently buildable and
+  deployable.
+- Keep Sanity editorial reads separate from PostgreSQL transactional writes.
+- Require an API contract, migration plan, workflow specification, and tests
+  before implementing a new backend domain.
 - Add focused tests around catalog queries, cart totals, order totals, payment webhook handling, and navigation URL generation as those capabilities are introduced.

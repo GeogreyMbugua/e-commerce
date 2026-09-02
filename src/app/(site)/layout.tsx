@@ -8,6 +8,7 @@ import Footer from "../../components/Footer";
 import { ModalProvider } from "../context/QuickViewModalContext";
 import { CartModalProvider } from "../context/CartSidebarModalContext";
 import { ReduxProvider } from "@/redux/provider";
+import { AuthProvider } from "@/providers/AuthProvider";
 import QuickViewModal from "@/components/Common/QuickViewModal";
 import CartSidebarModal from "@/components/Common/CartSidebarModal";
 import { PreviewSliderProvider } from "../context/PreviewSliderContext";
@@ -15,6 +16,7 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
+import CartHydrator from "@/components/Cart/CartHydrator";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -44,6 +46,8 @@ export default function RootLayout({
         ) : (
           <>
             <ReduxProvider>
+              <AuthProvider>
+              <CartHydrator />
               <CartModalProvider>
                 <ModalProvider>
                   <PreviewSliderProvider>
@@ -56,6 +60,7 @@ export default function RootLayout({
                   </PreviewSliderProvider>
                 </ModalProvider>
               </CartModalProvider>
+              </AuthProvider>
             </ReduxProvider>
             <ScrollToTop />
             <Footer />

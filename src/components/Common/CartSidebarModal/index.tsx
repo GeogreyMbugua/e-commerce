@@ -1,56 +1,93 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
-import {
-  removeItemFromCart,
-  selectTotalPrice,
-} from "@/redux/features/cart-slice";
+import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useAppSelector } from "@/redux/store";
 import { useSelector } from "react-redux";
 import SingleItem from "./SingleItem";
-import Link from "next/link";
 import EmptyCart from "./EmptyCart";
+import { cartPath, checkoutPath } from "@/lib/routes";
+
+const formatCartMoney = (amount: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(amount);
 
 const CartSidebarModal = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { isCartModalOpen, closeCartModal } = useCartModalContext();
   const cartItems = useAppSelector((state) => state.cartReducer.items);
-
   const totalPrice = useSelector(selectTotalPrice);
 
   useEffect(() => {
-    // closing modal while clicking outside
-    function handleClickOutside(event) {
-      if (!event.target.closest(".modal-content")) {
+    closeCartModal();
+  }, [pathname, closeCartModal]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!(event.target as Element | null)?.closest(".modal-content")) {
         closeCartModal();
       }
     }
 
     if (isCartModalOpen) {
+      document.body.style.overflow = "hidden";
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = "";
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isCartModalOpen, closeCartModal]);
 
+  const navigateFromDrawer = (path: string) => {
+    closeCartModal();
+    router.push(path);
+  };
+
   return (
     <div
-      className={`fixed top-0 left-0 z-99999 overflow-y-auto no-scrollbar w-full h-screen bg-dark/70 ease-linear duration-300 ${
-        isCartModalOpen ? "translate-x-0" : "translate-x-full"
+      className={`fixed inset-0 z-99999 overflow-y-auto no-scrollbar transition-all duration-300 ease-out ${
+        isCartModalOpen
+          ? "pointer-events-auto visible opacity-100"
+          : "pointer-events-none invisible opacity-0"
       }`}
+      aria-hidden={!isCartModalOpen}
     >
-      <div className="flex items-center justify-end">
-        <div className="w-full max-w-[500px] shadow-1 bg-white px-4 sm:px-7.5 lg:px-11 relative modal-content">
-          <div className="sticky top-0 bg-white flex items-center justify-between pb-7 pt-4 sm:pt-7.5 lg:pt-11 border-b border-gray-3 mb-7.5">
-            <h2 className="font-medium text-dark text-lg sm:text-2xl">
-              Cart View
-            </h2>
+      <div
+        className={`absolute inset-0 bg-brand-ink/60 transition-opacity duration-300 ${
+          isCartModalOpen ? "opacity-100" : "opacity-0"
+        }`}
+        aria-hidden="true"
+      />
+
+      <div className="flex min-h-full items-stretch justify-end">
+        <div
+          className={`modal-content relative flex h-full w-full max-w-[500px] flex-col bg-brand-cream shadow-2 transition-transform duration-300 ease-out ${
+            isCartModalOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-brand-ink/10 bg-brand-cream px-4 pb-6 pt-4 sm:px-7.5 sm:pt-7.5 lg:px-11 lg:pt-11">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-rust">
+                Cart
+              </p>
+              <h2 className="mt-1 font-medium text-brand-ink text-lg sm:text-2xl">
+                Your selection
+              </h2>
+            </div>
             <button
-              onClick={() => closeCartModal()}
-              aria-label="button for close modal"
-              className="flex items-center justify-center ease-in duration-150 bg-meta text-dark-5 hover:text-dark"
+              type="button"
+              onClick={closeCartModal}
+              aria-label="Close cart"
+              className="flex items-center justify-center rounded-full p-1 text-brand-ink/70 transition-colors duration-200 hover:bg-brand-ink/5 hover:text-brand-ink"
             >
               <svg
                 className="fill-current"
@@ -59,6 +96,7 @@ const CartSidebarModal = () => {
                 viewBox="0 0 30 30"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
                 <path
                   d="M12.5379 11.2121C12.1718 10.846 11.5782 10.846 11.212 11.2121C10.8459 11.5782 10.8459 12.1718 11.212 12.5379L13.6741 15L11.2121 17.4621C10.846 17.8282 10.846 18.4218 11.2121 18.7879C11.5782 19.154 12.1718 19.154 12.5379 18.7879L15 16.3258L17.462 18.7879C17.8281 19.154 18.4217 19.154 18.7878 18.7879C19.154 18.4218 19.154 17.8282 18.7878 17.462L16.3258 15L18.7879 12.5379C19.154 12.1718 19.154 11.5782 18.7879 11.2121C18.4218 10.846 17.8282 10.846 17.462 11.2121L15 13.6742L12.5379 11.2121Z"
@@ -74,16 +112,11 @@ const CartSidebarModal = () => {
             </button>
           </div>
 
-          <div className="h-[66vh] overflow-y-auto no-scrollbar">
-            <div className="flex flex-col gap-6">
-              {/* <!-- cart item --> */}
+          <div className="flex-1 overflow-y-auto no-scrollbar px-4 sm:px-7.5 lg:px-11">
+            <div className="flex flex-col gap-6 py-2">
               {cartItems.length > 0 ? (
-                cartItems.map((item, key) => (
-                  <SingleItem
-                    key={key}
-                    item={item}
-                    removeItemFromCart={removeItemFromCart}
-                  />
+                cartItems.map((item) => (
+                  <SingleItem key={item.slug} item={item} />
                 ))
               ) : (
                 <EmptyCart />
@@ -91,28 +124,31 @@ const CartSidebarModal = () => {
             </div>
           </div>
 
-          <div className="border-t border-gray-3 bg-white pt-5 pb-4 sm:pb-7.5 lg:pb-11 mt-7.5 sticky bottom-0">
-            <div className="flex items-center justify-between gap-5 mb-6">
-              <p className="font-medium text-xl text-dark">Subtotal:</p>
-
-              <p className="font-medium text-xl text-dark">${totalPrice}</p>
+          <div className="sticky bottom-0 border-t border-brand-ink/10 bg-brand-cream px-4 pb-4 pt-5 sm:px-7.5 sm:pb-7.5 lg:px-11 lg:pb-11">
+            <div className="mb-6 flex items-center justify-between gap-5">
+              <p className="font-medium text-brand-ink">Subtotal</p>
+              <p className="text-xl font-semibold text-brand-ink">
+                {formatCartMoney(totalPrice)}
+              </p>
             </div>
 
-            <div className="flex items-center gap-4">
-              <Link
-                onClick={() => closeCartModal()}
-                href="/cart"
-                className="w-full flex justify-center font-medium text-white bg-blue py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={() => navigateFromDrawer(cartPath)}
+                className="flex w-full justify-center rounded-md border border-brand-ink/15 bg-white px-6 py-3 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:text-brand-rust"
               >
                 View Cart
-              </Link>
+              </button>
 
-              <Link
-                href="/checkout"
-                className="w-full flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+              <button
+                type="button"
+                onClick={() => navigateFromDrawer(checkoutPath)}
+                disabled={cartItems.length === 0}
+                className="flex w-full justify-center rounded-md bg-brand-ink px-6 py-3 text-sm font-medium text-brand-cream transition-colors duration-200 hover:bg-brand-rust disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Checkout
-              </Link>
+              </button>
             </div>
           </div>
         </div>

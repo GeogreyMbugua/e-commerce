@@ -5,9 +5,11 @@ import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateQuickView } from "@/redux/features/quickView-slice";
-import { addItemToCart } from "@/redux/features/cart-slice";
+import { addProductToCart } from "@/lib/cart-service";
 import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
+import { getProductPreviewAlt, getProductPreviewUrl } from "@/lib/product-images";
+import { productHref } from "@/lib/routes";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 
 const SingleItem = ({ item }: { item: Product }) => {
@@ -20,13 +22,12 @@ const SingleItem = ({ item }: { item: Product }) => {
   };
 
   // add to cart
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...item,
-        quantity: 1,
-      })
-    );
+  const handleAddToCart = async () => {
+    if (!item.slug) {
+      return;
+    }
+
+    await addProductToCart(dispatch, { slug: item.slug, quantity: 1 });
   };
 
   const handleItemToWishList = () => {
@@ -38,6 +39,9 @@ const SingleItem = ({ item }: { item: Product }) => {
       })
     );
   };
+
+  const previewImage = getProductPreviewUrl(item);
+  const previewAlt = getProductPreviewAlt(item);
 
   return (
     <div className="group">
@@ -64,7 +68,7 @@ const SingleItem = ({ item }: { item: Product }) => {
           </div>
 
           <h3 className="mb-1.5 text-base font-medium text-brand-ink transition-colors duration-200 hover:text-brand-rust">
-            <Link href="/shop-details"> {item.title} </Link>
+            <Link href={productHref(item.slug)}> {item.title} </Link>
           </h3>
 
           <span className="flex items-center justify-center gap-2 text-lg font-medium">
@@ -75,8 +79,8 @@ const SingleItem = ({ item }: { item: Product }) => {
 
         <div className="flex items-center justify-center">
           <Image
-            src={item.imgs.previews[0]}
-            alt={item.title}
+            src={previewImage}
+            alt={previewAlt}
             width={280}
             height={280}
             className="object-contain"

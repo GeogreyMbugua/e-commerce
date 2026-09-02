@@ -1,14 +1,32 @@
+"use client";
+
 import React from "react";
-import Image from "@/components/Common/BrandedImage";
 import Link from "next/link";
 import ProductItem from "@/components/Common/ProductItem";
-import shopData from "@/components/Shop/shopData";
+import { useCatalogProducts } from "@/hooks/useCatalogProducts";
+import { shopPath } from "@/lib/routes";
+
+const ProductGridSkeleton = () => (
+  <div className="grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    {Array.from({ length: 4 }).map((_, index) => (
+      <div key={index} className="animate-pulse">
+        <div className="mb-4 h-[280px] rounded-lg bg-gray-2" />
+        <div className="mb-2 h-4 w-2/3 rounded bg-gray-2" />
+        <div className="h-5 w-1/3 rounded bg-gray-2" />
+      </div>
+    ))}
+  </div>
+);
 
 const NewArrival = () => {
+  const { products, loading, error } = useCatalogProducts({
+    limit: 8,
+    sort: "newest",
+  });
+
   return (
     <section className="overflow-hidden pt-15">
-      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        {/* <!-- section title --> */}
+      <div className="mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
         <div className="mb-7 flex items-center justify-between">
           <div>
             <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
@@ -33,25 +51,32 @@ const NewArrival = () => {
               </svg>
               This Week’s
             </span>
-            <h2 className="font-semibold text-xl text-brand-ink xl:text-heading-5">
+            <h2 className="text-xl font-semibold text-brand-ink xl:text-heading-5">
               New Arrivals
             </h2>
           </div>
 
           <Link
-            href="/shop-with-sidebar"
+            href={shopPath}
             className="inline-flex rounded-md border border-brand-ink/15 bg-brand-cream px-7 py-2.5 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white"
           >
             View All
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
-          {/* <!-- New Arrivals item --> */}
-          {shopData.map((item, key) => (
-            <ProductItem item={item} key={key} />
-          ))}
-        </div>
+        {loading && <ProductGridSkeleton />}
+
+        {!loading && error && (
+          <p className="text-brand-ink/70">{error}</p>
+        )}
+
+        {!loading && !error && (
+          <div className="grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {products.map((item) => (
+              <ProductItem item={item} key={item.slug ?? item.id} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

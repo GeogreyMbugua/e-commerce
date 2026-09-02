@@ -6,6 +6,7 @@ import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
 import Breadcrumb from "../Common/Breadcrumb";
 import Link from "next/link";
+import { shopPath } from "@/lib/routes";
 
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
@@ -103,7 +104,7 @@ const Cart = () => {
             <p className="pb-6">Your cart is empty!</p>
 
             <Link
-              href="/shop-with-sidebar"
+              href={shopPath}
               className="mx-auto flex w-full max-w-96 justify-center rounded-md bg-brand-ink px-6 py-[13px] font-medium text-white ease-out duration-200 hover:bg-brand-rust"
             >
               Continue Shopping

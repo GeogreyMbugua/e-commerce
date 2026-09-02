@@ -1,11 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import Image from "@/components/Common/BrandedImage";
 import AddressModal from "./AddressModal";
 import Orders from "../Orders";
+import { useAuth } from "@/providers/AuthProvider";
+import Link from "next/link";
+import { withBasePath } from "@/lib/routes";
 
 const MyAccount = () => {
+  const { customer, isAuthenticated, loading, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
 
@@ -21,6 +24,21 @@ const MyAccount = () => {
     <>
       <Breadcrumb title={"My Account"} pages={["my account"]} />
 
+      {!loading && !isAuthenticated ? (
+        <section className="overflow-hidden bg-brand-cream/40 py-20">
+          <div className="mx-auto max-w-[760px] px-4 text-center">
+            <p className="mb-6 text-brand-ink/80">
+              Sign in to manage your profile, addresses, and orders.
+            </p>
+            <Link
+              href={withBasePath("/signin")}
+              className="inline-flex rounded-md bg-brand-rust px-6 py-3 font-medium text-white hover:bg-brand-ink"
+            >
+              Sign in
+            </Link>
+          </div>
+        </section>
+      ) : (
       <section className="overflow-hidden bg-brand-cream/40 py-20">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-col xl:flex-row gap-7.5">
@@ -28,20 +46,20 @@ const MyAccount = () => {
             <div className="xl:max-w-[370px] w-full bg-white rounded-xl shadow-1">
               <div className="flex xl:flex-col">
                 <div className="hidden lg:flex flex-wrap items-center gap-5 py-6 px-4 sm:px-7.5 xl:px-9 border-r xl:border-r-0 xl:border-b border-gray-3">
-                  <div className="max-w-[64px] w-full h-16 rounded-full overflow-hidden">
-                    <Image
-                      src="/images/users/user-04.jpg"
-                      alt="user"
-                      width={64}
-                      height={64}
-                    />
-                  </div>
-
                   <div>
                     <p className="font-medium text-dark mb-0.5">
-                      James Septimus
+                      {customer?.firstName
+                        ? `${customer.firstName} ${customer.lastName ?? ""}`.trim()
+                        : customer?.email}
                     </p>
-                    <p className="text-custom-xs">Member Since Sep 2020</p>
+                    <p className="text-custom-xs">{customer?.email}</p>
+                    <button
+                      type="button"
+                      onClick={signOut}
+                      className="mt-2 text-custom-xs text-brand-rust hover:underline"
+                    >
+                      Sign out
+                    </button>
                   </div>
                 </div>
 
@@ -720,6 +738,7 @@ const MyAccount = () => {
           </div>
         </div>
       </section>
+      )}
 
       <AddressModal isOpen={addressModal} closeModal={closeAddressModal} />
     </>

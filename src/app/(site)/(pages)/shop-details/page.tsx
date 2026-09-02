@@ -1,20 +1,9 @@
-import React from "react";
-import ShopDetails from "@/components/ShopDetails";
-import { Metadata } from "next";
+import ShopDetailsRedirect from "@/components/ProductDetails/ShopDetailsRedirect";
 
-export const metadata: Metadata = {
-  title: "Product Details | AudioVintage",
-  description:
-    "View details, condition, and availability for curated AudioVintage products.",
-  // other metadata
-};
-
-const ShopDetailsPage = () => {
+export default function ShopDetailsLegacyPage() {
   return (
     <main>
-      <ShopDetails />
+      <ShopDetailsRedirect />
     </main>
   );
-};
-
-export default ShopDetailsPage;
+}
