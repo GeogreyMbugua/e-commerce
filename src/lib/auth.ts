@@ -14,7 +14,9 @@ const buildUrl = (path: string) => `${apiBaseUrl}${path}`;
 export const isClerkConfigured = (): boolean =>
   Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim());
 
-type TokenGetter = () => Promise<string | null>;
+type TokenGetter = (options?: {
+  skipCache?: boolean;
+}) => Promise<string | null>;
 
 let clerkTokenGetter: TokenGetter | null = null;
 
@@ -31,10 +33,12 @@ export const getAccessToken = (): string | null => {
   return window.localStorage.getItem(AUTH_TOKEN_KEY);
 };
 
-export const getAccessTokenAsync = async (): Promise<string | null> => {
+export const getAccessTokenAsync = async (options?: {
+  skipCache?: boolean;
+}): Promise<string | null> => {
   if (clerkTokenGetter) {
     try {
-      const token = await clerkTokenGetter();
+      const token = await clerkTokenGetter(options);
       if (token) {
         if (typeof window !== "undefined") {
           window.localStorage.setItem(AUTH_TOKEN_KEY, token);
@@ -91,20 +95,31 @@ export async function authFetch<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = await getAccessTokenAsync();
-  const headers = new Headers(options.headers);
+  const execute = async (skipCache = false) => {
+    const token = await getAccessTokenAsync(
+      skipCache ? { skipCache: true } : undefined,
+    );
+    const headers = new Headers(options.headers);
 
-  headers.set("Accept", "application/json");
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
+    headers.set("Accept", "application/json");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+
+    return fetch(buildUrl(path), {
+      ...options,
+      headers,
+      credentials: "include",
+      cache: "no-store",
+    });
+  };
+
+  let response = await execute(false);
+
+  // After idle, the cached Clerk JWT may be expired — refresh once and retry.
+  if (response.status === 401 && clerkTokenGetter) {
+    response = await execute(true);
   }
-
-  const response = await fetch(buildUrl(path), {
-    ...options,
-    headers,
-    credentials: "include",
-    cache: "no-store",
-  });
 
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => null)) as

@@ -137,13 +137,18 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [profileError, setProfileError] = useState<string | null>(null);
   const mergedCartForSession = useRef<string | null>(null);
+  const customerRef = useRef<CustomerProfile | null>(null);
 
   useEffect(() => {
-    registerClerkTokenGetter(async () => {
+    customerRef.current = customer;
+  }, [customer]);
+
+  useEffect(() => {
+    registerClerkTokenGetter(async (options) => {
       if (!isSignedIn) {
         return null;
       }
-      return getToken();
+      return getToken({ skipCache: options?.skipCache });
     });
 
     return () => {
@@ -159,10 +164,8 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    const token = await getToken();
+    const token = await getToken({ skipCache: true });
     if (!token) {
-      clearAuthSession();
-      setCustomer(null);
       setProfileError("Clerk session has no access token.");
       return;
     }
@@ -178,12 +181,18 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
         await mergeGuestCartAfterAuth(token);
       }
     } catch (error) {
-      // Keep the Clerk session; only clear the Nest profile cache.
-      setCustomer(null);
+      // Keep last known profile so admin idle blips don't hard-kick the user.
       const message =
         error instanceof Error ? error.message : "Unable to load profile.";
       setProfileError(message);
       console.error("[auth] Nest profile sync failed:", message);
+
+      if (!customerRef.current) {
+        const stored = getStoredCustomer();
+        if (stored) {
+          setCustomer(stored);
+        }
+      }
     }
   }, [getToken, isSignedIn]);
 
@@ -209,6 +218,33 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
     void bootstrap();
   }, [isLoaded, isSignedIn, refreshProfile]);
 
+  // Resume after tab idle: refresh Clerk JWT + Nest profile.
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) {
+      return;
+    }
+
+    let timer: number | undefined;
+    const onResume = () => {
+      if (document.visibilityState === "hidden") {
+        return;
+      }
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        void refreshProfile();
+      }, 350);
+    };
+
+    document.addEventListener("visibilitychange", onResume);
+    window.addEventListener("focus", onResume);
+
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onResume);
+      window.removeEventListener("focus", onResume);
+    };
+  }, [isLoaded, isSignedIn, refreshProfile]);
+
   const signInWithDev = useCallback(async () => {
     throw new Error(
       "Dev email login is disabled while Clerk is configured. Use the Clerk sign-in form.",
@@ -226,8 +262,6 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       customer,
-      // Clerk session is the source of truth for "signed in" UI.
-      // Catalogue admin still requires a synced Nest profile with ADMIN role.
       isAuthenticated: Boolean(isSignedIn),
       loading: loading || !isLoaded,
       clerkEnabled: true,
