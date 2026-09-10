@@ -10,7 +10,7 @@ import ProductFilters, {
 } from "@/components/Admin/ProductFilters";
 import ProductsTable from "@/components/Admin/ProductsTable";
 import { listAdminProducts } from "@/lib/admin-catalog";
-import { adminProductNewPath } from "@/lib/routes";
+import { adminProductImportPath, adminProductNewPath } from "@/lib/routes";
 import type { AdminProductDetail } from "@/types/admin-catalog";
 
 const defaultFilters: ProductFilterValues = {
@@ -81,12 +81,20 @@ export default function AdminProductsPage() {
       <AdminShell
         title="Products"
         actions={
-          <Link
-            href={adminProductNewPath}
-            className="rounded-md bg-brand-ink px-3 py-2 text-sm font-medium text-white hover:bg-brand-rust"
-          >
-            Add product
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={adminProductImportPath}
+              className="rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm font-medium hover:bg-brand-cream"
+            >
+              Import products
+            </Link>
+            <Link
+              href={adminProductNewPath}
+              className="rounded-md bg-brand-ink px-3 py-2 text-sm font-medium text-white hover:bg-brand-rust"
+            >
+              Add product
+            </Link>
+          </div>
         }
       >
         <ProductFilters value={filters} onChange={setFilters} />

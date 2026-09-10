@@ -315,5 +315,88 @@ export async function deleteAdminCategoryImage(
   );
 }
 
+export async function downloadProductImportTemplate(): Promise<Blob> {
+  const token = getAccessToken();
+  const response = await fetch(`${apiBaseUrl}/admin/products/import/template`, {
+    method: "GET",
+    headers: {
+      Accept: "text/csv",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    credentials: "include",
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Template download failed (${response.status})`);
+  }
+
+  return response.blob();
+}
+
+export async function parseProductImportFile(
+  file: File,
+): Promise<import("@/types/admin-catalog").ProductImportParseResult> {
+  const token = getAccessToken();
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${apiBaseUrl}/admin/products/import/parse`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: formData,
+    credentials: "include",
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const errorBody = (await response.json().catch(() => null)) as {
+      message?: string | string[];
+    } | null;
+    const message = errorBody?.message;
+    const text = Array.isArray(message)
+      ? message.join(", ")
+      : typeof message === "string"
+        ? message
+        : null;
+    throw new Error(text ?? `Parse failed (${response.status})`);
+  }
+
+  return response.json();
+}
+
+export async function previewProductImportRows(
+  rows: import("@/types/admin-catalog").ProductImportRowInput[],
+): Promise<import("@/types/admin-catalog").ProductImportParseResult> {
+  return authFetch("/admin/products/import/preview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ rows }),
+  });
+}
+
+export async function commitProductImport(
+  rows: import("@/types/admin-catalog").ProductImportCommitRow[],
+): Promise<import("@/types/admin-catalog").ProductImportCommitResult> {
+  return authFetch("/admin/products/import/commit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ rows }),
+  });
+}
+
+export async function publishImportedProducts(
+  productIds: string[],
+): Promise<import("@/types/admin-catalog").ProductImportPublishResult> {
+  return authFetch("/admin/products/import/publish", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productIds }),
+  });
+}
+
 export const majorToMinor = (major: number) => Math.round(major * 100);
 export const minorToMajor = (minor: number) => minor / 100;

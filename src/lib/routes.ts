@@ -15,6 +15,7 @@ export const myAccountPath = "/my-account";
 export const adminPath = "/admin";
 export const adminProductsPath = "/admin/products";
 export const adminProductNewPath = "/admin/products/new";
+export const adminProductImportPath = "/admin/products/import";
 export const adminProductEditPath = (id: string) =>
   `/admin/products/edit?id=${encodeURIComponent(id)}`;
 export const adminCategoriesPath = "/admin/categories";

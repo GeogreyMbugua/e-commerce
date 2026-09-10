@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Inject,
   Injectable,
   NotFoundException,
@@ -22,7 +23,16 @@ import type {
   UpdateAdminMediaInput,
   UpdateAdminProductInput,
 } from '../domain/admin-product.types.js';
-
+import { parseProductImportFile } from '../domain/parse-product-import-file.js';
+import {
+  buildImportTemplateCsv,
+  summarizeImportRows,
+  toCreateInput,
+  validateImportRow,
+  type ProductImportCommitRow,
+  type ProductImportParseResult,
+  type ProductImportRowInput,
+} from '../domain/product-import.js';
 const ALLOWED_UPLOAD_MIME = new Set([
   'image/jpeg',
   'image/png',
@@ -531,3 +541,159 @@ export class DeleteCategoryImageUseCase {
     return category;
   }
 }
+
+@Injectable()
+export class ParseProductImportUseCase {
+  constructor(
+    @Inject(ADMIN_CATALOG_REPOSITORY)
+    private readonly catalog: AdminCatalogRepository,
+  ) {}
+
+  async executeFromFile(file: Express.Multer.File): Promise<ProductImportParseResult> {
+    let rawRows: ProductImportRowInput[];
+
+    try {
+      rawRows = parseProductImportFile({
+        buffer: file.buffer,
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+      });
+    } catch (error) {
+      throw new BadRequestException({
+        code: 'IMPORT_PARSE_FAILED',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Unable to parse import file.',
+      });
+    }
+
+    return this.buildPreview(rawRows);
+  }
+
+  async executeFromRows(
+    rows: ProductImportRowInput[],
+  ): Promise<ProductImportParseResult> {
+    return this.buildPreview(rows);
+  }
+
+  async templateCsv(): Promise<string> {
+    const categories = await this.catalog.listAdminCategories();
+    const example =
+      categories.find((category) => category.isActive)?.slug ?? 'turntables';
+    return buildImportTemplateCsv(example);
+  }
+
+  private async buildPreview(
+    rawRows: ProductImportRowInput[],
+  ): Promise<ProductImportParseResult> {
+    if (rawRows.length === 0) {
+      throw new BadRequestException({
+        code: 'IMPORT_EMPTY',
+        message: 'No product rows found in the file.',
+      });
+    }
+
+    if (rawRows.length > 500) {
+      throw new BadRequestException({
+        code: 'IMPORT_TOO_LARGE',
+        message: 'Import is limited to 500 rows at a time.',
+      });
+    }
+
+    const categories = await this.catalog.listAdminCategories();
+    const lookups = categories.map((category) => ({
+      id: category.id,
+      slug: category.slug,
+      name: category.name,
+      isActive: category.isActive,
+    }));
+
+    const rows = rawRows.map((raw, index) =>
+      validateImportRow(index + 2, raw, lookups),
+    );
+
+    return {
+      rows,
+      summary: summarizeImportRows(rows),
+    };
+  }
+}
+
+@Injectable()
+export class CommitProductImportUseCase {
+  constructor(
+    @Inject(ADMIN_CATALOG_REPOSITORY)
+    private readonly catalog: AdminCatalogRepository,
+  ) {}
+
+  async execute(rows: ProductImportCommitRow[]): Promise<{
+    created: AdminProductDetail[];
+    failed: Array<{ index: number; title: string; message: string }>;
+  }> {
+    const created: AdminProductDetail[] = [];
+    const failed: Array<{ index: number; title: string; message: string }> = [];
+
+    for (const [index, row] of rows.entries()) {
+      try {
+        const product = await this.catalog.create(toCreateInput(row));
+        created.push(product);
+      } catch (error) {
+        failed.push({
+          index,
+          title: row.title,
+          message: extractErrorMessage(error),
+        });
+      }
+    }
+
+    return { created, failed };
+  }
+}
+
+@Injectable()
+export class PublishImportedProductsUseCase {
+  constructor(private readonly changeStatus: ChangeProductStatusUseCase) {}
+
+  async execute(productIds: string[]): Promise<{
+    published: AdminProductDetail[];
+    failed: Array<{ productId: string; message: string }>;
+  }> {
+    const published: AdminProductDetail[] = [];
+    const failed: Array<{ productId: string; message: string }> = [];
+
+    for (const productId of productIds) {
+      try {
+        const product = await this.changeStatus.execute(productId, 'ACTIVE');
+        published.push(product);
+      } catch (error) {
+        failed.push({
+          productId,
+          message: extractErrorMessage(error),
+        });
+      }
+    }
+
+    return { published, failed };
+  }
+}
+
+const extractErrorMessage = (error: unknown): string => {
+  if (error instanceof HttpException) {
+    const response = error.getResponse();
+    if (typeof response === 'string') return response;
+    if (
+      typeof response === 'object' &&
+      response !== null &&
+      'message' in response
+    ) {
+      const message = (response as { message?: string | string[] }).message;
+      if (Array.isArray(message)) return message.join(', ');
+      if (typeof message === 'string') return message;
+    }
+    return error.message;
+  }
+
+  if (error instanceof Error) return error.message;
+  return 'Unable to complete import action.';
+};

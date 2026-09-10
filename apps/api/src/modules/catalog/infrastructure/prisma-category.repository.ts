@@ -29,7 +29,8 @@ export class PrismaCategoryRepository implements CategoryRepository {
       slug: category.slug,
       name: category.name,
       description: category.description,
-      imageUrl: category.imageUrl,
+      // Always emit the key (null if unset) so clients never miss the field.
+      imageUrl: category.imageUrl ?? null,
       productCount: category._count.products,
     }));
   }

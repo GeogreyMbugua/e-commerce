@@ -178,6 +178,96 @@ export type UpdateAdminCategoryInput = {
   description?: string | null;
 };
 
+export type ProductImportRowSeverity = "ok" | "warning" | "error";
+
+export type ProductImportRowInput = {
+  title?: string | null;
+  description?: string | null;
+  category?: string | null;
+  price?: string | number | null;
+  conditionGrade?: string | null;
+  brand?: string | null;
+  model?: string | null;
+  shortDescription?: string | null;
+  compareAtPrice?: string | number | null;
+  quantity?: string | number | null;
+  isUniqueItem?: string | boolean | null;
+  tags?: string | null;
+  conditionNotes?: string | null;
+  defects?: string | null;
+  testingNotes?: string | null;
+  imageUrl?: string | null;
+  sku?: string | null;
+};
+
+export type ProductImportRowPreview = {
+  rowNumber: number;
+  severity: ProductImportRowSeverity;
+  errors: string[];
+  warnings: string[];
+  raw: ProductImportRowInput;
+  normalized: {
+    title: string;
+    description: string;
+    categoryId: string | null;
+    categoryLabel: string;
+    priceMinor: number | null;
+    compareAtMinor: number | null;
+    conditionGrade: AdminConditionGrade | null;
+    brand: string | null;
+    model: string | null;
+    shortDescription: string | null;
+    quantityAvailable: number;
+    isUniqueItem: boolean;
+    tags: string[];
+    conditionNotes: string | null;
+    defects: string | null;
+    testingNotes: string | null;
+    imageUrl: string | null;
+    sku: string | null;
+  };
+};
+
+export type ProductImportParseResult = {
+  rows: ProductImportRowPreview[];
+  summary: {
+    total: number;
+    ok: number;
+    warning: number;
+    error: number;
+  };
+};
+
+export type ProductImportCommitRow = {
+  title: string;
+  description: string;
+  categoryId: string;
+  priceMinor: number;
+  conditionGrade: AdminConditionGrade;
+  brand?: string | null;
+  model?: string | null;
+  shortDescription?: string | null;
+  compareAtMinor?: number | null;
+  quantityAvailable?: number;
+  isUniqueItem?: boolean;
+  tags?: string[];
+  conditionNotes?: string | null;
+  defects?: string | null;
+  testingNotes?: string | null;
+  imageUrl?: string | null;
+  sku?: string | null;
+};
+
+export type ProductImportCommitResult = {
+  created: AdminProductDetail[];
+  failed: Array<{ index: number; title: string; message: string }>;
+};
+
+export type ProductImportPublishResult = {
+  published: AdminProductDetail[];
+  failed: Array<{ productId: string; message: string }>;
+};
+
 export const PRODUCT_STATUS_LABELS: Record<AdminProductStatus, string> = {
   DRAFT: "Draft",
   ACTIVE: "Published",

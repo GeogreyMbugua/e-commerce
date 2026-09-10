@@ -186,3 +186,67 @@ export const updateCategorySchema = z
   });
 
 export type UpdateCategoryDto = z.infer<typeof updateCategorySchema>;
+
+export const importCommitRowSchema = z.object({
+  title: z.string().trim().min(1).max(200),
+  description: z.string().trim().min(1),
+  categoryId: z.string().trim().min(1),
+  priceMinor: z.number().int().nonnegative(),
+  conditionGrade: conditionGradeSchema,
+  brand: z.string().trim().min(1).max(120).nullable().optional(),
+  model: z.string().trim().min(1).max(120).nullable().optional(),
+  shortDescription: z.string().trim().max(500).nullable().optional(),
+  compareAtMinor: z.number().int().nonnegative().nullable().optional(),
+  quantityAvailable: z.number().int().nonnegative().optional(),
+  isUniqueItem: z.boolean().optional(),
+  tags: z.array(z.string().trim().min(1)).optional(),
+  conditionNotes: z.string().trim().nullable().optional(),
+  defects: z.string().trim().nullable().optional(),
+  testingNotes: z.string().trim().nullable().optional(),
+  imageUrl: z.string().trim().url().nullable().optional(),
+  sku: z.string().trim().min(1).max(100).nullable().optional(),
+});
+
+export const importCommitSchema = z.object({
+  rows: z.array(importCommitRowSchema).min(1).max(200),
+});
+
+export type ImportCommitDto = z.infer<typeof importCommitSchema>;
+
+export const importPublishSchema = z.object({
+  productIds: z.array(z.string().trim().min(1)).min(1).max(200),
+});
+
+export type ImportPublishDto = z.infer<typeof importPublishSchema>;
+
+export const importPreviewRowsSchema = z.object({
+  rows: z
+    .array(
+      z.object({
+        title: z.string().nullable().optional(),
+        description: z.string().nullable().optional(),
+        category: z.string().nullable().optional(),
+        price: z.union([z.string(), z.number()]).nullable().optional(),
+        conditionGrade: z.string().nullable().optional(),
+        brand: z.string().nullable().optional(),
+        model: z.string().nullable().optional(),
+        shortDescription: z.string().nullable().optional(),
+        compareAtPrice: z.union([z.string(), z.number()]).nullable().optional(),
+        quantity: z.union([z.string(), z.number()]).nullable().optional(),
+        isUniqueItem: z
+          .union([z.string(), z.boolean()])
+          .nullable()
+          .optional(),
+        tags: z.string().nullable().optional(),
+        conditionNotes: z.string().nullable().optional(),
+        defects: z.string().nullable().optional(),
+        testingNotes: z.string().nullable().optional(),
+        imageUrl: z.string().nullable().optional(),
+        sku: z.string().nullable().optional(),
+      }),
+    )
+    .min(1)
+    .max(500),
+});
+
+export type ImportPreviewRowsDto = z.infer<typeof importPreviewRowsSchema>;

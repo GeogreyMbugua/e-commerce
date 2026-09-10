@@ -9,20 +9,25 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import type { Response } from 'express';
 import { memoryStorage } from 'multer';
 import { AdminRequired } from '../../../shared/auth/admin-required.decorator.js';
 import { ZodValidationPipe } from '../../../shared/validation/zod-validation.pipe.js';
 import {
   AddProductMediaUseCase,
   ChangeProductStatusUseCase,
+  CommitProductImportUseCase,
   CreateProductUseCase,
   DeleteProductMediaUseCase,
   GetAdminProductUseCase,
   ListAdminProductsUseCase,
+  ParseProductImportUseCase,
+  PublishImportedProductsUseCase,
   ReorderProductMediaUseCase,
   ReplaceProductMediaUseCase,
   UpdateProductMediaUseCase,
@@ -32,6 +37,9 @@ import {
 import {
   addMediaByUrlSchema,
   createProductSchema,
+  importCommitSchema,
+  importPreviewRowsSchema,
+  importPublishSchema,
   listAdminProductsQuerySchema,
   productIdParamSchema,
   productMediaParamsSchema,
@@ -55,6 +63,9 @@ export class AdminProductsController {
     private readonly updateMedia: UpdateProductMediaUseCase,
     private readonly deleteMedia: DeleteProductMediaUseCase,
     private readonly reorderMedia: ReorderProductMediaUseCase,
+    private readonly parseImport: ParseProductImportUseCase,
+    private readonly commitImport: CommitProductImportUseCase,
+    private readonly publishImported: PublishImportedProductsUseCase,
   ) {}
 
   @Get()
@@ -63,6 +74,59 @@ export class AdminProductsController {
     query: ReturnType<typeof listAdminProductsQuerySchema.parse>,
   ) {
     return this.listProducts.execute(query);
+  }
+
+  @Get('import/template')
+  async importTemplate(@Res() res: Response) {
+    const csv = await this.parseImport.templateCsv();
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="audiovintage-product-import-template.csv"',
+    );
+    res.send(csv);
+  }
+
+  @Post('import/parse')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  parseImportFile(@UploadedFile() file: Express.Multer.File | undefined) {
+    if (!file) {
+      throw new BadRequestException({
+        code: 'FILE_REQUIRED',
+        message: 'A file field named "file" is required (.csv or .xlsx).',
+      });
+    }
+
+    return this.parseImport.executeFromFile(file);
+  }
+
+  @Post('import/preview')
+  previewImportRows(
+    @Body(new ZodValidationPipe(importPreviewRowsSchema))
+    body: ReturnType<typeof importPreviewRowsSchema.parse>,
+  ) {
+    return this.parseImport.executeFromRows(body.rows);
+  }
+
+  @Post('import/commit')
+  commitImportRows(
+    @Body(new ZodValidationPipe(importCommitSchema))
+    body: ReturnType<typeof importCommitSchema.parse>,
+  ) {
+    return this.commitImport.execute(body.rows);
+  }
+
+  @Post('import/publish')
+  publishImportedProducts(
+    @Body(new ZodValidationPipe(importPublishSchema))
+    body: ReturnType<typeof importPublishSchema.parse>,
+  ) {
+    return this.publishImported.execute(body.productIds);
   }
 
   @Get(':id')
