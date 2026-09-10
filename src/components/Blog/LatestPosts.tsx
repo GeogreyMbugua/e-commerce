@@ -34,22 +34,9 @@ const LatestPosts = ({ blogs }) => {
                 </h3>
 
                 <span className="flex items-center gap-3">
-                  <a
-                    href="#"
-                    className="text-custom-xs ease-out duration-200 hover:text-blue"
-                  >
+                  <span className="text-custom-xs text-brand-ink/60">
                     {blog.date}
-                  </a>
-
-                  {/* <!-- divider --> */}
-                  <span className="block w-px h-4 bg-gray-4"></span>
-
-                  <a
-                    href="#"
-                    className="text-custom-xs ease-out duration-200 hover:text-blue"
-                  >
-                    {blog.views}k Views
-                  </a>
+                  </span>
                 </span>
               </div>
             </div>

@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'AudioVintage',
 
-  projectId: 'lfv6li8u',
+  projectId: 'fm80bgv3',
   dataset: 'production',
 
   plugins: [structureTool(), visionTool()],
