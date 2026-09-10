@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AdminGuard } from './admin.guard.js';
+import { ClerkClientProvider } from './clerk-client.provider.js';
 import { CustomerIdentityService } from './customer-identity.service.js';
 import { DevAuthController } from './dev-auth.controller.js';
 import { JwtAuthGuard } from './jwt-auth.guard.js';
@@ -10,6 +11,7 @@ import { TokenVerifierService } from './token-verifier.service.js';
 @Module({
   controllers: [DevAuthController],
   providers: [
+    ClerkClientProvider,
     TokenVerifierService,
     CustomerIdentityService,
     JwtAuthGuard,
@@ -24,6 +26,7 @@ import { TokenVerifierService } from './token-verifier.service.js';
     },
   ],
   exports: [
+    ClerkClientProvider,
     TokenVerifierService,
     CustomerIdentityService,
     JwtAuthGuard,

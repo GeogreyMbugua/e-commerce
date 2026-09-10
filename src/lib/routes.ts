@@ -10,6 +10,7 @@ export const cartPath = "/cart";
 export const orderConfirmationPath = "/order-confirmation";
 export const orderStatusPath = "/order-status";
 export const signInPath = "/signin";
+export const signUpPath = "/signup";
 export const myAccountPath = "/my-account";
 
 export const adminPath = "/admin";

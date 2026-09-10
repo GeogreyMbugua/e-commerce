@@ -28,6 +28,19 @@ const baseEnvSchema = z.object({
     (value) => (value === '' ? undefined : value),
     z.string().min(1).optional(),
   ),
+  CLERK_SECRET_KEY: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().min(1).optional(),
+  ),
+  CLERK_PUBLISHABLE_KEY: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().min(1).optional(),
+  ),
+  // Comma-separated origins allowed in Clerk JWT `azp` (e.g. https://org.github.io).
+  CLERK_AUTHORIZED_PARTIES: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().optional(),
+  ),
   OIDC_ISSUER: z.preprocess(
     (value) => (value === '' ? undefined : value),
     z.string().url().optional(),
@@ -44,6 +57,18 @@ const baseEnvSchema = z.object({
     (value) => (value === '' ? undefined : value),
     z.string().min(16).optional(),
   ),
+  // Temporary email login when Clerk/OIDC is not configured.
+  // Prefer CLERK_* in production; ALLOW_DEV_AUTH is a fallback only.
+  ALLOW_DEV_AUTH: z.preprocess((value) => {
+    if (value === '' || value === undefined || value === null) {
+      return false;
+    }
+    if (typeof value === 'boolean') {
+      return value;
+    }
+    const normalized = String(value).trim().toLowerCase();
+    return ['1', 'true', 'yes', 'on'].includes(normalized);
+  }, z.boolean().default(false)),
   ADMIN_EMAILS: z.preprocess(
     (value) => (value === '' ? undefined : value),
     z.string().optional(),

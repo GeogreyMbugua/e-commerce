@@ -57,6 +57,26 @@ services:
         sync: false
       - key: SMTP_PASS
         sync: false
+      - key: DEV_JWT_SECRET
+        sync: false
+      - key: ALLOW_DEV_AUTH
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: CLERK_AUTHORIZED_PARTIES
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: audiovintage/products
 
   - type: keyvalue
     name: audiovintage-redis

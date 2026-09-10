@@ -10,11 +10,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-10 border-b border-brand-ink/10 pt-12 pb-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-19 xl:pt-22.5 xl:pb-15">
           <div className="max-w-[330px] w-full">
             <Image
-              src="/images/logo/vintage.png"
+              src="/images/logo/vintage-one.png"
               alt="Vintage Audio"
-              width={219}
-              height={36}
-              className="mb-6 w-[190px]"
+              width={552}
+              height={402}
+              className="mb-6 w-[120px] sm:w-[150px]"
               style={{ height: "auto" }}
             />
             <p className="mb-6 max-w-[290px] text-custom-sm text-brand-ink/70">

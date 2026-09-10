@@ -98,6 +98,7 @@ Safe for static build output:
 - `NEXT_PUBLIC_BASE_PATH`
 - `NEXT_PUBLIC_SANITY_PROJECT_ID`
 - `NEXT_PUBLIC_SANITY_DATASET`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - Public API origin, if the API is designed for browser access
 
 ### Server-only configuration
@@ -107,6 +108,7 @@ Never expose in `NEXT_PUBLIC_*` variables:
 - `DATABASE_URL`
 - Database direct/admin credentials.
 - Redis connection credentials.
+- `CLERK_SECRET_KEY` (and other Clerk server secrets).
 - OIDC client secrets.
 - Session signing keys.
 - Payment provider secret keys and webhook secrets.
@@ -118,6 +120,50 @@ Never expose in `NEXT_PUBLIC_*` variables:
 Render environment groups or a dedicated secret manager should provide these
 values. Configuration is validated at process startup and missing required
 production values fail fast.
+
+### Clerk authentication
+
+Production auth uses Clerk session JWTs (Bearer) verified by the Nest API.
+
+**Local development**
+
+- Storefront: `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` in `.env.local` (never put
+  `CLERK_SECRET_KEY` in the static Next app; keep it in `apps/api/.env`).
+- API: `CLERK_SECRET_KEY` + `CLERK_PUBLISHABLE_KEY` in `apps/api/.env`.
+- The repo is linked to Clerk app **AudioVintage** via the Clerk CLI
+  (`clerk auth login` / `clerk init --app …`). Prefer `@clerk/react` on the
+  storefront — do not add `@clerk/nextjs` middleware/`proxy.ts` while using
+  static export for GitHub Pages.
+
+**Clerk Dashboard**
+
+- Create an application and copy Publishable + Secret keys.
+- Allowed origins / redirect URLs must include the GitHub Pages site with base
+  path, e.g. `https://<org>.github.io/e-commerce`, `/signin`, `/signup`, `/home`.
+- Prefer hash routing on the static storefront (`SignIn` / `SignUp` use
+  `routing="hash"`).
+
+**Render (API)**
+
+- `CLERK_SECRET_KEY` — required for Clerk JWT verification
+- `CLERK_PUBLISHABLE_KEY` — optional companion for Backend SDK user lookups
+- `CLERK_AUTHORIZED_PARTIES` — optional comma-separated origins for JWT `azp`
+  checks (e.g. `https://<org>.github.io`)
+- `STOREFRONT_URL` — storefront origin for links/CORS-related config
+- `ADMIN_EMAILS` — comma-separated emails that receive `ADMIN` role after
+  Clerk sign-in
+- Leave `ALLOW_DEV_AUTH` false once Clerk is live
+
+**GitHub Pages (storefront build vars)**
+
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` — set on the `github-pages` environment
+- `NEXT_PUBLIC_API_URL` — production API base including `/api/v1`
+
+**Fallback**
+
+If `CLERK_SECRET_KEY` is unset, the API falls back to OIDC JWKS (when
+configured) or `DEV_JWT_SECRET` + `/auth/dev/login` (requires
+`ALLOW_DEV_AUTH=true` in production).
 
 ## Render service requirements
 

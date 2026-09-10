@@ -25,6 +25,7 @@
     "stripe:listen": "npx @stripe/cli listen --api-key \"$(grep '^STRIPE_SECRET_KEY=' apps/api/.env | cut -d= -f2-)\" --forward-to localhost:3001/api/v1/payments/webhooks/stripe"
   },
   "dependencies": {
+    "@clerk/react": "^6.15.1",
     "@portabletext/react": "^8.0.1",
     "@reduxjs/toolkit": "^2.6.1",
     "@sanity/image-url": "^2.1.1",

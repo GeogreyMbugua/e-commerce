@@ -11,12 +11,42 @@ const apiBaseUrl =
 
 const buildUrl = (path: string) => `${apiBaseUrl}${path}`;
 
+export const isClerkConfigured = (): boolean =>
+  Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim());
+
+type TokenGetter = () => Promise<string | null>;
+
+let clerkTokenGetter: TokenGetter | null = null;
+
+/** Register Clerk `getToken` so API calls always use a fresh session JWT. */
+export const registerClerkTokenGetter = (getter: TokenGetter | null) => {
+  clerkTokenGetter = getter;
+};
+
 export const getAccessToken = (): string | null => {
   if (typeof window === "undefined") {
     return null;
   }
 
   return window.localStorage.getItem(AUTH_TOKEN_KEY);
+};
+
+export const getAccessTokenAsync = async (): Promise<string | null> => {
+  if (clerkTokenGetter) {
+    try {
+      const token = await clerkTokenGetter();
+      if (token) {
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+        }
+        return token;
+      }
+    } catch {
+      // Fall through to stored token / null.
+    }
+  }
+
+  return getAccessToken();
 };
 
 export const getStoredCustomer = (): CustomerProfile | null => {
@@ -61,7 +91,7 @@ export async function authFetch<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = getAccessToken();
+  const token = await getAccessTokenAsync();
   const headers = new Headers(options.headers);
 
   headers.set("Accept", "application/json");
@@ -96,6 +126,20 @@ export async function authFetch<T>(
   return response.json() as Promise<T>;
 }
 
+export async function mergeGuestCartAfterAuth(accessToken: string) {
+  const guestCartToken = getCartToken();
+  if (!guestCartToken) {
+    return;
+  }
+
+  try {
+    const mergedCart = await mergeGuestCart(guestCartToken, accessToken);
+    setCartToken(mergedCart.guestToken);
+  } catch {
+    // Guest cart may already be empty or expired; auth still succeeds.
+  }
+}
+
 export async function devSignIn(input: {
   email: string;
   firstName?: string;
@@ -119,17 +163,7 @@ export async function devSignIn(input: {
 
   const session = (await response.json()) as AuthSession;
   setAuthSession(session);
-
-  const guestCartToken = getCartToken();
-  if (guestCartToken) {
-    try {
-      const mergedCart = await mergeGuestCart(guestCartToken, session.accessToken);
-      setCartToken(mergedCart.guestToken);
-    } catch {
-      // Guest cart may already be empty or expired; sign-in still succeeds.
-    }
-  }
-
+  await mergeGuestCartAfterAuth(session.accessToken);
   return session;
 }
 
@@ -147,8 +181,9 @@ export async function updateCustomerProfile(input: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+  const token = (await getAccessTokenAsync()) ?? "";
   setAuthSession({
-    accessToken: getAccessToken() ?? "",
+    accessToken: token,
     customer: profile,
   });
   return profile;

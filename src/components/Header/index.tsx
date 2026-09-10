@@ -146,11 +146,11 @@ const Header = () => {
         <div className="flex items-center justify-between gap-3 py-3 lg:hidden">
           <Link href="/home" className="shrink-0">
             <Image
-              src="/images/logo/vintage.png"
+              src="/images/logo/vintage-one.png"
               alt="AudioVintage"
-              width={160}
-              height={28}
-              className="w-[132px] object-contain"
+              width={552}
+              height={402}
+              className="w-[96px] object-contain sm:w-[120px]"
               style={{ height: "auto" }}
               priority
             />
@@ -224,11 +224,11 @@ const Header = () => {
         <div className="hidden items-center gap-6 py-4 lg:flex xl:gap-8">
           <Link href="/home" className="shrink-0">
             <Image
-              src="/images/logo/vintage.png"
+              src="/images/logo/vintage-one.png"
               alt="AudioVintage"
-              width={200}
-              height={34}
-              className="w-[180px] object-contain xl:w-[200px]"
+              width={552}
+              height={402}
+              className="w-[150px] object-contain xl:w-[170px]"
               style={{ height: "auto" }}
               priority
             />

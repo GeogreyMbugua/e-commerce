@@ -42,7 +42,7 @@ export default function RootLayout({
       <head>
         <link
           rel="icon"
-          href={`${basePath}/images/logo/vintage.png`}
+          href={`${basePath}/images/logo/vintage-one.png`}
           type="image/png"
         />
       </head>

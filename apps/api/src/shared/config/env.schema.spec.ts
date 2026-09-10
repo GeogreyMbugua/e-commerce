@@ -14,9 +14,19 @@ describe('envSchema', () => {
       API_PREFIX: 'api/v1',
       UPLOAD_DIR: 'uploads',
       CLOUDINARY_FOLDER: 'audiovintage/products',
+      ALLOW_DEV_AUTH: false,
       THROTTLE_TTL_MS: 60_000,
       THROTTLE_LIMIT: 100,
     });
+  });
+
+  it('parses ALLOW_DEV_AUTH truthy strings', () => {
+    expect(
+      envSchema.parse({
+        NODE_ENV: 'test',
+        ALLOW_DEV_AUTH: 'true',
+      }).ALLOW_DEV_AUTH,
+    ).toBe(true);
   });
 
   it('rejects invalid log levels', () => {

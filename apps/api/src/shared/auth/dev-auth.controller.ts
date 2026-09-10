@@ -4,9 +4,7 @@ import {
   ForbiddenException,
   Post,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { z } from 'zod';
-import type { Env } from '../config/env.schema.js';
 import { ZodValidationPipe } from '../validation/zod-validation.pipe.js';
 import { CustomerIdentityService } from './customer-identity.service.js';
 import { TokenVerifierService } from './token-verifier.service.js';
@@ -20,7 +18,6 @@ const devLoginSchema = z.object({
 @Controller('auth/dev')
 export class DevAuthController {
   constructor(
-    private readonly config: ConfigService<Env, true>,
     private readonly tokenVerifier: TokenVerifierService,
     private readonly customerIdentity: CustomerIdentityService,
   ) {}
@@ -30,12 +27,11 @@ export class DevAuthController {
     @Body(new ZodValidationPipe(devLoginSchema))
     body: z.infer<typeof devLoginSchema>,
   ) {
-    const nodeEnv = this.config.get('NODE_ENV', { infer: true });
-
-    if (nodeEnv === 'production' || !this.tokenVerifier.isDevAuthEnabled) {
+    if (!this.tokenVerifier.isDevAuthEnabled) {
       throw new ForbiddenException({
         code: 'DEV_AUTH_DISABLED',
-        message: 'Development authentication is disabled.',
+        message:
+          'Email sign-in is disabled. Set ALLOW_DEV_AUTH=true and DEV_JWT_SECRET on the API, or configure OIDC.',
       });
     }
 
