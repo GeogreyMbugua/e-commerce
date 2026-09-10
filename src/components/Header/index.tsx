@@ -221,20 +221,19 @@ const Header = () => {
         </div>
 
         {/* Desktop header */}
-        <div className="hidden items-center gap-6 py-4 lg:flex xl:gap-8">
-          <Link href="/home" className="shrink-0">
+        <div className="hidden items-center gap-6 py-3.5 lg:flex xl:gap-8">
+          <Link href="/home" className="flex shrink-0 items-center self-center">
             <Image
               src="/images/logo/vintage-one.png"
               alt="AudioVintage"
               width={552}
               height={402}
-              className="w-[150px] object-contain xl:w-[170px]"
-              style={{ height: "auto" }}
+              className="h-[96px] w-auto object-contain"
               priority
             />
           </Link>
 
-          <nav aria-label="Primary" className="hidden xl:block">
+          <nav aria-label="Primary" className="hidden self-center xl:block">
             <ul className="flex items-center gap-6">
               {menuData.map((menuItem) => (
                 <li key={menuItem.id}>
@@ -249,16 +248,16 @@ const Header = () => {
             </ul>
           </nav>
 
-          <div className="flex min-w-0 flex-1 items-center gap-2">
+          <div className="flex min-w-0 flex-1 items-center gap-2 self-center">
             <SearchForm id="desktop-search" className="min-w-0 flex-1" placeholder="Search the shop..." />
             <ShopControlButtons />
           </div>
 
-          <div className="flex shrink-0 items-center gap-4">
+          <div className="flex shrink-0 items-center gap-4 self-center">
             {isAdmin ? (
               <Link
                 href={adminProductsPath}
-                className="hidden text-sm font-medium text-brand-rust transition-colors hover:text-brand-ink xl:inline"
+                className="hidden text-xs font-normal text-brand-ink/50 transition-colors hover:text-brand-ink/80 xl:inline"
               >
                 Manage catalogue
               </Link>
