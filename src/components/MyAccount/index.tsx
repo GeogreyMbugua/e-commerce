@@ -8,7 +8,8 @@ import Link from "next/link";
 import { adminProductsPath, signInPath } from "@/lib/routes";
 
 const MyAccount = () => {
-  const { customer, isAuthenticated, loading, signOut } = useAuth();
+  const { customer, isAuthenticated, loading, profileError, signOut, refreshProfile } =
+    useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [addressModal, setAddressModal] = useState(false);
 
@@ -36,6 +37,34 @@ const MyAccount = () => {
             >
               Sign in
             </Link>
+          </div>
+        </section>
+      ) : !loading && isAuthenticated && !customer ? (
+        <section className="overflow-hidden bg-brand-cream/40 py-20">
+          <div className="mx-auto max-w-[760px] px-4 text-center">
+            <p className="mb-2 text-lg font-medium text-brand-ink">
+              Signed in, but your shop profile could not load
+            </p>
+            <p className="mb-6 text-sm text-brand-ink/70">
+              {profileError ??
+                "The API rejected the Clerk session. Check Render CLERK_SECRET_KEY and try again."}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => void refreshProfile()}
+                className="inline-flex rounded-md bg-brand-rust px-6 py-3 font-medium text-white hover:bg-brand-ink"
+              >
+                Retry
+              </button>
+              <button
+                type="button"
+                onClick={signOut}
+                className="inline-flex rounded-md border border-brand-ink/20 px-6 py-3 font-medium text-brand-ink hover:border-brand-rust"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         </section>
       ) : (

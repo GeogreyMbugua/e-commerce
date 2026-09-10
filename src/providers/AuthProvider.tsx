@@ -33,6 +33,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   loading: boolean;
   clerkEnabled: boolean;
+  profileError: string | null;
   signInWithDev: (input: {
     email: string;
     firstName?: string;
@@ -50,21 +51,27 @@ const clerkPublishableKey =
 function DevBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const [customer, setCustomer] = useState<CustomerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
 
   const refreshProfile = useCallback(async () => {
     const token = getAccessToken();
     if (!token) {
       setCustomer(null);
+      setProfileError(null);
       return;
     }
 
     try {
       const profile = await fetchCustomerProfile();
       setCustomer(profile);
+      setProfileError(null);
       setAuthSession({ accessToken: token, customer: profile });
-    } catch {
+    } catch (error) {
       clearAuthSession();
       setCustomer(null);
+      setProfileError(
+        error instanceof Error ? error.message : "Unable to load profile.",
+      );
     }
   }, []);
 
@@ -94,6 +101,7 @@ function DevBackedAuthProvider({ children }: { children: React.ReactNode }) {
     }) => {
       const session = await devSignIn(input);
       setCustomer(session.customer);
+      setProfileError(null);
       return session;
     },
     [],
@@ -102,6 +110,7 @@ function DevBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(() => {
     clearAuthSession();
     setCustomer(null);
+    setProfileError(null);
   }, []);
 
   const value = useMemo(
@@ -110,11 +119,12 @@ function DevBackedAuthProvider({ children }: { children: React.ReactNode }) {
       isAuthenticated: Boolean(customer && getAccessToken()),
       loading,
       clerkEnabled: false,
+      profileError,
       signInWithDev,
       signOut,
       refreshProfile,
     }),
-    [customer, loading, refreshProfile, signInWithDev, signOut],
+    [customer, loading, profileError, refreshProfile, signInWithDev, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -125,6 +135,7 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const clerk = useClerk();
   const [customer, setCustomer] = useState<CustomerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
   const mergedCartForSession = useRef<string | null>(null);
 
   useEffect(() => {
@@ -144,6 +155,7 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
     if (!isSignedIn) {
       clearAuthSession();
       setCustomer(null);
+      setProfileError(null);
       return;
     }
 
@@ -151,21 +163,27 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
     if (!token) {
       clearAuthSession();
       setCustomer(null);
+      setProfileError("Clerk session has no access token.");
       return;
     }
 
     try {
       const profile = await fetchCustomerProfile();
       setCustomer(profile);
+      setProfileError(null);
       setAuthSession({ accessToken: token, customer: profile });
 
       if (mergedCartForSession.current !== profile.id) {
         mergedCartForSession.current = profile.id;
         await mergeGuestCartAfterAuth(token);
       }
-    } catch {
-      clearAuthSession();
+    } catch (error) {
+      // Keep the Clerk session; only clear the Nest profile cache.
       setCustomer(null);
+      const message =
+        error instanceof Error ? error.message : "Unable to load profile.";
+      setProfileError(message);
+      console.error("[auth] Nest profile sync failed:", message);
     }
   }, [getToken, isSignedIn]);
 
@@ -178,6 +196,7 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
       if (!isSignedIn) {
         clearAuthSession();
         setCustomer(null);
+        setProfileError(null);
         setLoading(false);
         return;
       }
@@ -199,6 +218,7 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(() => {
     clearAuthSession();
     setCustomer(null);
+    setProfileError(null);
     mergedCartForSession.current = null;
     void clerk.signOut({ redirectUrl: `${basePath}/home` || "/home" });
   }, [clerk]);
@@ -206,9 +226,12 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       customer,
-      isAuthenticated: Boolean(isSignedIn && customer),
+      // Clerk session is the source of truth for "signed in" UI.
+      // Catalogue admin still requires a synced Nest profile with ADMIN role.
+      isAuthenticated: Boolean(isSignedIn),
       loading: loading || !isLoaded,
       clerkEnabled: true,
+      profileError,
       signInWithDev,
       signOut,
       refreshProfile,
@@ -218,6 +241,7 @@ function ClerkBackedAuthProvider({ children }: { children: React.ReactNode }) {
       isLoaded,
       isSignedIn,
       loading,
+      profileError,
       refreshProfile,
       signInWithDev,
       signOut,

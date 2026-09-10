@@ -21,6 +21,168 @@ type EditDraft = {
   description: string;
 };
 
+const emptyDraft = (): EditDraft => ({
+  name: "",
+  slug: "",
+  description: "",
+});
+
+type CategoryImageCellProps = {
+  category: AdminCategoryDetail;
+  busy: boolean;
+  inputRef: (el: HTMLInputElement | null) => void;
+  onUpload: (file: File | null) => void;
+  onRemove: () => void;
+  onPickFile: () => void;
+};
+
+function CategoryImageCell({
+  category,
+  busy,
+  inputRef,
+  onUpload,
+  onRemove,
+  onPickFile,
+}: CategoryImageCellProps) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-brand-ink/10 bg-brand-cream">
+        {category.imageUrl ? (
+          <Image
+            src={category.imageUrl}
+            alt=""
+            fill
+            sizes="48px"
+            className="object-cover"
+          />
+        ) : (
+          <span className="flex h-full w-full items-center justify-center text-sm font-semibold text-brand-ink/40">
+            {getCategoryInitial(category.name)}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0] ?? null;
+            e.target.value = "";
+            onUpload(file);
+          }}
+        />
+        <button
+          type="button"
+          disabled={busy}
+          onClick={onPickFile}
+          className="rounded-md border border-brand-ink/15 px-2 py-0.5 text-left text-xs font-medium hover:bg-brand-cream disabled:opacity-60"
+        >
+          {busy ? "Saving…" : category.imageUrl ? "Replace image" : "Add image"}
+        </button>
+        {category.imageUrl ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onRemove}
+            className="text-left text-xs text-brand-ink/50 hover:text-brand-rust disabled:opacity-60"
+          >
+            Remove
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+type CategoryEditFormProps = {
+  draft: EditDraft;
+  saving: boolean;
+  compact?: boolean;
+  onChange: (draft: EditDraft) => void;
+  onSave: (event: React.FormEvent) => void;
+  onCancel: () => void;
+};
+
+function CategoryEditForm({
+  draft,
+  saving,
+  compact = false,
+  onChange,
+  onSave,
+  onCancel,
+}: CategoryEditFormProps) {
+  return (
+    <form
+      onSubmit={onSave}
+      className={
+        compact
+          ? "mt-3 space-y-3 rounded-md border border-brand-ink/10 bg-brand-cream/40 p-3"
+          : "space-y-3"
+      }
+    >
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
+            Name
+          </label>
+          <input
+            value={draft.name}
+            onChange={(e) => onChange({ ...draft, name: e.target.value })}
+            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
+            required
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
+            Slug
+          </label>
+          <input
+            value={draft.slug}
+            onChange={(e) => onChange({ ...draft, slug: e.target.value })}
+            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
+            required
+          />
+          <p className="mt-1 text-[11px] text-brand-ink/45">
+            Changing the slug updates shop filter links for this category.
+          </p>
+        </div>
+        <div className="sm:col-span-2">
+          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
+            Description
+          </label>
+          <textarea
+            value={draft.description}
+            onChange={(e) =>
+              onChange({ ...draft, description: e.target.value })
+            }
+            rows={2}
+            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
+          />
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="submit"
+          disabled={saving}
+          className="rounded-md bg-brand-ink px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-rust disabled:opacity-60"
+        >
+          {saving ? "Saving…" : "Save changes"}
+        </button>
+        <button
+          type="button"
+          disabled={saving}
+          onClick={onCancel}
+          className="rounded-md border border-brand-ink/15 px-3 py-1.5 text-xs font-medium hover:bg-white disabled:opacity-60"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export default function CategoriesManager() {
   const [categories, setCategories] = useState<AdminCategoryDetail[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,11 +192,7 @@ export default function CategoriesManager() {
   const [submitting, setSubmitting] = useState(false);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editDraft, setEditDraft] = useState<EditDraft>({
-    name: "",
-    slug: "",
-    description: "",
-  });
+  const [editDraft, setEditDraft] = useState<EditDraft>(emptyDraft);
   const [savingEdit, setSavingEdit] = useState(false);
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -67,7 +225,7 @@ export default function CategoriesManager() {
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditDraft({ name: "", slug: "", description: "" });
+    setEditDraft(emptyDraft());
   };
 
   const handleCreate = async (event: React.FormEvent) => {
@@ -180,137 +338,17 @@ export default function CategoriesManager() {
     }
   };
 
-  const CategoryImageCell = ({ category }: { category: AdminCategoryDetail }) => {
-    const busy = uploadingId === category.id;
-
-    return (
-      <div className="flex items-center gap-3">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-brand-ink/10 bg-brand-cream">
-          {category.imageUrl ? (
-            <Image
-              src={category.imageUrl}
-              alt=""
-              fill
-              sizes="48px"
-              className="object-cover"
-            />
-          ) : (
-            <span className="flex h-full w-full items-center justify-center text-sm font-semibold text-brand-ink/40">
-              {getCategoryInitial(category.name)}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <input
-            ref={(el) => {
-              fileInputs.current[category.id] = el;
-            }}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0] ?? null;
-              e.target.value = "";
-              void handleImageUpload(category.id, file);
-            }}
-          />
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() => fileInputs.current[category.id]?.click()}
-            className="rounded-md border border-brand-ink/15 px-2 py-0.5 text-left text-xs font-medium hover:bg-brand-cream disabled:opacity-60"
-          >
-            {busy ? "Saving…" : category.imageUrl ? "Replace image" : "Add image"}
-          </button>
-          {category.imageUrl ? (
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => void handleImageRemove(category)}
-              className="text-left text-xs text-brand-ink/50 hover:text-brand-rust disabled:opacity-60"
-            >
-              Remove
-            </button>
-          ) : null}
-        </div>
-      </div>
-    );
-  };
-
-  const EditForm = ({ compact = false }: { compact?: boolean }) => (
-    <form
-      onSubmit={(e) => void handleSaveEdit(e)}
-      className={
-        compact
-          ? "mt-3 space-y-3 rounded-md border border-brand-ink/10 bg-brand-cream/40 p-3"
-          : "space-y-3"
-      }
-    >
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
-            Name
-          </label>
-          <input
-            value={editDraft.name}
-            onChange={(e) =>
-              setEditDraft((prev) => ({ ...prev, name: e.target.value }))
-            }
-            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
-            required
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
-            Slug
-          </label>
-          <input
-            value={editDraft.slug}
-            onChange={(e) =>
-              setEditDraft((prev) => ({ ...prev, slug: e.target.value }))
-            }
-            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
-            required
-          />
-          <p className="mt-1 text-[11px] text-brand-ink/45">
-            Changing the slug updates shop filter links for this category.
-          </p>
-        </div>
-        <div className="sm:col-span-2">
-          <label className="mb-1 block text-xs font-medium text-brand-ink/70">
-            Description
-          </label>
-          <textarea
-            value={editDraft.description}
-            onChange={(e) =>
-              setEditDraft((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }))
-            }
-            rows={2}
-            className="w-full rounded-md border border-brand-ink/15 bg-white px-3 py-2 text-sm outline-none focus:border-brand-rust focus:ring-2 focus:ring-brand-rust/15"
-          />
-        </div>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="submit"
-          disabled={savingEdit}
-          className="rounded-md bg-brand-ink px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-rust disabled:opacity-60"
-        >
-          {savingEdit ? "Saving…" : "Save changes"}
-        </button>
-        <button
-          type="button"
-          disabled={savingEdit}
-          onClick={cancelEdit}
-          className="rounded-md border border-brand-ink/15 px-3 py-1.5 text-xs font-medium hover:bg-white disabled:opacity-60"
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
+  const renderImageCell = (category: AdminCategoryDetail) => (
+    <CategoryImageCell
+      category={category}
+      busy={uploadingId === category.id}
+      inputRef={(el) => {
+        fileInputs.current[category.id] = el;
+      }}
+      onUpload={(file) => void handleImageUpload(category.id, file)}
+      onRemove={() => void handleImageRemove(category)}
+      onPickFile={() => fileInputs.current[category.id]?.click()}
+    />
   );
 
   return (
@@ -400,11 +438,20 @@ export default function CategoriesManager() {
                       className="border-b border-brand-ink/5 last:border-0"
                     >
                       <td className="px-4 py-3 align-top">
-                        <CategoryImageCell category={category} />
+                        {renderImageCell(category)}
                       </td>
-                      <td className="px-4 py-3 align-top" colSpan={isEditing ? 4 : 1}>
+                      <td
+                        className="px-4 py-3 align-top"
+                        colSpan={isEditing ? 4 : 1}
+                      >
                         {isEditing ? (
-                          <EditForm />
+                          <CategoryEditForm
+                            draft={editDraft}
+                            saving={savingEdit}
+                            onChange={setEditDraft}
+                            onSave={(e) => void handleSaveEdit(e)}
+                            onCancel={cancelEdit}
+                          />
                         ) : (
                           <div>
                             <p className="font-medium">{category.name}</p>
@@ -482,7 +529,7 @@ export default function CategoriesManager() {
                   className="rounded-lg border border-brand-ink/10 bg-white p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <CategoryImageCell category={category} />
+                    {renderImageCell(category)}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -527,7 +574,16 @@ export default function CategoriesManager() {
                           {category.isActive ? "Deactivate" : "Activate"}
                         </button>
                       </div>
-                      {isEditing ? <EditForm compact /> : null}
+                      {isEditing ? (
+                        <CategoryEditForm
+                          draft={editDraft}
+                          saving={savingEdit}
+                          compact
+                          onChange={setEditDraft}
+                          onSave={(e) => void handleSaveEdit(e)}
+                          onCancel={cancelEdit}
+                        />
+                      ) : null}
                     </div>
                   </div>
                 </article>

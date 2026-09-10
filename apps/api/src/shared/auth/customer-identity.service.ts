@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../config/env.schema.js';
 import { PrismaService } from '../database/prisma.service.js';
@@ -10,6 +10,8 @@ import type {
 
 @Injectable()
 export class CustomerIdentityService {
+  private readonly logger = new Logger(CustomerIdentityService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: ConfigService<Env, true>,
@@ -47,25 +49,54 @@ export class CustomerIdentityService {
         : null);
     const email = claims.email.toLowerCase();
 
-    const existing = await this.prisma.customer.findUnique({
+    const bySubject = await this.prisma.customer.findUnique({
       where: { oidcSubject: claims.sub },
-      select: { role: true },
     });
 
-    const role = this.resolveRole(email, existing?.role);
+    if (bySubject) {
+      const role = this.resolveRole(email, bySubject.role);
+      const customer = await this.prisma.customer.update({
+        where: { id: bySubject.id },
+        data: {
+          oidcIssuer: claims.iss,
+          email,
+          emailVerified: claims.email_verified ?? false,
+          role,
+          firstName,
+          lastName,
+        },
+      });
+      return this.toAuthenticatedCustomer(customer);
+    }
 
-    const customer = await this.prisma.customer.upsert({
-      where: { oidcSubject: claims.sub },
-      create: {
+    // Same email may already exist from a previous auth provider (e.g. dev login).
+    const byEmail = await this.prisma.customer.findUnique({
+      where: { email },
+    });
+
+    if (byEmail) {
+      this.logger.log(
+        `Linking existing customer ${byEmail.id} to new subject ${claims.sub}`,
+      );
+      const role = this.resolveRole(email, byEmail.role);
+      const customer = await this.prisma.customer.update({
+        where: { id: byEmail.id },
+        data: {
+          oidcSubject: claims.sub,
+          oidcIssuer: claims.iss,
+          emailVerified: claims.email_verified ?? false,
+          role,
+          firstName: firstName ?? byEmail.firstName,
+          lastName: lastName ?? byEmail.lastName,
+        },
+      });
+      return this.toAuthenticatedCustomer(customer);
+    }
+
+    const role = this.resolveRole(email);
+    const customer = await this.prisma.customer.create({
+      data: {
         oidcSubject: claims.sub,
-        oidcIssuer: claims.iss,
-        email,
-        emailVerified: claims.email_verified ?? false,
-        role,
-        firstName,
-        lastName,
-      },
-      update: {
         oidcIssuer: claims.iss,
         email,
         emailVerified: claims.email_verified ?? false,

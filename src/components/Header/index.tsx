@@ -15,7 +15,7 @@ import { useAuth } from "@/providers/AuthProvider";
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { customer, isAuthenticated } = useAuth();
+  const { customer, isAuthenticated, profileError } = useAuth();
   const isAdmin = isAuthenticated && customer?.role === "ADMIN";
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);

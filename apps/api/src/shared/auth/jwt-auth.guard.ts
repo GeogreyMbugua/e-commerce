@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -27,6 +28,8 @@ const readBearerToken = (headers: Record<string, string | undefined>) => {
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly logger = new Logger(JwtAuthGuard.name);
+
   constructor(
     private readonly reflector: Reflector,
     private readonly tokenVerifier: TokenVerifierService,
@@ -64,7 +67,10 @@ export class JwtAuthGuard implements CanActivate {
       const customer = await this.customerIdentity.upsertFromClaims(claims);
       attachRequestCustomer(request, customer);
       return true;
-    } catch {
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown auth error';
+      this.logger.warn(`Access token rejected: ${message}`);
       throw new UnauthorizedException({
         code: 'AUTH_INVALID',
         message: 'Access token is invalid or expired.',
