@@ -26,6 +26,11 @@ implementation and maintained as the system evolves.
    production infrastructure cost approximation for a single client.
 10. [../CHANGELOG.md](../CHANGELOG.md) — release history and operational notes.
 
+## Presentations
+
+- [INTERNAL-PRESENTATION.md](INTERNAL-PRESENTATION.md) — internal overview of
+  product, architecture, status, demo script, and talking points.
+
 ## Documentation rules
 
 ### Every feature must identify

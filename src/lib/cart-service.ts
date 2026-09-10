@@ -16,9 +16,14 @@ const syncCart = (dispatch: AppDispatch, cart: Awaited<ReturnType<typeof ensureC
 };
 
 export async function hydrateCart(dispatch: AppDispatch) {
-  const cart = await fetchCurrentCart();
-  if (cart) {
-    dispatch(setCartFromServer(cartToViewItems(cart)));
+  try {
+    const cart = await fetchCurrentCart();
+    if (cart) {
+      dispatch(setCartFromServer(cartToViewItems(cart)));
+    }
+  } catch (error) {
+    // Soft-fail when the API is unreachable so page render is not blocked.
+    console.warn("Cart hydration skipped:", error);
   }
 }
 

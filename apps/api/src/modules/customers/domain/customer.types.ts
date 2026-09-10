@@ -2,6 +2,7 @@ export type CustomerProfile = {
   id: string;
   email: string;
   emailVerified: boolean;
+  role: 'CUSTOMER' | 'ADMIN';
   firstName: string | null;
   lastName: string | null;
   phone: string | null;

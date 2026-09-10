@@ -22,7 +22,7 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
 const publishedProductWhere = (
   query: Pick<
     ListProductsQuery,
-    'search' | 'category' | 'minPriceMinor' | 'maxPriceMinor'
+    'search' | 'category' | 'featured' | 'minPriceMinor' | 'maxPriceMinor'
   >,
 ): Prisma.ProductWhereInput => ({
   status: 'ACTIVE',
@@ -34,11 +34,30 @@ const publishedProductWhere = (
         },
       }
     : {}),
+  ...(query.featured === true ? { isFeatured: true } : {}),
   ...(query.search
     ? {
         OR: [
           {
             title: {
+              contains: query.search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            brand: {
+              contains: query.search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            model: {
+              contains: query.search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            sku: {
               contains: query.search,
               mode: 'insensitive',
             },
@@ -98,6 +117,7 @@ const toSummary = (product: ProductWithRelations): ProductSummary => {
     currency: product.currency,
     conditionGrade: product.conditionGrade,
     isUniqueItem: product.isUniqueItem,
+    isFeatured: product.isFeatured,
     availableQuantity: sellableQuantity,
     isAvailable: sellableQuantity > 0,
     primaryImage: primaryMedia ? toImage(primaryMedia) : null,

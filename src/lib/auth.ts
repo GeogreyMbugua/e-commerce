@@ -78,9 +78,15 @@ export async function authFetch<T>(
 
   if (!response.ok) {
     const errorBody = (await response.json().catch(() => null)) as
-      | { message?: string; code?: string }
+      | { message?: string | string[]; code?: string }
       | null;
-    throw new Error(errorBody?.message ?? `Request failed (${response.status})`);
+    const message = errorBody?.message;
+    const text = Array.isArray(message)
+      ? message.join(", ")
+      : typeof message === "string"
+        ? message
+        : null;
+    throw new Error(text ?? `Request failed (${response.status})`);
   }
 
   if (response.status === 204) {

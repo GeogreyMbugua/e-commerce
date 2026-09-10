@@ -11,6 +11,7 @@ type PriceDropdownProps = {
     minPriceMinor?: number;
     maxPriceMinor?: number;
   }) => void;
+  flat?: boolean;
 };
 
 const minorToMajor = (value?: number) =>
@@ -22,6 +23,7 @@ const PriceDropdown = ({
   minPriceMinor,
   maxPriceMinor,
   onChange,
+  flat = false,
 }: PriceDropdownProps) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
   const [selectedPrice, setSelectedPrice] = useState({
@@ -44,23 +46,23 @@ const PriceDropdown = ({
   };
 
   return (
-    <div className="rounded-lg bg-white shadow-1">
+    <div className={flat ? "" : "border border-brand-ink/10 bg-white/70"}>
       <div
         onClick={() => setToggleDropdown(!toggleDropdown)}
-        className="flex cursor-pointer items-center justify-between py-3 pl-6 pr-5.5"
+        className="flex cursor-pointer items-center justify-between px-4 py-3"
       >
-        <p className="text-dark">Price</p>
+        <p className="text-sm font-medium text-brand-ink">Price</p>
         <button
           type="button"
-          aria-label="button for price dropdown"
-          className={`text-dark ease-out duration-200 ${
-            toggleDropdown && "rotate-180"
+          aria-label="Toggle price filter"
+          className={`text-brand-ink transition-transform duration-200 ${
+            toggleDropdown ? "rotate-180" : ""
           }`}
         >
           <svg
             className="fill-current"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -75,38 +77,34 @@ const PriceDropdown = ({
         </button>
       </div>
 
-      <div className={`p-6 ${toggleDropdown ? "block" : "hidden"}`}>
-        <div id="pricingOne">
-          <div className="price-range">
-            <RangeSlider
-              id="range-slider-gradient"
-              className="margin-lg"
-              min={0}
-              max={1000}
-              step={5}
-              value={[selectedPrice.from, selectedPrice.to]}
-              onInput={(values) => {
-                const from = Math.floor(values[0]);
-                const to = Math.ceil(values[1]);
-                setSelectedPrice({ from, to });
-                applyRange(from, to);
-              }}
-            />
+      <div className={`px-4 pb-4 ${toggleDropdown ? "block" : "hidden"}`}>
+        <div className="price-range">
+          <RangeSlider
+            id="range-slider-gradient"
+            className="margin-lg"
+            min={0}
+            max={1000}
+            step={5}
+            value={[selectedPrice.from, selectedPrice.to]}
+            onInput={(values) => {
+              const from = Math.floor(values[0]);
+              const to = Math.ceil(values[1]);
+              setSelectedPrice({ from, to });
+              applyRange(from, to);
+            }}
+          />
 
-            <div className="flex items-center justify-between pt-4">
-              <div className="flex rounded border border-gray-3/80 text-custom-xs text-dark-4">
-                <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
-                </span>
-                <span className="block px-3 py-1.5">{selectedPrice.from}</span>
-              </div>
-
-              <div className="flex rounded border border-gray-3/80 text-custom-xs text-dark-4">
-                <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
-                </span>
-                <span className="block px-3 py-1.5">{selectedPrice.to}</span>
-              </div>
+          <div className="flex items-center justify-between gap-3 pt-4">
+            <div className="flex flex-1 items-center border border-brand-ink/15 bg-white/60 text-xs text-brand-ink/70">
+              <span className="border-r border-brand-ink/15 px-2.5 py-2">$</span>
+              <span className="px-3 py-2">{selectedPrice.from}</span>
+            </div>
+            <span className="text-brand-ink/40" aria-hidden="true">
+              –
+            </span>
+            <div className="flex flex-1 items-center border border-brand-ink/15 bg-white/60 text-xs text-brand-ink/70">
+              <span className="border-r border-brand-ink/15 px-2.5 py-2">$</span>
+              <span className="px-3 py-2">{selectedPrice.to}</span>
             </div>
           </div>
         </div>

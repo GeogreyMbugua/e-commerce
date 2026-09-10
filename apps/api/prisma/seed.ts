@@ -7,48 +7,59 @@ const categories = [
     slug: 'speakers',
     name: 'Speakers',
     description: 'Vintage and reference speakers for listening rooms and setups.',
+    imageUrl: '/images/categories/speakers.webp',
   },
   {
     slug: 'turntables',
     name: 'Turntables',
     description: 'Classic turntables serviced for stable playback.',
+    imageUrl: '/images/categories/turntable2.jpg',
   },
   {
     slug: 'amplifiers-receivers',
     name: 'Amplifiers & Receivers',
     description: 'Integrated amps and stereo receivers tested for everyday listening.',
+    imageUrl: '/images/categories/amp.jpg',
   },
   {
     slug: 'vinyl-records',
     name: 'Vinyl Records',
     description: 'Curated records across jazz, soul, rock, and soundtracks.',
+    imageUrl: '/images/categories/vinyle.webp',
   },
   {
     slug: 'cds',
     name: 'CDs',
     description: 'Pre-owned CDs inspected for playback quality.',
+    imageUrl: '/images/categories/CDS.jpg',
   },
   {
     slug: 'cassettes',
     name: 'Cassettes',
     description: 'Vintage cassette decks and curated tape media.',
+    imageUrl: '/images/categories/Cassettes.jpg',
   },
   {
     slug: 'dvds',
     name: 'DVDs',
     description: 'Film, music, and collector physical media on DVD.',
+    imageUrl: '/images/categories/DVD.jpg',
   },
   {
     slug: 'vhs-tapes',
     name: 'VHS Tapes',
     description: 'Classic film and music collections on VHS.',
+    imageUrl: '/images/categories/vhs.jpg',
   },
 ] as const;
 
 const products = [
   {
     slug: 'sony-ta-stereo-amplifier',
+    sku: 'AV-SONY-TA-001',
     title: 'Sony TA Stereo Amplifier',
+    brand: 'Sony',
+    model: 'TA',
     description:
       'Warm vintage integrated amplifier suited for bookshelf speakers and turntable-led setups.',
     categorySlug: 'amplifiers-receivers',
@@ -60,6 +71,7 @@ const products = [
     defects: 'Light scratch on top panel.',
     tags: ['amplifier', 'integrated', 'vintage'],
     isUniqueItem: false,
+    isFeatured: true,
     quantityAvailable: 2,
     media: {
       url: '/images/products/sony-ta.webp',
@@ -68,7 +80,10 @@ const products = [
   },
   {
     slug: 'technics-sl-1200mk2-turntable',
+    sku: 'AV-TECH-SL1200MK2',
     title: 'Technics SL-1200MK2 Turntable',
+    brand: 'Technics',
+    model: 'SL-1200MK2',
     description:
       'Legendary direct-drive turntable with stable speed and a serviced tonearm assembly.',
     categorySlug: 'turntables',
@@ -80,6 +95,7 @@ const products = [
     restorationNotes: 'New stylus recommended on purchase.',
     tags: ['turntable', 'technics', 'direct-drive'],
     isUniqueItem: true,
+    isFeatured: true,
     quantityAvailable: 1,
     media: {
       url: '/images/products/technics.webp',
@@ -88,7 +104,10 @@ const products = [
   },
   {
     slug: 'vintage-integrated-stereo-amplifier',
+    sku: 'AV-AMP-INT-001',
     title: 'Vintage Integrated Stereo Amplifier',
+    brand: null,
+    model: null,
     description:
       'Compact integrated amp with phono input and balanced presentation for small rooms.',
     categorySlug: 'amplifiers-receivers',
@@ -100,6 +119,7 @@ const products = [
     defects: 'Small paint chip on rear corner.',
     tags: ['amplifier', 'integrated', 'phono'],
     isUniqueItem: false,
+    isFeatured: false,
     quantityAvailable: 1,
     media: {
       url: '/images/products/integratedamp.webp',
@@ -108,7 +128,10 @@ const products = [
   },
   {
     slug: 'classic-stereo-receiver',
+    sku: 'AV-RCV-CLASSIC-001',
     title: 'Classic Stereo Receiver',
+    brand: null,
+    model: null,
     description:
       'All-in-one receiver with AM/FM tuning and speaker outputs for a simple vintage stack.',
     categorySlug: 'amplifiers-receivers',
@@ -119,6 +142,7 @@ const products = [
     testingNotes: 'FM tuning, tone controls, and headphone output tested.',
     tags: ['receiver', 'fm', 'vintage'],
     isUniqueItem: false,
+    isFeatured: true,
     quantityAvailable: 1,
     media: {
       url: '/images/products/receiver.webp',
@@ -127,7 +151,10 @@ const products = [
   },
   {
     slug: 'curated-vinyl-records',
+    sku: 'AV-VINYL-CURATED',
     title: 'Curated Vinyl Records',
+    brand: null,
+    model: null,
     description:
       'Hand-selected jazz, soul, and classic rock pressings ready for immediate listening.',
     categorySlug: 'vinyl-records',
@@ -138,6 +165,7 @@ const products = [
     testingNotes: 'Each record visually inspected for warping and heavy scuffs.',
     tags: ['vinyl', 'records', 'curated'],
     isUniqueItem: false,
+    isFeatured: false,
     quantityAvailable: 12,
     media: {
       url: '/images/products/curated.webp',
@@ -146,7 +174,10 @@ const products = [
   },
   {
     slug: 'vintage-cassette-deck',
+    sku: 'AV-CASS-DECK-001',
     title: 'Vintage Cassette Deck',
+    brand: null,
+    model: null,
     description:
       'Two-head cassette deck with clean transport and warm playback for tape collectors.',
     categorySlug: 'cassettes',
@@ -158,6 +189,7 @@ const products = [
     defects: 'Minor label wear on front panel.',
     tags: ['cassette', 'deck', 'analog'],
     isUniqueItem: true,
+    isFeatured: false,
     quantityAvailable: 1,
     media: {
       url: '/images/products/cassets.webp',
@@ -166,7 +198,10 @@ const products = [
   },
   {
     slug: 'pre-owned-music-cds',
+    sku: 'AV-CD-PREOWNED',
     title: 'Pre-owned Music CDs',
+    brand: null,
+    model: null,
     description:
       'Pre-owned CDs across soul, jazz, and classic rock with verified playback surfaces.',
     categorySlug: 'cds',
@@ -177,6 +212,7 @@ const products = [
     testingNotes: 'Spot-checked for read errors on a reference player.',
     tags: ['cd', 'physical-media', 'pre-owned'],
     isUniqueItem: false,
+    isFeatured: false,
     quantityAvailable: 18,
     media: {
       url: '/images/products/preowned.webp',
@@ -185,7 +221,10 @@ const products = [
   },
   {
     slug: 'classic-film-and-music-collection',
+    sku: 'AV-MEDIA-CLASSIC',
     title: 'Classic Film and Music Collection',
+    brand: null,
+    model: null,
     description:
       'Mixed media collection spanning soundtrack LPs, film scores, and companion CDs.',
     categorySlug: 'dvds',
@@ -196,6 +235,7 @@ const products = [
     testingNotes: 'Collection grouped and checked for missing inserts.',
     tags: ['collection', 'soundtrack', 'physical-media'],
     isUniqueItem: false,
+    isFeatured: false,
     quantityAvailable: 4,
     media: {
       url: '/images/products/films.webp',
@@ -211,8 +251,18 @@ async function main() {
       update: {
         name: category.name,
         description: category.description,
+        isActive: true,
       },
-      create: category,
+      create: {
+        ...category,
+        isActive: true,
+      },
+    });
+
+    // Backfill decorative defaults only when no image is set yet.
+    await prisma.category.updateMany({
+      where: { slug: category.slug, imageUrl: null },
+      data: { imageUrl: category.imageUrl },
     });
   }
 
@@ -234,7 +284,10 @@ async function main() {
     const savedProduct = await prisma.product.upsert({
       where: { slug: product.slug },
       update: {
+        sku: product.sku,
         title: product.title,
+        brand: product.brand,
+        model: product.model,
         description: product.description,
         status: 'ACTIVE',
         categoryId,
@@ -248,10 +301,15 @@ async function main() {
         defects: product.defects,
         tags: [...product.tags],
         isUniqueItem: product.isUniqueItem,
+        isFeatured: product.isFeatured,
+        archivedAt: null,
       },
       create: {
         slug: product.slug,
+        sku: product.sku,
         title: product.title,
+        brand: product.brand,
+        model: product.model,
         description: product.description,
         status: 'ACTIVE',
         categoryId,
@@ -265,6 +323,7 @@ async function main() {
         defects: product.defects,
         tags: [...product.tags],
         isUniqueItem: product.isUniqueItem,
+        isFeatured: product.isFeatured,
       },
     });
 

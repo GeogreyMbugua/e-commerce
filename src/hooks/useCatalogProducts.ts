@@ -21,6 +21,7 @@ export const useCatalogProducts = (
 
   const search = params.search ?? "";
   const category = params.category ?? "";
+  const featured = params.featured;
   const sort = params.sort ?? "newest";
   const limit = params.limit ?? 20;
   const minPriceMinor = params.minPriceMinor;
@@ -37,6 +38,7 @@ export const useCatalogProducts = (
         const response = await fetchProducts({
           search: search || undefined,
           category: category || undefined,
+          featured,
           sort,
           limit,
           minPriceMinor,
@@ -63,7 +65,7 @@ export const useCatalogProducts = (
     return () => {
       cancelled = true;
     };
-  }, [search, category, sort, limit, minPriceMinor, maxPriceMinor]);
+  }, [search, category, featured, sort, limit, minPriceMinor, maxPriceMinor]);
 
   return { products, loading, error };
 };

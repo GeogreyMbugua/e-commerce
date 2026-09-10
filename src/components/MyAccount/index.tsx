@@ -5,7 +5,7 @@ import AddressModal from "./AddressModal";
 import Orders from "../Orders";
 import { useAuth } from "@/providers/AuthProvider";
 import Link from "next/link";
-import { signInPath } from "@/lib/routes";
+import { adminProductsPath, signInPath } from "@/lib/routes";
 
 const MyAccount = () => {
   const { customer, isAuthenticated, loading, signOut } = useAuth();
@@ -53,6 +53,14 @@ const MyAccount = () => {
                         : customer?.email}
                     </p>
                     <p className="text-custom-xs">{customer?.email}</p>
+                    {customer?.role === "ADMIN" ? (
+                      <Link
+                        href={adminProductsPath}
+                        className="mt-2 block text-custom-xs font-medium text-brand-rust hover:underline"
+                      >
+                        Manage catalogue
+                      </Link>
+                    ) : null}
                     <button
                       type="button"
                       onClick={signOut}

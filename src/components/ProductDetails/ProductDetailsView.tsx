@@ -84,11 +84,11 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
         pages={["shop", product.category.name]}
       />
 
-      <section className="relative overflow-hidden pb-20 pt-5 lg:pt-20 xl:pt-28">
+      <section className="relative overflow-hidden pb-28 pt-5 lg:pb-20 lg:pt-20 xl:pt-28">
         <div className="mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
           <div className="flex flex-col gap-7.5 lg:flex-row xl:gap-17.5">
             <div className="w-full lg:max-w-[570px]">
-              <div className="relative flex items-center justify-center rounded-lg bg-brand-cream p-4 shadow-1 sm:p-7.5 lg:min-h-[512px]">
+              <div className="relative flex aspect-square items-center justify-center rounded-xl border border-brand-ink/10 bg-brand-cream p-4 sm:p-7.5 lg:min-h-[512px] lg:aspect-auto">
                 {images.length > 0 && (
                   <>
                     <button
@@ -183,7 +183,7 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
                 </span>
               </div>
 
-              <div className="mb-7.5 flex items-center gap-4">
+              <div className="mb-6 flex items-center gap-4">
                 <span className="text-2xl font-semibold text-brand-rust">
                   {formatMoney(product.priceMinor, product.currency)}
                 </span>
@@ -194,9 +194,7 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
                 )}
               </div>
 
-              <p className="mb-7.5 text-brand-ink/80">{product.description}</p>
-
-              <div className="mb-7.5 flex items-center gap-4">
+              <div className="mb-6 flex items-center gap-3">
                 <div className="flex items-center rounded-md border border-gray-3">
                   <button
                     aria-label="Decrease quantity"
@@ -227,7 +225,7 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
                 <button
                   onClick={handleAddToCart}
                   disabled={!product.isAvailable}
-                  className="inline-flex flex-1 items-center justify-center rounded-md bg-brand-rust px-8 py-3 font-medium text-white duration-200 hover:bg-brand-ink disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-brand-rust px-6 py-3 font-medium text-white duration-200 hover:bg-brand-ink disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Add to cart
                 </button>
@@ -242,7 +240,7 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
               </div>
 
               {product.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="mb-6 flex flex-wrap gap-2">
                   {product.tags.map((tag) => (
                     <span
                       key={tag}
@@ -253,6 +251,10 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
                   ))}
                 </div>
               )}
+
+              <p className="text-sm leading-relaxed text-brand-ink/80">
+                {product.description}
+              </p>
             </div>
           </div>
 
@@ -365,6 +367,28 @@ const ProductDetailsView = ({ product }: ProductDetailsViewProps) => {
           </div>
         </div>
       </section>
+
+      {/* Sticky mobile purchase action — sits above bottom nav */}
+      <div className="fixed inset-x-0 bottom-16 z-30 border-t border-brand-ink/10 bg-brand-cream/95 px-4 py-3 backdrop-blur-md lg:hidden">
+        <div className="mx-auto flex max-w-[1170px] items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-brand-ink">
+              {product.title}
+            </p>
+            <p className="text-sm font-semibold text-brand-rust">
+              {formatMoney(product.priceMinor, product.currency)}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={!product.isAvailable}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-brand-rust px-5 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {product.isAvailable ? "Add to cart" : "Sold out"}
+          </button>
+        </div>
+      </div>
     </>
   );
 };

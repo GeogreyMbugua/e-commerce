@@ -24,7 +24,7 @@ const MailSuccess = () => {
               </p>
 
               <Link
-                href="/"
+                href="/home"
                 className="inline-flex items-center gap-2 rounded-md bg-brand-ink px-6 py-3 font-medium text-white ease-out duration-200 hover:bg-brand-rust"
               >
                 <svg

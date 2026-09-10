@@ -13,7 +13,7 @@ const Breadcrumb = ({ title, pages }) => {
 
             <ul className="flex items-center gap-2">
               <li className="text-custom-sm text-brand-ink/70 hover:text-brand-rust">
-                <Link href="/">Home /</Link>
+                <Link href="/home">Home /</Link>
               </li>
 
               {pages.length > 0 &&

@@ -9,6 +9,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
   async listPublishedWithCounts(): Promise<CategorySummary[]> {
     const categories = await this.prisma.category.findMany({
+      where: { isActive: true },
       orderBy: { name: 'asc' },
       include: {
         _count: {
@@ -28,6 +29,7 @@ export class PrismaCategoryRepository implements CategoryRepository {
       slug: category.slug,
       name: category.name,
       description: category.description,
+      imageUrl: category.imageUrl,
       productCount: category._count.products,
     }));
   }

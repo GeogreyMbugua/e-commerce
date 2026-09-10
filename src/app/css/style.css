@@ -8,7 +8,32 @@
   }
 
   body {
-    @apply font-euclid-circular-a font-normal text-base text-dark-3 relative z-1;
+    @apply relative z-1 font-euclid-circular-a font-normal text-base text-dark-3;
+    background-color: #f7f1e8;
+    background-image:
+      radial-gradient(ellipse 120% 80% at 0% -10%, rgba(184, 95, 45, 0.12), transparent 55%),
+      radial-gradient(ellipse 90% 70% at 100% 8%, rgba(210, 163, 58, 0.1), transparent 50%),
+      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(37, 36, 42, 0.06), transparent 55%),
+      linear-gradient(180deg, #fbf8f2 0%, #f3ebe0 42%, #f7f1e8 100%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.45;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 180px 180px;
+    mix-blend-mode: multiply;
+  }
+
+  body > * {
+    position: relative;
+    z-index: 1;
   }
 }
 
@@ -29,6 +54,48 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  /* Soft tonal band for storefront sections */
+  .store-band {
+    position: relative;
+  }
+
+  .store-band--warm {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(184, 95, 45, 0.05) 0%,
+        rgba(251, 248, 242, 0.35) 40%,
+        rgba(210, 163, 58, 0.04) 100%
+      );
+  }
+
+  .store-band--ink {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(37, 36, 42, 0.035) 0%,
+        rgba(251, 248, 242, 0.2) 50%,
+        rgba(37, 36, 42, 0.03) 100%
+      );
+  }
+
+  .store-band--panel {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(251, 248, 242, 0.72) 0%,
+        rgba(243, 235, 224, 0.55) 100%
+      );
+    border-top: 1px solid rgba(37, 36, 42, 0.06);
+    border-bottom: 1px solid rgba(37, 36, 42, 0.06);
+  }
+
+  .store-rail {
+    background-image:
+      radial-gradient(ellipse 70% 80% at 0% 50%, rgba(184, 95, 45, 0.06), transparent 60%),
+      radial-gradient(ellipse 60% 70% at 100% 40%, rgba(47, 139, 130, 0.05), transparent 55%);
   }
 }
 
@@ -224,6 +291,126 @@ input[type='search']::-webkit-search-results-decoration {
   }
 }
 
+/* Homepage intro: hero collapses into Categories */
+.hero-desktop.is-collapsed .hero-slide {
+  min-height: 380px;
+  padding-bottom: 3.5rem;
+}
+
+.hero-desktop.is-collapsed .hero-slide-copy {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.hero-desktop.is-collapsed .hero-slide-copy h1,
+.hero-desktop.is-collapsed .hero-slide-copy h2 {
+  font-size: 2.15rem;
+  line-height: 1.08;
+}
+
+.hero-desktop.is-collapsed .hero-slide-description {
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.hero-desktop.is-collapsed .hero-slide-cta {
+  margin-top: 1.25rem;
+}
+
+.hero-desktop.is-collapsed .hero-slide-media {
+  min-height: 0;
+}
+
+.hero-desktop.is-collapsed .hero-slide-product {
+  max-height: min(28vw, 280px);
+}
+
+.hero-desktop.is-collapsed .hero-slide-accent {
+  height: 14rem;
+  width: 14rem;
+  opacity: 0.55;
+}
+
+.hero-desktop.is-collapsed .hero-desktop-collections {
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.hero-desktop.is-collapsed .hero-desktop-collection-card {
+  min-height: 128px;
+  padding: 1.15rem 1.25rem;
+}
+
+.hero-desktop.is-collapsed .hero-desktop-collection-card h2 {
+  font-size: 1.25rem;
+}
+
+.hero-desktop.is-collapsed .hero-desktop-collection-copy {
+  display: none;
+}
+
+.hero-desktop.is-collapsed .hero-desktop-collection-card img {
+  width: 88px;
+}
+
+.hero-mobile-shell.is-collapsed .hero-mobile-slide {
+  min-height: clamp(340px, 52svh, 420px);
+}
+
+.hero-mobile-shell.is-collapsed .hero-mobile-copy {
+  padding-bottom: 5.5rem;
+}
+
+.hero-mobile-shell.is-collapsed .hero-mobile-description {
+  display: none;
+}
+
+.hero-mobile-shell.is-collapsed .hero-mobile-product {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+}
+
+.home-categories {
+  --hero-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.72;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--hero-motion-ease),
+    transform 0.7s var(--hero-motion-ease);
+}
+
+.home-categories.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-desktop .hero-slide,
+  .hero-desktop .hero-slide-copy,
+  .hero-desktop .hero-slide-description,
+  .hero-desktop .hero-slide-media,
+  .hero-desktop .hero-slide-product,
+  .hero-desktop .hero-slide-accent,
+  .hero-desktop .hero-desktop-collections,
+  .hero-desktop .hero-desktop-features,
+  .hero-mobile-shell .hero-mobile-slide,
+  .hero-mobile-shell .hero-mobile-copy,
+  .hero-mobile-shell .hero-mobile-product,
+  .hero-mobile-secondary,
+  .home-categories {
+    transition: none !important;
+  }
+
+  .home-categories {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* The container must be positioned relative: */
 .custom-select select {
   display: none; /*hide original SELECT element: */
@@ -351,4 +538,45 @@ input[type='search']::-webkit-search-results-decoration {
 
 .range-slider__range {
   @apply !bg-blue;
+}
+
+/* Sign-in page motion */
+@keyframes signin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes signin-ken {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+.signin-rise {
+  animation: signin-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.signin-rise-delay {
+  animation: signin-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+.signin-media {
+  animation: signin-ken 28s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signin-rise,
+  .signin-rise-delay,
+  .signin-media {
+    animation: none;
+  }
 }

@@ -1,9 +1,12 @@
+export type CustomerRole = 'CUSTOMER' | 'ADMIN';
+
 export type AuthenticatedCustomer = {
   id: string;
   oidcSubject: string;
   oidcIssuer: string;
   email: string;
   emailVerified: boolean;
+  role: CustomerRole;
   firstName: string | null;
   lastName: string | null;
   phone: string | null;

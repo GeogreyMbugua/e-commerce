@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
 import Header from "../../components/Header";
@@ -17,6 +18,7 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
 import CartHydrator from "@/components/Cart/CartHydrator";
+import MobileBottomNav from "@/components/Store/MobileBottomNav";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -26,6 +28,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState<boolean>(true);
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin") ?? false;
+  const isAuthSurface = pathname === "/signin" || pathname === "/signup";
+  const useFocusedShell = isAdmin || isAuthSurface;
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
@@ -47,23 +53,32 @@ export default function RootLayout({
           <>
             <ReduxProvider>
               <AuthProvider>
-              <CartHydrator />
-              <CartModalProvider>
-                <ModalProvider>
-                  <PreviewSliderProvider>
-                    <Header />
-                    {children}
+                <CartHydrator />
+                <CartModalProvider>
+                  <ModalProvider>
+                    <PreviewSliderProvider>
+                      {useFocusedShell ? (
+                        children
+                      ) : (
+                        <>
+                          <Header />
+                          <div className="pb-20 lg:pb-0">
+                            {children}
+                            <Footer />
+                          </div>
 
-                    <QuickViewModal />
-                    <CartSidebarModal />
-                    <PreviewSliderModal />
-                  </PreviewSliderProvider>
-                </ModalProvider>
-              </CartModalProvider>
+                          <QuickViewModal />
+                          <CartSidebarModal />
+                          <PreviewSliderModal />
+                          <MobileBottomNav />
+                        </>
+                      )}
+                    </PreviewSliderProvider>
+                  </ModalProvider>
+                </CartModalProvider>
               </AuthProvider>
             </ReduxProvider>
-            <ScrollToTop />
-            <Footer />
+            {!useFocusedShell ? <ScrollToTop /> : null}
           </>
         )}
       </body>

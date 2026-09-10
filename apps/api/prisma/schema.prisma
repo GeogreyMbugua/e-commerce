@@ -10,7 +10,14 @@ datasource db {
 enum ProductStatus {
   DRAFT
   ACTIVE
+  UNAVAILABLE
+  SOLD
   ARCHIVED
+}
+
+enum CustomerRole {
+  CUSTOMER
+  ADMIN
 }
 
 enum ConditionGrade {
@@ -78,21 +85,29 @@ enum AddressType {
 }
 
 model Category {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  name        String
-  description String?
-  products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  name             String
+  description      String?
+  imageUrl         String?
+  imageStorageKey  String?
+  isActive         Boolean   @default(true)
+  products         Product[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   @@index([name])
+  @@index([isActive, name])
 }
 
 model Product {
   id               String         @id @default(cuid())
   slug             String         @unique
+  sku              String?        @unique
   title            String
+  brand            String?
+  model            String?
+  shortDescription String?
   description      String
   status           ProductStatus  @default(DRAFT)
   categoryId       String
@@ -109,6 +124,7 @@ model Product {
   specifications   Json?
   tags             String[]
   isUniqueItem     Boolean        @default(false)
+  isFeatured       Boolean        @default(false)
   media            ProductMedia[]
   inventory        InventoryItem?
   cartLines           CartLine[]
@@ -121,16 +137,19 @@ model Product {
   @@index([status, createdAt])
   @@index([categoryId, status])
   @@index([priceMinor])
+  @@index([isFeatured, status, createdAt])
+  @@index([brand])
 }
 
 model ProductMedia {
-  id        String  @id @default(cuid())
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String
-  altText   String?
-  sortOrder Int     @default(0)
-  isPrimary Boolean @default(false)
+  id         String  @id @default(cuid())
+  productId  String
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url        String
+  storageKey String?
+  altText    String?
+  sortOrder  Int     @default(0)
+  isPrimary  Boolean @default(false)
 
   @@index([productId, sortOrder])
 }
@@ -368,6 +387,7 @@ model Customer {
   oidcIssuer    String
   email         String            @unique
   emailVerified Boolean           @default(false)
+  role          CustomerRole      @default(CUSTOMER)
   firstName     String?
   lastName      String?
   phone         String?
@@ -378,6 +398,7 @@ model Customer {
   updatedAt     DateTime          @updatedAt
 
   @@index([email])
+  @@index([role])
 }
 
 model CustomerAddress {

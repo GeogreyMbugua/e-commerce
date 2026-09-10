@@ -1,75 +1,94 @@
 "use client";
 
-import React from "react";
-import SingleItem from "./SingleItem";
-import Image from "@/components/Common/BrandedImage";
-import Link from "next/link";
-import { useCatalogProducts } from "@/hooks/useCatalogProducts";
+import React, { useEffect, useState } from "react";
+import ProductItem from "@/components/Common/ProductItem";
+import SectionHeader from "@/components/Store/SectionHeader";
+import { fetchProducts } from "@/lib/catalog";
+import { toViewProducts } from "@/lib/catalog-adapter";
 import { shopPath } from "@/lib/routes";
+import type { Product } from "@/types/product";
 
-const BestSeller = () => {
-  const { products, loading, error } = useCatalogProducts({
-    limit: 8,
-    sort: "newest",
-  });
+const Featured = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const featured = products.slice(1, 7);
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Prefer explicitly featured catalogue items when the API returns any.
+        const featuredResponse = await fetchProducts({
+          featured: true,
+          limit: 6,
+          sort: "newest",
+        });
+
+        let list = featuredResponse.data;
+
+        // Fall back to newest slice when no featured products are set.
+        if (list.length === 0) {
+          const newest = await fetchProducts({ limit: 6, sort: "newest" });
+          list = newest.data;
+        }
+
+        if (!cancelled) {
+          setProducts(toViewProducts(list));
+        }
+      } catch {
+        if (!cancelled) {
+          setError("Unable to load products.");
+          setProducts([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
-    <section className="overflow-hidden">
+    <section id="featured" className="pt-10 sm:pt-12">
       <div className="mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
-        <div className="mb-8 flex items-center justify-between sm:mb-10">
-          <div>
-            <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
-              <Image
-                src="/images/icons/icon-07.svg"
-                alt=""
-                width={17}
-                height={17}
-                className="opacity-90"
-              />
-              This Month
-            </span>
-            <h2 className="text-xl font-semibold text-brand-ink xl:text-heading-5">
-              Best Sellers
-            </h2>
-          </div>
-        </div>
+        <SectionHeader
+          eyebrow="Curated picks"
+          title="Featured"
+          href={shopPath}
+        />
 
         {loading && (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7.5 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-[430px] animate-pulse rounded-lg bg-gray-2"
-              />
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <div className="mb-2.5 aspect-square bg-gray-2" />
+                <div className="mb-2 h-4 w-3/4 rounded bg-gray-2" />
+                <div className="h-4 w-1/3 rounded bg-gray-2" />
+              </div>
             ))}
           </div>
         )}
 
         {!loading && error && (
-          <p className="text-brand-ink/70">{error}</p>
+          <p className="text-sm text-brand-ink/70">{error}</p>
         )}
 
         {!loading && !error && (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-7.5 lg:grid-cols-3">
-            {featured.map((item) => (
-              <SingleItem item={item} key={item.slug ?? item.id} />
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+            {products.map((item) => (
+              <ProductItem item={item} key={item.slug ?? item.id} />
             ))}
           </div>
         )}
-
-        <div className="mt-9 text-center sm:mt-12.5">
-          <Link
-            href={shopPath}
-            className="inline-flex rounded-md border border-brand-ink/15 bg-brand-cream px-7 py-3 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white sm:px-12.5"
-          >
-            View All
-          </Link>
-        </div>
       </div>
     </section>
   );
 };
 
-export default BestSeller;
+export default Featured;

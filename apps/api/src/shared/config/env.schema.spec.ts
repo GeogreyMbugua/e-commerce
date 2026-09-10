@@ -12,6 +12,8 @@ describe('envSchema', () => {
       PORT: 3000,
       LOG_LEVEL: 'info',
       API_PREFIX: 'api/v1',
+      UPLOAD_DIR: 'uploads',
+      CLOUDINARY_FOLDER: 'audiovintage/products',
       THROTTLE_TTL_MS: 60_000,
       THROTTLE_LIMIT: 100,
     });

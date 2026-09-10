@@ -45,6 +45,8 @@ export async function fetchProducts(
     buildUrl("/products", {
       search: params.search,
       category: params.category,
+      featured:
+        params.featured === undefined ? undefined : String(params.featured),
       minPriceMinor: params.minPriceMinor,
       maxPriceMinor: params.maxPriceMinor,
       sort: params.sort ?? "newest",
@@ -73,8 +75,34 @@ export const FALLBACK_PRODUCT_SLUGS = [
 
 export async function fetchProductSlugs(): Promise<Array<{ slug: string }>> {
   try {
-    const response = await fetchProducts({ limit: 50 });
-    return response.data.map((product) => ({ slug: product.slug }));
+    const slugs: string[] = [];
+    let cursor: string | undefined;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await fetchProducts({
+        limit: 50,
+        sort: "newest",
+        cursor,
+      });
+
+      for (const product of response.data) {
+        slugs.push(product.slug);
+      }
+
+      hasMore = response.page.hasMore;
+      cursor = response.page.nextCursor ?? undefined;
+
+      if (!hasMore || !cursor) {
+        break;
+      }
+    }
+
+    if (slugs.length === 0) {
+      return FALLBACK_PRODUCT_SLUGS.map((slug) => ({ slug }));
+    }
+
+    return slugs.map((slug) => ({ slug }));
   } catch {
     return FALLBACK_PRODUCT_SLUGS.map((slug) => ({ slug }));
   }

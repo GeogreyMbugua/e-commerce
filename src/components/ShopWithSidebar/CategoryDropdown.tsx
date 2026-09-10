@@ -12,6 +12,7 @@ type CategoryDropdownProps = {
   categories: CategoryFilterOption[];
   selectedSlug?: string;
   onChange: (slug?: string) => void;
+  flat?: boolean;
 };
 
 const CategoryItem = ({
@@ -60,8 +61,8 @@ const CategoryItem = ({
 
       <span
         className={`${
-          selected ? "bg-brand-rust text-white" : "bg-gray-2"
-        } inline-flex rounded-[30px] px-2 text-custom-xs ease-out duration-200 group-hover:bg-brand-rust group-hover:text-white`}
+          selected ? "bg-brand-rust text-white" : "bg-brand-ink/8 text-brand-ink/70"
+        } inline-flex min-w-6 items-center justify-center px-1.5 py-0.5 text-[10px] font-medium`}
       >
         {category.productCount}
       </span>
@@ -73,32 +74,31 @@ const CategoryDropdown = ({
   categories,
   selectedSlug,
   onChange,
+  flat = false,
 }: CategoryDropdownProps) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   return (
-    <div className="rounded-lg bg-white shadow-1">
+    <div className={flat ? "" : "border border-brand-ink/10 bg-white/70"}>
       <div
         onClick={(event) => {
           event.preventDefault();
           setToggleDropdown(!toggleDropdown);
         }}
-        className={`flex cursor-pointer items-center justify-between py-3 pl-6 pr-5.5 ${
-          toggleDropdown && "shadow-filter"
-        }`}
+        className="flex cursor-pointer items-center justify-between px-4 py-3"
       >
-        <p className="text-dark">Category</p>
+        <p className="text-sm font-medium text-brand-ink">Category</p>
         <button
           type="button"
-          aria-label="button for category dropdown"
-          className={`text-dark ease-out duration-200 ${
-            toggleDropdown && "rotate-180"
+          aria-label="Toggle category filters"
+          className={`text-brand-ink transition-transform duration-200 ${
+            toggleDropdown ? "rotate-180" : ""
           }`}
         >
           <svg
             className="fill-current"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@ const CategoryDropdown = ({
       </div>
 
       <div
-        className={`flex-col gap-3 py-6 pl-6 pr-5.5 ${
+        className={`flex-col gap-3 px-4 pb-4 ${
           toggleDropdown ? "flex" : "hidden"
         }`}
       >

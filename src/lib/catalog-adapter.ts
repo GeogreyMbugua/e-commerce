@@ -39,6 +39,7 @@ export const toViewProduct = (
     isAvailable: product.isAvailable,
     conditionGrade: product.conditionGrade,
     categorySlug: product.category.slug,
+    categoryName: product.category.name,
     imgs: {
       thumbnails: images.map((image) => image.url),
       previews: images.map((image) => image.url),

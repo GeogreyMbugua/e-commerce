@@ -57,8 +57,8 @@ const HeroDesktopCarousel = () => {
       >
         {heroSlides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <div className="hero-slide relative grid min-h-[600px] grid-cols-[minmax(0,0.44fr)_minmax(0,0.56fr)] items-stretch gap-0 pb-16 2xl:min-h-[620px]">
-              <div className="hero-slide-copy relative z-10 flex flex-col justify-center px-10 py-14 2xl:px-14 2xl:py-16">
+            <div className="hero-slide relative grid min-h-[600px] grid-cols-[minmax(0,0.44fr)_minmax(0,0.56fr)] items-stretch gap-0 pb-16 transition-[min-height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 2xl:min-h-[620px]">
+              <div className="hero-slide-copy relative z-10 flex flex-col justify-center px-10 py-14 transition-[padding] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 2xl:px-14 2xl:py-16">
                 <div
                   className="pointer-events-none absolute inset-y-0 -left-10 right-0 2xl:-left-14"
                   aria-hidden="true"
@@ -90,13 +90,13 @@ const HeroDesktopCarousel = () => {
                     </h2>
                   )}
 
-                  <p className="hero-slide-description relative max-w-[380px] text-base leading-7 text-[#f1eadf] drop-shadow-[0_2px_16px_rgba(15,11,9,0.45)]">
+                  <p className="hero-slide-description relative max-w-[380px] text-base leading-7 text-[#f1eadf] drop-shadow-[0_2px_16px_rgba(15,11,9,0.45)] transition-[opacity,max-height,margin] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
                     {slide.description}
                   </p>
 
                   <Link
                     href={slide.ctaHref}
-                    className="relative mt-8 inline-flex w-fit items-center gap-2.5 rounded-md bg-brand-cream px-7 py-3.5 text-sm font-medium text-brand-ink shadow-[0_8px_24px_rgba(15,11,9,0.28)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
+                    className="hero-slide-cta relative mt-8 inline-flex w-fit items-center gap-2.5 rounded-md bg-brand-cream px-7 py-3.5 text-sm font-medium text-brand-ink shadow-[0_8px_24px_rgba(15,11,9,0.28)] transition-colors duration-200 hover:bg-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-ink/40"
                   >
                     {slide.cta}
                     <span aria-hidden="true">→</span>
@@ -104,9 +104,9 @@ const HeroDesktopCarousel = () => {
                 </div>
               </div>
 
-              <div className="hero-slide-media relative flex items-center justify-end px-10 pb-0 pt-0 2xl:min-h-[500px] 2xl:px-14">
+              <div className="hero-slide-media relative flex items-center justify-end px-10 pb-0 pt-0 transition-[min-height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 2xl:min-h-[500px] 2xl:px-14">
                 <div
-                  className="hero-slide-accent absolute right-[6%] top-1/2 h-[22rem] w-[22rem] -translate-y-1/2 rounded-full border border-brand-rust/25 2xl:right-[4%] 2xl:h-[24rem] 2xl:w-[24rem]"
+                  className="hero-slide-accent absolute right-[6%] top-1/2 h-[22rem] w-[22rem] -translate-y-1/2 rounded-full border border-brand-rust/25 transition-[height,width,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 2xl:right-[4%] 2xl:h-[24rem] 2xl:w-[24rem]"
                   aria-hidden="true"
                 />
                 <Image
@@ -116,7 +116,8 @@ const HeroDesktopCarousel = () => {
                   height={slide.productHeight}
                   priority={index === 0}
                   sizes="50vw"
-                  className={`relative z-10 h-auto max-h-[min(42vw,440px)] w-full max-w-[min(52vw,640px)] object-contain drop-shadow-[0_24px_48px_rgba(37,36,42,0.22)] ${slide.desktopProductClassName}`}
+                  className={`hero-slide-product relative z-10 h-auto max-h-[min(42vw,440px)] w-full max-w-[min(52vw,640px)] object-contain drop-shadow-[0_24px_48px_rgba(37,36,42,0.22)] transition-[max-height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${slide.desktopProductClassName}`}
+                  style={{ height: "auto" }}
                 />
               </div>
 
@@ -142,9 +143,15 @@ const HeroDesktopCarousel = () => {
   );
 };
 
-const HeroDesktop = () => {
+type HeroDesktopProps = {
+  collapsed?: boolean;
+};
+
+const HeroDesktop = ({ collapsed = false }: HeroDesktopProps) => {
   return (
-    <section className="hero-desktop relative overflow-hidden bg-[#7a4528]">
+    <section
+      className={`hero-desktop relative overflow-hidden bg-[#7a4528]${collapsed ? " is-collapsed" : ""}`}
+    >
       <Image
         src="/images/hero/hero-ackground-2.jpg"
         alt="Shelves of vintage audio equipment in a curated shop"
@@ -166,10 +173,10 @@ const HeroDesktop = () => {
             <HeroDesktopCarousel />
           </div>
 
-          <div className="flex w-[340px] shrink-0 flex-col justify-center gap-4 py-10 2xl:w-[380px]">
+          <div className="hero-desktop-collections flex w-[340px] shrink-0 flex-col justify-center gap-4 py-10 transition-[gap,padding,width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] 2xl:w-[380px]">
             <Link
               href="/shop-with-sidebar?category=turntables"
-              className="group relative flex min-h-[210px] flex-col justify-between overflow-hidden border border-brand-ink/10 bg-brand-cream/70 p-6 backdrop-blur-[2px] transition-all duration-300 hover:border-brand-rust/30 hover:bg-brand-cream/78"
+              className="hero-desktop-collection-card group relative flex min-h-[210px] flex-col justify-between overflow-hidden border border-brand-ink/10 bg-brand-cream/70 p-6 backdrop-blur-[2px] transition-all duration-300 hover:border-brand-rust/30 hover:bg-brand-cream/78"
             >
               <div className="relative z-10 max-w-[58%]">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-rust/85">
@@ -178,7 +185,7 @@ const HeroDesktop = () => {
                 <h2 className="mt-2 text-[1.65rem] font-semibold leading-tight text-brand-ink">
                   Turntables
                 </h2>
-                <p className="mt-2.5 text-sm leading-6 text-brand-ink/70">
+                <p className="hero-desktop-collection-copy mt-2.5 text-sm leading-6 text-brand-ink/70">
                   Classic decks ready for their next spin.
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-rust transition-colors duration-200 group-hover:text-brand-gold">
@@ -198,12 +205,13 @@ const HeroDesktop = () => {
                 width={148}
                 height={148}
                 className="pointer-events-none absolute -bottom-2 -right-1 h-auto w-[130px] object-contain opacity-95 transition-transform duration-500 group-hover:scale-[1.04] group-hover:-translate-y-1"
+                style={{ height: "auto" }}
               />
             </Link>
 
             <Link
               href="/shop-with-sidebar?category=speakers"
-              className="group relative flex min-h-[210px] flex-col justify-between overflow-hidden border border-brand-ink/10 bg-brand-cream/70 p-6 backdrop-blur-[2px] transition-all duration-300 hover:border-brand-rust/30 hover:bg-brand-cream/78"
+              className="hero-desktop-collection-card group relative flex min-h-[210px] flex-col justify-between overflow-hidden border border-brand-ink/10 bg-brand-cream/70 p-6 backdrop-blur-[2px] transition-all duration-300 hover:border-brand-rust/30 hover:bg-brand-cream/78"
             >
               <div className="relative z-10 max-w-[58%]">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-rust/85">
@@ -212,7 +220,7 @@ const HeroDesktop = () => {
                 <h2 className="mt-2 text-[1.65rem] font-semibold leading-tight text-brand-ink">
                   Vintage Speakers
                 </h2>
-                <p className="mt-2.5 text-sm leading-6 text-brand-ink/70">
+                <p className="hero-desktop-collection-copy mt-2.5 text-sm leading-6 text-brand-ink/70">
                   Classic cabinets. Distinctive sound.
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-brand-rust transition-colors duration-200 group-hover:text-brand-gold">
@@ -232,13 +240,18 @@ const HeroDesktop = () => {
                 width={128}
                 height={150}
                 className="pointer-events-none absolute bottom-0 right-0 h-auto w-[118px] object-contain opacity-95 transition-transform duration-500 group-hover:scale-[1.04] group-hover:-translate-y-1"
+                style={{ height: "auto" }}
               />
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 mt-0">
+      <div
+        className={`hero-desktop-features relative z-10 mt-0 overflow-hidden transition-[max-height,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          collapsed ? "max-h-0 opacity-0" : "max-h-[280px] opacity-100"
+        }`}
+      >
         <div
           className="absolute inset-x-0 -top-24 h-24 bg-gradient-to-b from-transparent via-brand-ink/40 to-brand-ink/90"
           aria-hidden="true"

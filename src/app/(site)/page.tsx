@@ -1,17 +1,17 @@
-import Home from "@/components/Home";
+import ShopWithSidebar from "@/components/ShopWithSidebar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AudioVintage | Curated Vintage Audio & Physical Media",
+  title: "Shop AudioVintage",
   description:
-    "Discover carefully selected vintage audio equipment and physical media at AudioVintage.",
+    "Browse curated vintage audio equipment and physical media from AudioVintage.",
   // other metadata
 };
 
 export default function HomePage() {
   return (
-    <>
-      <Home />
-    </>
+    <main>
+      <ShopWithSidebar />
+    </main>
   );
 }

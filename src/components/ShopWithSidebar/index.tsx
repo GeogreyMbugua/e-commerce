@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
-import Breadcrumb from "../Common/Breadcrumb";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import CustomSelect from "./CustomSelect";
 import CategoryDropdown from "./CategoryDropdown";
 import PriceDropdown from "./PriceDropdown";
@@ -10,10 +10,24 @@ import { useShopCatalog } from "@/hooks/useShopCatalog";
 import type { CatalogSort } from "@/types/catalog";
 
 const sortOptions: Array<{ label: string; value: CatalogSort }> = [
-  { label: "Latest Products", value: "newest" },
+  { label: "Newest", value: "newest" },
   { label: "Price: Low to High", value: "price_asc" },
   { label: "Price: High to Low", value: "price_desc" },
 ];
+
+const shortCategoryLabel = (name: string) => {
+  const map: Record<string, string> = {
+    Speakers: "Speakers",
+    Turntables: "Turntables",
+    "Amplifiers & Receivers": "Amps",
+    "Vinyl Records": "Vinyl",
+    CDs: "CDs",
+    Cassettes: "Cassettes",
+    DVDs: "DVDs",
+    "VHS Tapes": "VHS",
+  };
+  return map[name] ?? name.split(" ")[0];
+};
 
 const ShopWithSidebarContent = () => {
   const {
@@ -26,8 +40,22 @@ const ShopWithSidebarContent = () => {
     clearFilters,
   } = useShopCatalog();
   const [productStyle, setProductStyle] = useState<"grid" | "list">("grid");
-  const [productSidebar, setProductSidebar] = useState(false);
-  const [stickyMenu, setStickyMenu] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  useEffect(() => {
+    const handleShopControls = () => {
+      setFilterOpen(true);
+      requestAnimationFrame(() => {
+        document.getElementById("shop-controls")?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      });
+    };
+
+    window.addEventListener("shop:open-controls", handleShopControls);
+    return () => window.removeEventListener("shop:open-controls", handleShopControls);
+  }, []);
 
   const categoryOptions = categories.map((category) => ({
     slug: category.slug,
@@ -35,166 +63,256 @@ const ShopWithSidebarContent = () => {
     productCount: category.productCount,
   }));
 
+  const selectedCategoryName = useMemo(
+    () => categoryOptions.find((c) => c.slug === filters.category)?.name,
+    [categoryOptions, filters.category],
+  );
+
   const hasActiveFilters = Boolean(
     filters.search ||
       filters.category ||
       filters.minPriceMinor !== undefined ||
-      filters.maxPriceMinor !== undefined ||
-      filters.sort !== "newest",
+      filters.maxPriceMinor !== undefined,
   );
 
-  useEffect(() => {
-    const handleStickyMenu = () => {
-      setStickyMenu(window.scrollY >= 80);
-    };
+  const FiltersPanel = ({ compact = false }: { compact?: boolean }) => (
+    <div className={`flex flex-col ${compact ? "gap-5" : "gap-6"}`}>
+      <div className="border border-brand-ink/10 bg-white/70 px-4 py-3">
+        <p className="mb-2 text-sm font-medium text-brand-ink">Sort by</p>
+        <CustomSelect
+          options={sortOptions}
+          value={filters.sort}
+          onChange={(sort) => updateFilters({ sort: sort as CatalogSort })}
+        />
+      </div>
 
-    handleStickyMenu();
-    window.addEventListener("scroll", handleStickyMenu);
+      {!compact ? (
+        <div className="border border-brand-ink/10 bg-white/70 px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-medium text-brand-ink">Filters</p>
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-xs font-medium text-brand-rust hover:text-brand-ink"
+              >
+                Clear all
+              </button>
+            ) : (
+              <span className="text-xs text-brand-ink/55">Refine results</span>
+            )}
+          </div>
+          {filters.search ? (
+            <p className="mt-2 text-sm text-brand-ink/70">
+              Search: <span className="text-brand-ink">{filters.search}</span>
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
-    return () => window.removeEventListener("scroll", handleStickyMenu);
-  }, []);
+      {!compact ? (
+        <CategoryDropdown
+          categories={categoryOptions}
+          selectedSlug={filters.category}
+          onChange={(category) => updateFilters({ category })}
+        />
+      ) : null}
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as HTMLElement | null;
-      if (!target?.closest(".sidebar-content")) {
-        setProductSidebar(false);
-      }
-    }
-
-    if (productSidebar) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [productSidebar]);
+      <PriceDropdown
+        minPriceMinor={filters.minPriceMinor}
+        maxPriceMinor={filters.maxPriceMinor}
+        onChange={({ minPriceMinor, maxPriceMinor }) =>
+          updateFilters({ minPriceMinor, maxPriceMinor })
+        }
+        flat={compact}
+      />
+    </div>
+  );
 
   return (
     <>
-      <Breadcrumb title={"Shop Audio & Physical Media"} pages={["shop"]} />
-      <section className="relative overflow-hidden bg-brand-cream/40 pb-20 pt-5 lg:pt-20 xl:pt-28">
-        <div className="mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
-          <div className="flex gap-7.5">
-            <div
-              className={`sidebar-content fixed w-full max-w-[310px] ease-out duration-200 xl:static xl:z-1 xl:max-w-[270px] xl:translate-x-0 ${
-                productSidebar
-                  ? "z-9999 h-screen translate-x-0 overflow-y-auto bg-white p-5"
-                  : "-translate-x-full"
+      {/* Compact shop header */}
+      <div className="border-b border-brand-ink/10 bg-brand-cream/50">
+        <div className="mx-auto flex w-full max-w-[1170px] items-end justify-between gap-3 px-4 py-4 sm:px-8 sm:py-5 xl:px-0">
+          <div className="min-w-0">
+            <nav aria-label="Breadcrumb" className="mb-1 hidden text-xs text-brand-ink/55 sm:block">
+              <ol className="flex items-center gap-1.5">
+                <li>
+                  <Link href="/home" className="hover:text-brand-rust">
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li className="text-brand-rust">Shop</li>
+              </ol>
+            </nav>
+            <h1 className="truncate text-lg font-semibold text-brand-ink sm:text-xl lg:text-2xl">
+              {selectedCategoryName ?? (filters.search ? `“${filters.search}”` : "Shop")}
+            </h1>
+          </div>
+          <p className="shrink-0 pb-0.5 text-sm text-brand-ink/60">
+            {loading ? "…" : `${products.length} items`}
+          </p>
+        </div>
+      </div>
+
+      <section className="relative pb-24 pt-3 sm:pb-10 sm:pt-5 lg:pb-16 lg:pt-8 xl:pb-16">
+        <div
+          className="pointer-events-none absolute inset-0 store-band--warm"
+          aria-hidden="true"
+        />
+
+        <div className="relative mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
+          {/* Mobile category chips */}
+          <div className="no-scrollbar -mx-4 mb-3 flex gap-2 overflow-x-auto px-4 pb-0.5 xl:hidden">
+            <button
+              type="button"
+              onClick={() => updateFilters({ category: undefined })}
+              className={`shrink-0 px-3.5 py-2 text-xs font-medium transition-colors ${
+                !filters.category
+                  ? "bg-brand-ink text-brand-cream"
+                  : "bg-white/70 text-brand-ink"
               }`}
             >
+              All
+            </button>
+            {categoryOptions.map((category) => (
               <button
-                onClick={() => setProductSidebar(!productSidebar)}
-                aria-label="button for product sidebar toggle"
-                className={`absolute -right-12.5 flex h-8 w-8 items-center justify-center rounded-md bg-white shadow-1 sm:-right-8 xl:hidden ${
-                  stickyMenu
-                    ? "top-35 sm:top-34.5 lg:top-20"
-                    : "top-37 sm:top-39 lg:top-24"
+                key={category.slug}
+                type="button"
+                onClick={() =>
+                  updateFilters({
+                    category:
+                      filters.category === category.slug
+                        ? undefined
+                        : category.slug,
+                  })
+                }
+                className={`shrink-0 px-3.5 py-2 text-xs font-medium transition-colors ${
+                  filters.category === category.slug
+                    ? "bg-brand-ink text-brand-cream"
+                    : "bg-white/70 text-brand-ink"
                 }`}
               >
-                <svg
-                  className="fill-current"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M3.25 6C3.25 5.58579 3.58579 5.25 4 5.25L20 5.25C20.4142 5.25 20.75 5.58579 20.75 6C20.75 6.41421 20.4142 6.75 20 6.75L4 6.75C3.58579 6.75 3.25 6.41421 3.25 6ZM3.25 12C3.25 11.5858 3.58579 11.25 4 11.25L20 11.25C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75L4 12.75C3.58579 12.75 3.25 12.4142 3.25 12ZM4 17.25C3.58579 17.25 3.25 17.5858 3.25 18C3.25 18.4142 3.58579 18.75 4 18.75L20 18.75C20.4142 18.75 20.75 18.4142 20.75 18C20.75 17.5858 20.4142 17.25 20 17.25L4 17.25Z"
-                    fill=""
-                  />
-                </svg>
+                {shortCategoryLabel(category.name)}
               </button>
+            ))}
+          </div>
 
-              <div className="flex flex-col gap-6">
-                <div className="rounded-lg bg-white px-5 py-4 shadow-1">
-                  <div className="flex items-center justify-between">
-                    <p>Filters:</p>
-                    {hasActiveFilters ? (
-                      <button
-                        type="button"
-                        onClick={clearFilters}
-                        className="text-custom-xs text-brand-rust hover:text-brand-ink"
-                      >
-                        Clear filters
-                      </button>
-                    ) : (
-                      <span className="text-custom-xs text-brand-ink/60">
-                        Refine your search
-                      </span>
-                    )}
-                  </div>
-                  {filters.search ? (
-                    <p className="mt-3 text-custom-sm text-brand-ink/70">
-                      Search: <span className="text-brand-ink">{filters.search}</span>
-                    </p>
-                  ) : null}
-                </div>
-
-                <CategoryDropdown
-                  categories={categoryOptions}
-                  selectedSlug={filters.category}
-                  onChange={(category) => updateFilters({ category })}
-                />
-
-                <PriceDropdown
-                  minPriceMinor={filters.minPriceMinor}
-                  maxPriceMinor={filters.maxPriceMinor}
-                  onChange={({ minPriceMinor, maxPriceMinor }) =>
-                    updateFilters({ minPriceMinor, maxPriceMinor })
+          {/* Active filter chips */}
+          {(filters.search ||
+            filters.minPriceMinor !== undefined ||
+            filters.maxPriceMinor !== undefined) && (
+            <div className="mb-3 flex flex-wrap items-center gap-2 xl:hidden">
+              {filters.search ? (
+                <button
+                  type="button"
+                  onClick={() => updateFilters({ search: undefined })}
+                  className="inline-flex items-center gap-1.5 bg-brand-ink/5 px-2.5 py-1.5 text-xs text-brand-ink"
+                >
+                  “{filters.search}”
+                  <span aria-hidden="true">×</span>
+                </button>
+              ) : null}
+              {(filters.minPriceMinor !== undefined ||
+                filters.maxPriceMinor !== undefined) && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateFilters({
+                      minPriceMinor: undefined,
+                      maxPriceMinor: undefined,
+                    })
                   }
-                />
-              </div>
+                  className="inline-flex items-center gap-1.5 bg-brand-ink/5 px-2.5 py-1.5 text-xs text-brand-ink"
+                >
+                  Price
+                  <span aria-hidden="true">×</span>
+                </button>
+              )}
+              {hasActiveFilters ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="text-xs font-medium text-brand-rust"
+                >
+                  Clear all
+                </button>
+              ) : null}
             </div>
+          )}
+
+          <div id="shop-controls" className="mb-4 xl:hidden">
+            {filterOpen ? (
+              <div className="border-y border-brand-ink/10 bg-white/55 px-4 py-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-sm font-semibold text-brand-ink">Filter & sort</p>
+                  <button
+                    type="button"
+                    onClick={() => setFilterOpen(false)}
+                    className="text-xs font-medium text-brand-rust"
+                  >
+                    Done
+                  </button>
+                </div>
+                <FiltersPanel compact />
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex gap-7.5">
+            <aside className="hidden w-full max-w-[270px] xl:block">
+              <FiltersPanel />
+            </aside>
 
             <div className="w-full xl:max-w-[870px]">
-              <div className="mb-6 rounded-lg bg-white py-2.5 pl-3 pr-2.5 shadow-1">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                    <CustomSelect
-                      options={sortOptions}
-                      value={filters.sort}
-                      onChange={(sort) =>
-                        updateFilters({ sort: sort as CatalogSort })
-                      }
-                    />
+              {/* Desktop toolbar */}
+              <div className="mb-5 hidden items-center justify-between gap-4 border-b border-brand-ink/10 pb-4 xl:flex">
+                <div className="flex items-center gap-4">
+                  <p className="text-sm text-brand-ink/65">
+                    <span className="font-medium text-brand-ink">
+                      {products.length}
+                    </span>{" "}
+                    products
+                  </p>
+                </div>
 
-                    <p>
-                      Showing{" "}
-                      <span className="text-brand-ink">{products.length}</span>{" "}
-                      Products
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <button
-                      onClick={() => setProductStyle("grid")}
-                      aria-label="button for product grid tab"
-                      className={`${
-                        productStyle === "grid"
-                          ? "border-brand-rust bg-brand-rust text-white"
-                          : "border-gray-3 bg-gray-1 text-dark"
-                      } flex h-9 w-10.5 items-center justify-center rounded-[5px] border ease-out duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white`}
-                    >
-                      Grid
-                    </button>
-
-                    <button
-                      onClick={() => setProductStyle("list")}
-                      aria-label="button for product list tab"
-                      className={`${
-                        productStyle === "list"
-                          ? "border-brand-rust bg-brand-rust text-white"
-                          : "border-gray-3 bg-gray-1 text-dark"
-                      } flex h-9 w-10.5 items-center justify-center rounded-[5px] border ease-out duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white`}
-                    >
-                      List
-                    </button>
-                  </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setProductStyle("grid")}
+                    aria-label="Grid view"
+                    aria-pressed={productStyle === "grid"}
+                    className={`flex h-9 w-9 items-center justify-center border transition-colors ${
+                      productStyle === "grid"
+                        ? "border-brand-ink bg-brand-ink text-white"
+                        : "border-brand-ink/15 text-brand-ink hover:border-brand-rust"
+                    }`}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                      <rect x="0" y="0" width="5.5" height="5.5" />
+                      <rect x="8.5" y="0" width="5.5" height="5.5" />
+                      <rect x="0" y="8.5" width="5.5" height="5.5" />
+                      <rect x="8.5" y="8.5" width="5.5" height="5.5" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setProductStyle("list")}
+                    aria-label="List view"
+                    aria-pressed={productStyle === "list"}
+                    className={`flex h-9 w-9 items-center justify-center border transition-colors ${
+                      productStyle === "list"
+                        ? "border-brand-ink bg-brand-ink text-white"
+                        : "border-brand-ink/15 text-brand-ink hover:border-brand-rust"
+                    }`}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+                      <rect x="0" y="1" width="14" height="2" />
+                      <rect x="0" y="6" width="14" height="2" />
+                      <rect x="0" y="11" width="14" height="2" />
+                    </svg>
+                  </button>
                 </div>
               </div>
 
@@ -203,11 +321,13 @@ const ShopWithSidebarContent = () => {
                 productStyle={productStyle}
                 loading={loading}
                 error={error}
+                gridClassName="grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-4 sm:gap-y-6 lg:grid-cols-3"
               />
             </div>
           </div>
         </div>
       </section>
+
     </>
   );
 };
@@ -216,8 +336,8 @@ const ShopWithSidebar = () => {
   return (
     <Suspense
       fallback={
-        <div className="px-4 py-20 text-center text-brand-ink/70">
-          Loading the shop...
+        <div className="px-4 py-16 text-center text-sm text-brand-ink/70">
+          Loading the shop…
         </div>
       }
     >

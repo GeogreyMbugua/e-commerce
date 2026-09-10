@@ -1,5 +1,8 @@
+import { mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
@@ -7,7 +10,7 @@ import { AppModule } from './app.module.js';
 import type { Env } from './shared/config/env.schema.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     rawBody: true,
   });
@@ -15,6 +18,10 @@ async function bootstrap() {
   app.use(helmet());
 
   const config = app.get(ConfigService<Env, true>);
+  const uploadDir = resolve(config.get('UPLOAD_DIR', { infer: true }));
+  mkdirSync(uploadDir, { recursive: true });
+  app.useStaticAssets(uploadDir, { prefix: '/uploads' });
+
   const apiPrefix = config.get('API_PREFIX', { infer: true });
   app.setGlobalPrefix(apiPrefix);
 

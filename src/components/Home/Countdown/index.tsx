@@ -135,9 +135,10 @@ const CounDown = () => {
           <Image
             src="/images/countdown/count-down-01.webp"
             alt="product"
-            className="hidden lg:block absolute right-4 xl:right-33 bottom-4 xl:bottom-10 -z-1"
+            className="hidden lg:block absolute right-4 xl:right-33 bottom-4 xl:bottom-10 -z-1 max-w-[411px]"
             width={411}
             height={376}
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
       </div>

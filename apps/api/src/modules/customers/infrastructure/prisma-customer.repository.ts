@@ -13,6 +13,7 @@ const toProfile = (customer: {
   id: string;
   email: string;
   emailVerified: boolean;
+  role: 'CUSTOMER' | 'ADMIN';
   firstName: string | null;
   lastName: string | null;
   phone: string | null;
@@ -21,6 +22,7 @@ const toProfile = (customer: {
   id: customer.id,
   email: customer.email,
   emailVerified: customer.emailVerified,
+  role: customer.role,
   firstName: customer.firstName,
   lastName: customer.lastName,
   phone: customer.phone,

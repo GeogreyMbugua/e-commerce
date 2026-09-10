@@ -16,6 +16,7 @@ export type ProductSummary = {
   currency: string;
   conditionGrade: string;
   isUniqueItem: boolean;
+  isFeatured?: boolean;
   availableQuantity: number;
   isAvailable: boolean;
   primaryImage: ProductImage | null;
@@ -37,6 +38,7 @@ export type ProductDetail = ProductSummary & {
 export type ListProductsQuery = {
   search?: string;
   category?: string;
+  featured?: boolean;
   minPriceMinor?: number;
   maxPriceMinor?: number;
   sort: 'newest' | 'price_asc' | 'price_desc';

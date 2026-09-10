@@ -7,6 +7,7 @@ export type CatalogCategory = {
   slug: string;
   name: string;
   description?: string | null;
+  imageUrl?: string | null;
   productCount: number;
 };
 
@@ -18,6 +19,7 @@ export type CatalogProductSummary = {
   currency: string;
   conditionGrade: string;
   isUniqueItem: boolean;
+  isFeatured?: boolean;
   availableQuantity: number;
   isAvailable: boolean;
   primaryImage: CatalogProductImage | null;
@@ -52,6 +54,7 @@ export type CatalogSort = "newest" | "price_asc" | "price_desc";
 export type CatalogListParams = {
   search?: string;
   category?: string;
+  featured?: boolean;
   minPriceMinor?: number;
   maxPriceMinor?: number;
   sort?: CatalogSort;

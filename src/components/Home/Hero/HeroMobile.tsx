@@ -13,7 +13,11 @@ import "swiper/css";
 import Image from "@/components/Common/BrandedImage";
 import { heroSlides } from "./hero-slides";
 
-const HeroMobile = () => {
+type HeroMobileProps = {
+  collapsed?: boolean;
+};
+
+const HeroMobile = ({ collapsed = false }: HeroMobileProps) => {
   const paginationRef = useRef<HTMLDivElement>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -27,7 +31,9 @@ const HeroMobile = () => {
   }, []);
 
   return (
-    <div className="hero-mobile-shell relative overflow-hidden bg-brand-ink">
+    <div
+      className={`hero-mobile-shell relative overflow-hidden bg-brand-ink${collapsed ? " is-collapsed" : ""}`}
+    >
       <Swiper
         effect="fade"
         fadeEffect={{ crossFade: true }}
@@ -55,7 +61,7 @@ const HeroMobile = () => {
       >
         {heroSlides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <div className="hero-mobile-slide relative min-h-[clamp(520px,82svh,680px)] overflow-hidden">
+            <div className="hero-mobile-slide relative min-h-[clamp(520px,82svh,680px)] overflow-hidden transition-[min-height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
               <Image
                 src={slide.mobileBackground}
                 alt=""
@@ -77,7 +83,7 @@ const HeroMobile = () => {
                 aria-hidden="true"
               />
 
-              <div className="hero-mobile-copy relative z-20 px-5 pb-[min(42vh,240px)] pt-6">
+              <div className="hero-mobile-copy relative z-20 px-5 pb-[min(42vh,240px)] pt-6 transition-[padding] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
                 <div
                   className="pointer-events-none absolute -inset-x-5 -top-6 bottom-8 bg-gradient-to-b from-brand-ink/50 via-brand-ink/20 to-transparent"
                   aria-hidden="true"
@@ -106,7 +112,7 @@ const HeroMobile = () => {
                   </h2>
                 )}
 
-                <p className="relative line-clamp-3 max-w-[19rem] text-sm leading-6 text-[#f1eadf] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+                <p className="hero-mobile-description relative line-clamp-3 max-w-[19rem] text-sm leading-6 text-[#f1eadf] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
                   {slide.description}
                 </p>
 
@@ -119,7 +125,7 @@ const HeroMobile = () => {
                 </Link>
               </div>
 
-              <div className="hero-mobile-product pointer-events-none absolute inset-x-0 bottom-[3.25rem] z-10 flex justify-center px-3">
+              <div className="hero-mobile-product pointer-events-none absolute inset-x-0 bottom-[3.25rem] z-10 flex justify-center px-3 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
                 <div className="relative flex w-full max-w-[min(100%,400px)] items-end justify-center">
                   <div
                     className="absolute bottom-[8%] left-1/2 h-[min(38vw,11.5rem)] w-[min(38vw,11.5rem)] -translate-x-1/2 rounded-full border border-brand-rust/30"
@@ -133,6 +139,7 @@ const HeroMobile = () => {
                     priority={index === 0}
                     sizes="90vw"
                     className="relative z-10 h-auto w-full max-h-[min(40vh,280px)] object-contain object-bottom drop-shadow-[0_24px_48px_rgba(0,0,0,0.5)]"
+                    style={{ height: "auto" }}
                   />
                 </div>
               </div>

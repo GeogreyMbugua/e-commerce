@@ -14,7 +14,8 @@ const Footer = () => {
               alt="Vintage Audio"
               width={219}
               height={36}
-              className="mb-6 h-auto w-[190px]"
+              className="mb-6 w-[190px]"
+              style={{ height: "auto" }}
             />
             <p className="mb-6 max-w-[290px] text-custom-sm text-brand-ink/70">
               A considered collection of classic hi-fi, turntables, and audio
@@ -208,19 +209,6 @@ const Footer = () => {
 
           <div className="w-full">
             <h2 className="mb-5 text-custom-1 font-medium text-brand-ink">
-              Your Account
-            </h2>
-            <ul className="flex flex-col gap-3">
-              <li><a className="ease-out duration-200 hover:text-brand-rust" href="/my-account">My Account</a></li>
-              <li><a className="ease-out duration-200 hover:text-brand-rust" href="/signin">Sign In</a></li>
-              <li><a className="ease-out duration-200 hover:text-brand-rust" href="/cart">Cart</a></li>
-              <li><a className="ease-out duration-200 hover:text-brand-rust" href="/wishlist">Wishlist</a></li>
-              <li><a className="ease-out duration-200 hover:text-brand-rust" href="/shop-without-sidebar">Shop</a></li>
-            </ul>
-          </div>
-
-          <div className="w-full">
-            <h2 className="mb-5 text-custom-1 font-medium text-brand-ink">
               Explore
             </h2>
             <ul className="flex flex-col gap-3">
@@ -346,8 +334,9 @@ const Footer = () => {
                   <Image
                     src="/images/payment/payment-04.svg"
                     alt="apple pay"
-                    width={52.94}
+                    width={53}
                     height={22}
+                    style={{ width: "auto", height: "auto" }}
                   />
                 </a>
                 <a href="#" aria-label="payment system with google pay">

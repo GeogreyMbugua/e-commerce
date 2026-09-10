@@ -1,3 +1,5 @@
+export type CustomerRole = "CUSTOMER" | "ADMIN";
+
 export type CustomerProfile = {
   id: string;
   email: string;
@@ -5,6 +7,7 @@ export type CustomerProfile = {
   firstName: string | null;
   lastName: string | null;
   phone: string | null;
+  role?: CustomerRole;
   createdAt: string;
 };
 

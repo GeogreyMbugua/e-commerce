@@ -1,14 +1,22 @@
 /** @type {import('next').NextConfig} */
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig = {
-	output: "export",
+	// Static export is for production deploys (e.g. GitHub Pages).
+	// Keep it off in `next dev` so newly published admin products can open
+	// at /shop/[slug] without a rebuild of generateStaticParams.
+	...(isProd ? { output: "export" } : {}),
 	basePath,
 	assetPrefix: basePath ? `${basePath}/` : undefined,
 	images: {
 		unoptimized: true,
-		// When product media moves to a CDN, add remotePatterns here, e.g.:
-		// remotePatterns: [{ protocol: "https", hostname: "cdn.example.com" }],
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "res.cloudinary.com",
+			},
+		],
 	},
 };
 

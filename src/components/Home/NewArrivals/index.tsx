@@ -1,22 +1,43 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import ProductItem from "@/components/Common/ProductItem";
+import SectionHeader from "@/components/Store/SectionHeader";
 import { useCatalogProducts } from "@/hooks/useCatalogProducts";
 import { shopPath } from "@/lib/routes";
 
-const ProductGridSkeleton = () => (
-  <div className="grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    {Array.from({ length: 4 }).map((_, index) => (
-      <div key={index} className="animate-pulse">
-        <div className="mb-4 h-[280px] rounded-lg bg-gray-2" />
-        <div className="mb-2 h-4 w-2/3 rounded bg-gray-2" />
-        <div className="h-5 w-1/3 rounded bg-gray-2" />
+const ProductGridSkeleton = ({ rail = false }: { rail?: boolean }) => {
+  if (rail) {
+    return (
+      <div className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className="w-[46%] shrink-0 animate-pulse sm:w-auto"
+          >
+            <div className="mb-2.5 aspect-square bg-gray-2" />
+            <div className="mb-2 h-3 w-1/2 rounded bg-gray-2" />
+            <div className="mb-2 h-4 w-3/4 rounded bg-gray-2" />
+            <div className="h-4 w-1/3 rounded bg-gray-2" />
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-);
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="animate-pulse">
+          <div className="mb-2.5 aspect-square bg-gray-2" />
+          <div className="mb-2 h-3 w-1/2 rounded bg-gray-2" />
+          <div className="mb-2 h-4 w-3/4 rounded bg-gray-2" />
+          <div className="h-4 w-1/3 rounded bg-gray-2" />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const NewArrival = () => {
   const { products, loading, error } = useCatalogProducts({
@@ -25,57 +46,42 @@ const NewArrival = () => {
   });
 
   return (
-    <section className="overflow-hidden pt-15">
+    <section id="new-arrivals" className="pt-8 sm:pt-10">
       <div className="mx-auto w-full max-w-[1170px] px-4 sm:px-8 xl:px-0">
-        <div className="mb-7 flex items-center justify-between">
-          <div>
-            <span className="mb-1.5 flex items-center gap-2.5 font-medium text-brand-rust">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.11826 15.4622C4.11794 16.6668 5.97853 16.6668 9.69971 16.6668H10.3007C14.0219 16.6668 15.8825 16.6668 16.8821 15.4622M3.11826 15.4622C2.11857 14.2577 2.46146 12.429 3.14723 8.77153C3.63491 6.17055 3.87875 4.87006 4.8045 4.10175M3.11826 15.4622C3.11826 15.4622 3.11826 15.4622 3.11826 15.4622ZM16.8821 15.4622C17.8818 14.2577 17.5389 12.429 16.8532 8.77153C16.3655 6.17055 16.1216 4.87006 15.1959 4.10175M16.8821 15.4622C16.8821 15.4622 16.8821 15.4622 16.8821 15.4622ZM15.1959 4.10175C14.2701 3.33345 12.947 3.33345 10.3007 3.33345H9.69971C7.0534 3.33345 5.73025 3.33345 4.8045 4.10175M15.1959 4.10175C15.1959 4.10175 15.1959 4.10175 15.1959 4.10175ZM4.8045 4.10175C4.8045 4.10175 4.8045 4.10175 4.8045 4.10175Z"
-                  stroke="#B85F2D"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M7.64258 6.66678C7.98578 7.63778 8.91181 8.33345 10.0003 8.33345C11.0888 8.33345 12.0149 7.63778 12.3581 6.66678"
-                  stroke="#B85F2D"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-              This Week’s
-            </span>
-            <h2 className="text-xl font-semibold text-brand-ink xl:text-heading-5">
-              New Arrivals
-            </h2>
-          </div>
+        <SectionHeader
+          eyebrow="Just in"
+          title="New Arrivals"
+          href={`${shopPath}?sort=newest`}
+        />
 
-          <Link
-            href={shopPath}
-            className="inline-flex rounded-md border border-brand-ink/15 bg-brand-cream px-7 py-2.5 text-sm font-medium text-brand-ink transition-colors duration-200 hover:border-brand-rust hover:bg-brand-rust hover:text-white"
-          >
-            View All
-          </Link>
-        </div>
-
-        {loading && <ProductGridSkeleton />}
+        {loading && <ProductGridSkeleton rail />}
 
         {!loading && error && (
-          <p className="text-brand-ink/70">{error}</p>
+          <p className="text-sm text-brand-ink/70">{error}</p>
         )}
 
         {!loading && !error && (
-          <div className="grid grid-cols-1 gap-x-7.5 gap-y-9 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((item) => (
-              <ProductItem item={item} key={item.slug ?? item.id} />
-            ))}
-          </div>
+          <>
+            {/* Mobile: horizontal product rail */}
+            <div className="no-scrollbar -mx-4 grid auto-cols-[clamp(9.5rem,43vw,13rem)] grid-flow-col gap-3 overflow-x-auto px-4 pb-2 sm:hidden">
+              {products.map((item, index) => (
+                    <div key={item.slug ?? item.id} className="min-w-0">
+                  <ProductItem item={item} compact priority={index < 2} />
+                </div>
+              ))}
+            </div>
+
+            {/* Tablet/desktop: dense grid */}
+            <div className="hidden grid-cols-2 gap-[clamp(0.75rem,2vw,1.25rem)] sm:grid lg:grid-cols-3 xl:grid-cols-4">
+              {products.map((item, index) => (
+                <ProductItem
+                  item={item}
+                  key={item.slug ?? item.id}
+                  priority={index < 4}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
     </section>

@@ -17,9 +17,9 @@ const SingleItem = ({ item }) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-5">
-      <div className="flex w-full items-center gap-6">
-        <div className="flex h-22.5 w-full max-w-[90px] items-center justify-center rounded-[10px] bg-gray-3">
+    <div className="flex items-center justify-between gap-3 sm:gap-5">
+      <div className="flex min-w-0 items-center gap-3 sm:gap-6">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-gray-3 sm:h-22.5 sm:w-full sm:max-w-[90px]">
           <Image
             src={getProductPreviewUrl(item)}
             alt={getProductPreviewAlt(item)}
@@ -28,18 +28,18 @@ const SingleItem = ({ item }) => {
           />
         </div>
 
-        <div>
-          <h3 className="mb-1 font-medium text-dark ease-out duration-200 hover:text-blue">
-            <a href="#"> {item.title} </a>
+        <div className="min-w-0">
+          <h3 className="mb-1 line-clamp-2 text-sm font-medium text-dark ease-out duration-200 hover:text-blue sm:text-base">
+            {item.title}
           </h3>
-          <p className="text-custom-sm">Price: ${item.discountedPrice}</p>
+          <p className="text-xs text-brand-ink/65 sm:text-custom-sm">Price: ${item.discountedPrice}</p>
         </div>
       </div>
 
       <button
         onClick={() => void handleRemoveFromCart()}
         aria-label="button for remove product from cart"
-        className="flex h-9.5 w-full max-w-[38px] items-center justify-center rounded-lg border border-gray-3 bg-gray-2 text-dark duration-200 ease-out hover:border-red-light-4 hover:bg-red-light-6 hover:text-red"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-3 bg-gray-2 text-dark duration-200 ease-out hover:border-red-light-4 hover:bg-red-light-6 hover:text-red"
       >
         <svg
           className="fill-current"

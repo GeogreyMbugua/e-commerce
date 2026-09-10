@@ -5,12 +5,9 @@ import blogData from "../BlogGrid/blogData";
 import SearchForm from "../Blog/SearchForm"; 
 import LatestPosts from "../Blog/LatestPosts";
 import LatestProducts from "../Blog/LatestProducts";
-import Categories from "../Blog/Categories";
-import categoriesData from "../Home/Categories/categoryData";
+import BlogShopCategories from "../Blog/BlogShopCategories";
  
 const BlogGridWithSidebar = () => {
-  const categories = categoriesData;
-
   return (
     <>
       <Breadcrumb title={"Blog Grid Sidebar"} pages={["blog grid sidebar"]} />
@@ -157,7 +154,7 @@ const BlogGridWithSidebar = () => {
               <LatestProducts />
 
               {/* <!-- Popular Category box --> */}
-              <Categories categories={categories} />
+              <BlogShopCategories />
 
               {/* <!-- Tags box --> */}
               <div className="shadow-1 bg-white rounded-xl mt-7.5">

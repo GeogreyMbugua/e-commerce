@@ -44,6 +44,28 @@ const baseEnvSchema = z.object({
     (value) => (value === '' ? undefined : value),
     z.string().min(16).optional(),
   ),
+  ADMIN_EMAILS: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().optional(),
+  ),
+  UPLOAD_DIR: z.string().default('uploads'),
+  PUBLIC_API_URL: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().url().optional(),
+  ),
+  CLOUDINARY_CLOUD_NAME: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().min(1).optional(),
+  ),
+  CLOUDINARY_API_KEY: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().min(1).optional(),
+  ),
+  CLOUDINARY_API_SECRET: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().min(1).optional(),
+  ),
+  CLOUDINARY_FOLDER: z.string().default('audiovintage/products'),
   STOREFRONT_URL: z.string().url().optional(),
   STOREFRONT_BASE_PATH: z.string().optional(),
   SMTP_HOST: z.string().optional(),

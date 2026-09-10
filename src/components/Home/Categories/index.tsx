@@ -1,15 +1,19 @@
 "use client";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef, useEffect } from "react";
-import data from "./categoryData";
-
-// Import Swiper styles
 import "swiper/css/navigation";
 import "swiper/css";
 import SingleItem from "./SingleItem";
+import { useCatalogCategories } from "@/hooks/useCatalogCategories";
 
-const Categories = () => {
+type CategoriesProps = {
+  revealed?: boolean;
+};
+
+const Categories = ({ revealed = true }: CategoriesProps) => {
   const sliderRef = useRef(null);
+  const { categories, loading } = useCatalogCategories();
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -27,11 +31,19 @@ const Categories = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (sliderRef.current?.swiper && !loading) {
+      sliderRef.current.swiper.update();
+    }
+  }, [categories, loading]);
+
   return (
-    <section className="overflow-hidden bg-brand-cream/40 pt-10 sm:pt-17.5">
+    <section
+      id="home-categories"
+      className={`home-categories overflow-hidden bg-brand-cream/40 pt-10 sm:pt-17.5${revealed ? " is-revealed" : ""}`}
+    >
       <div className="max-w-[1170px] w-full mx-auto border-b border-brand-ink/10 px-4 pb-10 sm:px-8 sm:pb-15 xl:px-0">
         <div className="swiper categories-carousel common-carousel">
-          {/* <!-- section title --> */}
           <div className="mb-6 flex items-end justify-between sm:mb-10">
             <div>
               <span className="mb-1.5 flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-rust sm:text-sm">
@@ -77,7 +89,12 @@ const Categories = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <button type="button" aria-label="Previous categories" onClick={handlePrev} className="swiper-button-prev !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9">
+              <button
+                type="button"
+                aria-label="Previous categories"
+                onClick={handlePrev}
+                className="swiper-button-prev !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9"
+              >
                 <svg
                   className="fill-current"
                   width="24"
@@ -95,7 +112,12 @@ const Categories = () => {
                 </svg>
               </button>
 
-              <button type="button" aria-label="Next categories" onClick={handleNext} className="swiper-button-next !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9">
+              <button
+                type="button"
+                aria-label="Next categories"
+                onClick={handleNext}
+                className="swiper-button-next !h-8 !w-8 !border-brand-ink/15 !bg-white !text-brand-ink hover:!border-brand-rust hover:!bg-brand-rust hover:!text-white sm:!h-9 sm:!w-9"
+              >
                 <svg
                   className="fill-current"
                   width="24"
@@ -120,7 +142,6 @@ const Categories = () => {
             slidesPerView={2.15}
             spaceBetween={12}
             breakpoints={{
-              // Keep a partial next card visible on small screens.
               0: {
                 slidesPerView: 2.15,
                 spaceBetween: 12,
@@ -139,11 +160,20 @@ const Categories = () => {
               },
             }}
           >
-            {data.map((item, key) => (
-              <SwiperSlide key={key}>
-                <SingleItem item={item} />
-              </SwiperSlide>
-            ))}
+            {loading
+              ? Array.from({ length: 6 }).map((_, key) => (
+                  <SwiperSlide key={key}>
+                    <div className="flex flex-col items-center px-1 py-2 sm:px-2 sm:py-3">
+                      <div className="mb-3 aspect-square w-full max-w-[150px] animate-pulse rounded-lg bg-brand-cream sm:mb-4" />
+                      <div className="h-4 w-20 animate-pulse rounded bg-brand-cream" />
+                    </div>
+                  </SwiperSlide>
+                ))
+              : categories.map((item) => (
+                  <SwiperSlide key={item.slug}>
+                    <SingleItem item={item} />
+                  </SwiperSlide>
+                ))}
           </Swiper>
         </div>
       </div>

@@ -12,6 +12,13 @@ export const orderStatusPath = "/order-status";
 export const signInPath = "/signin";
 export const myAccountPath = "/my-account";
 
+export const adminPath = "/admin";
+export const adminProductsPath = "/admin/products";
+export const adminProductNewPath = "/admin/products/new";
+export const adminProductEditPath = (id: string) =>
+  `/admin/products/edit?id=${encodeURIComponent(id)}`;
+export const adminCategoriesPath = "/admin/categories";
+
 export const productPath = (slug: string) => `/shop/${slug}`;
 
 export const productHref = (slug?: string) =>

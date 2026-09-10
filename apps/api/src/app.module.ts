@@ -9,6 +9,8 @@ import { AppConfigModule } from './shared/config/app-config.module.js';
 import type { Env } from './shared/config/env.schema.js';
 import { HealthModule } from './shared/health/health.module.js';
 import { PrismaModule } from './shared/database/prisma.module.js';
+import { MediaStorageModule } from './shared/media/media-storage.module.js';
+import { AdminCatalogModule } from './modules/admin-catalog/admin-catalog.module.js';
 import { CatalogModule } from './modules/catalog/catalog.module.js';
 import { CartModule } from './modules/cart/cart.module.js';
 import { CheckoutModule } from './modules/checkout/checkout.module.js';
@@ -21,6 +23,7 @@ import { AuthModule } from './shared/auth/auth.module.js';
     AppConfigModule,
     AuthModule,
     PrismaModule,
+    MediaStorageModule,
     LoggerModule.forRootAsync({
       imports: [AppConfigModule],
       providers: [],
@@ -56,6 +59,7 @@ import { AuthModule } from './shared/auth/auth.module.js';
     }),
     HealthModule,
     CatalogModule,
+    AdminCatalogModule,
     CartModule,
     CheckoutModule,
     OrdersModule,

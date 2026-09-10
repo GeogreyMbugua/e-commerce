@@ -8,6 +8,7 @@ export type Product = {
   isAvailable?: boolean;
   conditionGrade?: string;
   categorySlug?: string;
+  categoryName?: string;
   primaryImageUrl?: string;
   imageAlt?: string;
   imgs?: {

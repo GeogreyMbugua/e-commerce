@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import type { CustomerProfile } from "@/types/customer";
+import type { AuthSession, CustomerProfile } from "@/types/customer";
 import {
   clearAuthSession,
   devSignIn,
@@ -26,7 +26,7 @@ type AuthContextValue = {
     email: string;
     firstName?: string;
     lastName?: string;
-  }) => Promise<void>;
+  }) => Promise<AuthSession>;
   signOut: () => void;
   refreshProfile: () => Promise<void>;
 };
@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }) => {
       const session = await devSignIn(input);
       setCustomer(session.customer);
+      return session;
     },
     [],
   );
